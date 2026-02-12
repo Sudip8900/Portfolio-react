@@ -4,5 +4,5 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ mode }) => ({
   plugins: [tailwindcss(), react()],
-  base: mode === "production" ? "/Portfolio-react/" : "/",
+  // base: mode === "production" ? "/Portfolio-react/" : "/",
 }))
