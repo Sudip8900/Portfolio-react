@@ -11,10 +11,17 @@
   backdrop-filter: blur(10px);
 }
 
-.liquidbutton:active{
-  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.402), transparent);
-  border: 1px solid white;
-  padding: 20px;
-  box-shadow: 0 1px 5px black;
+/* Hide scrollbar for Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  display: none;
 }
 
+/* Hide scrollbar for Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for IE */
+body {
+  -ms-overflow-style: none;
+}

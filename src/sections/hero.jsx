@@ -76,7 +76,7 @@ const hero = () => {
                         </group>
                     </Environment>
                     <Float speed={0.5}>
-                        <Helmet position={isMobile? [0, -2.3, 0] : [0, -4, 0]} shadows scale={isMobile ? 0.7 : 1.2}/>
+                        <Helmet position={isMobile? [0, -2.3, 0] : [0, -3.6, 0]} shadows scale={isMobile ? 0.7 : 1.1}/>
                     </Float>
 
                 </Canvas>

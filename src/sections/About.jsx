@@ -23,9 +23,10 @@ const About = () => {
                         <div className=" mt-5 w-10 h-1 md:w-32 bg-orange-500"/>
                         <p>Animator</p>
                     </div>
-                    <div id="title-about-4" className="mt-5">
+                    <div id="title-about-4" className="mt-5 flex item-center justify-center gap-3 translate-x-16">
                         <p className="font-bold">Electronics Engineer</p>
-
+                        <div className=" mt-5 w-10 h-1 md:w-32 bg-orange-500"/>
+                        <p>VLSI Design</p>
                     </div>
                 </div>
             </div>
