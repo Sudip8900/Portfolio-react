@@ -61,7 +61,7 @@ const hero = () => {
             <figure className='absolute inset-0 -z-50' style={{ width: "100vw", height: "100vh" }}>
                 {/* Background Image */}
                 <img ref={ImageRef}
-                    src="/Images/Background.jpg"
+                    src="Images/Background.jpg"
                     alt="background"
                     className="absolute inset-0 w-full h-full object-cover opacity-50 -z-50"
                 />

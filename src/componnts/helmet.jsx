@@ -13,7 +13,7 @@ import { useGSAP } from '@gsap/react';
 
 export function Helmet(props) {
   const shapeContainer = useRef(null);
-  const { nodes, materials } = useGLTF('/Model/sci-fi_helmet (1K).glb');
+  const { nodes, materials } = useGLTF('Model/sci-fi_helmet (1K).glb');
   useGSAP(() => {
     const tl = gsap.timeline();
     tl.from(shapeContainer.current.position, {
