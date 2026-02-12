@@ -9,6 +9,7 @@ const Navbar = () => {
     const navRef = useRef(null);
     const navref2 = useRef(null);
     const linkRef = useRef([]);
+    const linkRef2 = useRef([]);
     const contactRef = useRef(null);
     const toplineRef = useRef(null);
     const bottomlineRef = useRef(null);
@@ -21,21 +22,21 @@ const Navbar = () => {
         gsap.set(navRef.current, { xPercent: 100 });
         gsap.set([linkRef.current, contactRef.current], {
             autoAlpha: 0,
-            x:-20,
+            x: -20,
         });
 
-        tl.current = gsap.timeline({paused: true}).to(
-            navRef.current, { 
-                xPercent: 0, 
-                duration: 1, 
-                ease: "power3.out" 
+        tl.current = gsap.timeline({ paused: true }).to(
+            navRef.current, {
+            xPercent: 0,
+            duration: 1,
+            ease: "power3.out"
         }).to(linkRef.current, {
             autoAlpha: 1,
             x: 0,
             duration: 0.5,
             stagger: 0.1,
             ease: "power3.out"
-        },"<").to(contactRef.current, {
+        }, "<").to(contactRef.current, {
             autoAlpha: 1,
             x: 0,
             duration: 0.5,
@@ -50,7 +51,20 @@ const Navbar = () => {
             ease: "power3.out"
         });
 
-        icontl.current = gsap.timeline({paused: true}).to(toplineRef.current, {
+        gsap.set(linkRef2.current, {
+            autoAlpha: 0,
+            y: -20
+        });
+
+        gsap.to(linkRef2.current, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power3.out"
+        });
+
+        icontl.current = gsap.timeline({ paused: true }).to(toplineRef.current, {
             rotate: 45,
             y: 3.3,
             duration: 0.3,
@@ -64,10 +78,10 @@ const Navbar = () => {
     }, []);
 
     const toggleMenue = () => {
-        if(!isOpen){
+        if (!isOpen) {
             icontl.current.play();
             tl.current.play();
-        }else{
+        } else {
             icontl.current.reverse();
             tl.current.reverse();
         }
@@ -76,18 +90,18 @@ const Navbar = () => {
 
     return (
         <>
-            <nav ref={navref2} className=' hidden md:fixed md:z-50 md:flex md:flex-row md:justify-between md:w-full md:h-20 md:p-10 text-black'>
-                <div className='text-4xl'><h1>Sudip's Portfolio</h1></div>
-                <div className='flex flex-row text-2xl gap-x-10 ml-auto'>
+            <nav ref={navref2} className=' hidden md:fixed md:z-50 md:flex md:flex-row md:justify-between md:w-auto md:h-auto md:p-5 md:align-middle text-black  rounded-full top-2 right-2 left-2 liquidglass'>
+                <div className='text-4xl z-50 flex flex-wrap'><h1>Sudip's Portfolio</h1></div>
+                <div className='flex flex-row text-2xl gap-x-10'>
                     {['home', 'about', 'work', 'contact'].map((section, index) => (
-                        <div><Link className='transition-all p-2 duration-500 cursor-pointer hover:text-[1.75rem] active:bg-black active:rounded-[25px] active:text-white' to={`${section}`} smooth offset={0} duration={200}>{section}</Link></div>
+                        <div key={index} ref={(el) => (linkRef2.current[index] = el)}><Link className='transition-all p-2 duration-500 cursor-pointer hover:text-[1.75rem] border-0 active:rounded-full liquidbutton' to={`${section}`} smooth offset={0} duration={200}>{section}</Link></div>
                     ))}
                 </div>
             </nav>
             <nav ref={navRef} className='fixed z-50 w-full h-full flex flex-col justify-between px-10 uppercase bg-black text-white/80 py-28 gap-y-10 md:hidden '>
                 <div className='flex flex-col text-5xl gap-y-2'>
                     {['home', 'about', 'work', 'contact'].map((section, index) => (
-                        <div key={index} ref={(el) => (linkRef.current[index] = el)}><Link className='transition-all duration-500 cursor-pointer hover:text-white' to={`${section}`} smooth offset={0} duration={200}n>{section}</Link></div>
+                        <div key={index} ref={(el) => (linkRef.current[index] = el)}><Link className='transition-all duration-500 cursor-pointer hover:text-white' to={`${section}`} smooth offset={0} duration={200}>{section}</Link></div>
                     ))}
                 </div>
                 <div ref={contactRef} className='flex flex-col flex-wrap justify-between gap-8'>
