@@ -11,4 +11,8 @@ export const socials = [
         name: "LinkedIn",
         href: "https://www.linkedin.com/in/sudip-pan-7a3946253"
     },
+    {
+        name: "FaceBook",
+        href: "https://www.facebook.com/sudip.pan.792/"
+    }
 ];

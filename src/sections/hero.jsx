@@ -9,7 +9,6 @@ import { Circle, Environment, Float, Lightformer } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
 
 
-
 const hero = () => {
     const contextRef = useRef(null);
     const headerRef = useRef(null);
@@ -17,6 +16,7 @@ const hero = () => {
     const Name = "Sudip Pan";
     const ImageRef = useRef(null);
     const isMobile = useMediaQuery({maxWidth: 853});
+    const SocialRef = useRef(null);
 
     useGSAP(() => {
         const tl = gsap.timeline();
@@ -35,6 +35,12 @@ const hero = () => {
             scale: 1.5,
             opacity: 0,
             duration: 0.8,
+            ease: "circ.out",
+        }, "<");
+        tl.from(SocialRef.current, {
+            duration: 1,
+            opacity: 0,
+            x: "200",
             ease: "circ.out",
         }, "<");
     }, []);
@@ -81,6 +87,12 @@ const hero = () => {
 
                 </Canvas>
             </figure>
+                <div ref={SocialRef} className='absolute mb-auto top-70 right-3 mx-auto rounded-full bg-orange-500 h-auto w-auto justify-center flex flex-col align-middle gap-y-5 p-2 z-40 md:gap-y-10'>
+                    <a href="https://www.instagram.com/sudip_pan00/" target='_blank'><img src="/Images/instagram-brands-solid.png" alt="Insta" className='w-8 md:w-12 cursor-pointer'/></a>
+                    <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank'><img src="/Images/linkedin-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 '/></a>
+                    <a href="https://github.com/Sudip8900" target='_blank'><img src="/Images/github-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 '/></a>
+                    <a href="https://www.facebook.com/sudip.pan.792/" target='_blank'><img src="/Images/facebook-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 '/></a>
+                </div>
         </section>
     )
 }

@@ -17,6 +17,8 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const icontl = useRef(null);
     const [showBurger, setShowBurger] = useState(true);
+    const [activeSection, setActiveSection] = useState("home");
+
 
     useGSAP(() => {
 
@@ -87,19 +89,8 @@ const Navbar = () => {
             tl.current.reverse();
         }
         setIsOpen(!isOpen);
-    }
-
-    const moveBadge = (el) => {
-        const navRect = navref2.current.getBoundingClientRect();
-        const rect = el.getBoundingClientRect();
-
-        gsap.to(badgeRef.current, {
-            x: rect.left - navRect.left,
-            width: rect.width,
-            duration: 0.4,
-            ease: "power3.out"
-        });
     };
+
 
 
     return (
@@ -119,10 +110,13 @@ const Navbar = () => {
                         {['home', 'about', 'works', 'contact'].map((section, index) => (
                             <div key={index} ref={(el) => (linkRef2.current[index] = el)}>
                                 <Link
+                                    spy={true}
                                     className="transition-all duration-300 cursor-pointer hover:text-[1.6rem]"
                                     to={section}
                                     smooth
                                     duration={200}
+                                    offset={-100}
+                                    onSetActive={() => setActiveSection(section)}
                                 >
                                     {section}
                                 </Link>
@@ -156,14 +150,16 @@ const Navbar = () => {
                             <a key={index} href={social.href} target='_blank' className='hover:underline underline-offset-2'>{social.name}</a>
                         ))}</div>
                     </div>
-                    <button className='bg-orange-500 py-2 text-[1.2rem] rounded-[20px]'><a href="public/Documets/Resume.pdf" target='_blank'>Resume</a></button>
+                    <button className='bg-orange-500 py-2 text-[1.2rem] rounded-[20px]'><a href="/Documets/Resume.pdf" target='_blank'>Resume</a></button>
                 </div>
             </nav>
-                <div className='text-2xl m-5 fixed md:hidden liquidglass pl-5 pr-10 py-2 rounded-full'><h1>Sudip's Portfolio</h1></div>
+            <div>
+                <div className='text-2xl m-5 fixed md:hidden liquidglass pl-5 pr-10 py-2 rounded-full z-40'><h1>Sudip's Portfolio</h1></div>
                 <div className='fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-orange-500 rounded-full cursor-pointer w-14 h-14 top-4 right-5 md:hidden' onClick={toggleMenue}>
                     <span ref={toplineRef} className='block w-8 h-0.5 bg-white rounded-full origin-center'></span>
                     <span ref={bottomlineRef} className='block w-8 h-0.5 bg-white rounded-full origin-center'></span>
                 </div>
+            </div>
         </>
     )
 }
