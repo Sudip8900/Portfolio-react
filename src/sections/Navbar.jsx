@@ -16,8 +16,6 @@ const Navbar = () => {
     const tl = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const icontl = useRef(null);
-    const [showBurger, setShowBurger] = useState(true);
-    const [activeSection, setActiveSection] = useState("home");
 
 
     useGSAP(() => {
@@ -99,7 +97,7 @@ const Navbar = () => {
 
                 {/* Main Glass Navbar */}
                 <nav
-                    className="flex items-center justify-between px-8 py-4 rounded-full liquidglass w-full relative">
+                    className="flex items-center justify-between px-8 py-4 rounded-full liquidglass w-screen relative">
                     {/* Logo */}
                     <div className="text-3xl">
                         <h1>Sudip's Portfolio</h1>
@@ -116,7 +114,6 @@ const Navbar = () => {
                                     smooth
                                     duration={200}
                                     offset={-100}
-                                    onSetActive={() => setActiveSection(section)}
                                 >
                                     {section}
                                 </Link>
@@ -126,7 +123,7 @@ const Navbar = () => {
                 </nav>
 
                 {/* Resume Capsule (Separate Background) */}
-                <button
+                <button 
                     className="px-6 py-4 rounded-full bg-orange-500 text-white hover:scale-105 transition-all duration-300 ml-2 text-2xl cursor-pointer"><a href="/Documets/Resume.pdf" target='_blank'>
                         Resume
                     </a>
