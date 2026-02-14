@@ -122,11 +122,11 @@ const hero = () => {
                 </Canvas>
             </figure>
             <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all, 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all, 0.4s " }} className='absolute mb-auto top-70 right-3 mx-auto h-auto w-auto justify-center flex flex-col align-middle gap-y-5 p-2 z-40 md:gap-y-10'>
-                <div className='bg-orange-500 p-2 rounded-full'>
-                    <a href="https://www.instagram.com/sudip_pan00/" target='_blank'><img src="/Images/instagram-brands-solid.png" alt="Insta" className='w-8 md:w-12 cursor-pointer mb-2 md:mb-5' /></a>
-                    <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank'><img src="/Images/linkedin-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5' /></a>
-                    <a href="https://github.com/Sudip8900" target='_blank'><img src="/Images/github-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5' /></a>
-                    <a href="https://www.facebook.com/sudip.pan.792/" target='_blank'><img src="/Images/facebook-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 ' /></a>
+                <div className='bg-orange-500 p-2 rounded-full transition-all duration-300 hover:scale-105'>
+                    <a href="https://www.instagram.com/sudip_pan00/" target='_blank'><img src="/Images/instagram-brands-solid.png" alt="Insta" className='w-8 md:w-12 cursor-pointer mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a>
+                    <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank'><img src="/Images/linkedin-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a>
+                    <a href="https://github.com/Sudip8900" target='_blank'><img src="/Images/github-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a>
+                    <a href="https://www.facebook.com/sudip.pan.792/" target='_blank'><img src="/Images/facebook-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 hover:rounded-full hover:bg-white' /></a>
                 </div>
                 <div className='relative z-50 md:hidden'>
                     <button className='bg-orange-500 p-2 rounded-full'><img width="30"  src="https://img.icons8.com/pulsar-line/48/hire-me.png" alt="hire-me"/></button>
