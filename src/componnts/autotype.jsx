@@ -1,5 +1,5 @@
 import { Typewriter } from "react-simple-typewriter";
-import AnimatedTextSlide from '../componnts/animatedTextSlide.jsx';
+import AnimatedTextSlide from './animatedTextSlide.jsx';
 
 function AutoType() {
   return (

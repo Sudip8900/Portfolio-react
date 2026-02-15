@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import AutoType from './autotype';
+import AutoType from '../componnts/autotype.jsx';
 import AnimatedTextSlide from '../componnts/animatedTextSlide.jsx';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
