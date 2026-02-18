@@ -43,7 +43,10 @@ const Navbar = () => {
             duration: 0.5,
             stagger: 0.1,
             ease: "power3.out"
-        }, "<");
+        }, "<").to(navRef.current, {
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+        }, "<+0.5");
 
         gsap.from(navref2.current, {
             yPercent: -100,
@@ -130,7 +133,7 @@ const Navbar = () => {
                 </button>
             </div>
 
-            <nav ref={navRef} className='fixed z-50 w-full h-full flex flex-col justify-between px-10 uppercase bg-black text-white/80 py-28 gap-y-10 md:hidden'>
+            <nav ref={navRef} className='fixed z-50 w-full h-full flex flex-col justify-between px-10 uppercase bg-black text-white/80 py-28 gap-y-10 md:hidden rounded-l-[50px] '>
                 <div className='flex flex-col text-5xl gap-y-2'>
                     {['home', 'about', 'works', 'contact'].map((section, index) => (
                         <div key={index} ref={(el) => (linkRef.current[index] = el)}><Link className='transition-all duration-500 cursor-pointer hover:text-white' to={`${section}`} smooth offset={0} duration={200}>{section}</Link></div>
