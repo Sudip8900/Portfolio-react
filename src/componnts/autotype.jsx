@@ -1,13 +1,27 @@
+import { useGSAP } from "@gsap/react";
 import { Typewriter } from "react-simple-typewriter";
-import AnimatedTextSlide from './animatedTextSlide.jsx';
+import { useRef } from "react";
+import gsap from "gsap";
 
-function AutoType() {
+function AutoType({ subTitle, text, Ntextcolor, AnimTextcolor, NtextSize, AnimTextSize}) {
+  const AutotypeRef = useRef(null);
+
+  useGSAP(() => {
+    const tl = gsap.timeline();
+    tl.from(AutotypeRef.current, {
+      duration: 1,
+      opacity: 0,
+      yPercent: 200,
+      ease: "circ.out",
+    })
+  });
+
   return (
-    <h2 className="text-xl font-bold">
-      <span className="uppercase tracking-[0.5rem] text-[1rem] md:text-[2rem]">I am a passonate{" "}</span> <br />
-      <span className="text-orange-500 text-[1.5rem] md:text-[4rem]">
+    <h2 ref={AutotypeRef} className={`font-bold`}>
+      <span className={`uppercase tracking-[0.5rem] ${NtextSize} ${Ntextcolor}`}>{subTitle}</span> <br />
+      <span className={`${AnimTextcolor} ${AnimTextSize}`}>
         <Typewriter
-          words={["Game Developer", "Game Designer", "UE5 Enthusiast", "Elecronics Engineer"]}
+          words={text}
           loop
           cursor
           cursorStyle="|"

@@ -100,7 +100,7 @@ const Navbar = () => {
 
                 {/* Main Glass Navbar */}
                 <nav
-                    className="flex items-center justify-between px-8 py-4 rounded-full liquidglass w-screen relative">
+                    className="flex items-center justify-between px-8 py-4 rounded-full bg-white w-screen relative">
                     {/* Logo */}
                     <div className="text-3xl">
                         <h1>Sudip's Portfolio</h1>
@@ -154,7 +154,7 @@ const Navbar = () => {
                 </div>
             </nav>
             <div>
-                <div className='text-2xl m-5 fixed md:hidden liquidglass pl-5 pr-10 py-2 rounded-full z-40'><h1>Sudip's Portfolio</h1></div>
+                <div className='text-2xl m-5 fixed md:hidden bg-white pl-5 pr-10 py-2 rounded-full z-40'><h1>Sudip's Portfolio</h1></div>
                 <div className='fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-orange-500 rounded-full cursor-pointer w-14 h-14 top-4 right-5 md:hidden' onClick={toggleMenue}>
                     <span ref={toplineRef} className='block w-8 h-0.5 bg-white rounded-full origin-center'></span>
                     <span ref={bottomlineRef} className='block w-8 h-0.5 bg-white rounded-full origin-center'></span>

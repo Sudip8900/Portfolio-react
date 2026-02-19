@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import Navbar from './sections/Navbar'
 import Hero from './sections/hero'
-import About from './sections/About'
+import AboutSummery from './sections/AboutSummery';
+import About from './sections/About';
+import ReactLenis from 'lenis/react';
 
 const App = () => {
 
@@ -16,11 +18,12 @@ const App = () => {
   }, []);
 
   return (
-    <div className='relative w-screen min-h-screen overflow-auto'>
+    <ReactLenis root className='relative w-screen min-h-screen'>
       <Navbar />
       <Hero />
+      <AboutSummery />
       <About />
-    </div>
+    </ReactLenis>
   )
 }
 

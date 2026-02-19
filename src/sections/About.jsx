@@ -1,38 +1,38 @@
+import React from 'react'
+import AutoType from '../componnts/autotype'
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
 const About = () => {
-  return (
-    <section id="about"  className="mt-20 overflow-hidden font-light leading-snug text-center mb-42 contact-text-responsive">
-        <div className="w-full flex flex-col h-auto whitespace-nowrap">
-            <div className="flex flex-col w-full text-start">
-                <h1 className="text-4xl font-bold ml-5 md:ml-10 md:text-8xl heading">About Me</h1>
-                <div className="bg-orange-500 w-full h-0.5 shrink-0"/>
+    const headingRef = useRef(null);
+    useGSAP(() => {
+
+        gsap.from(headingRef.current, {
+            duration: 1,
+            opacity: 0,
+            yPercent: 200,
+            ease: "circ.out",
+            scrollTrigger: {
+                trigger: headingRef.current,
+                start: "top 80%",
+            }
+        });
+    });
+
+    return (
+        <section id="about" className='min-h-screen bg-black rounded-t-4xl'>
+            <div className='text-white text-4xl md:text-8xl font-bold p-5 pl-2 pb-1 md:p-10 md:pb-1'>
+                <h1 ref={headingRef} className='inline-block text-center w-full md:text-start'>About Me</h1>
             </div>
-            <div className="font-light">
-                <div className="w-full h-auto text-[1rem] p-5 md:text-4xl">
-                    <div id="title-about-1">
-                        <p>Game Developer</p>
-                    </div>
-                    <div id="title-about-2" className=" mt-5 flex items-center justify-center gap-3 translate-x-16 ">
-                        <p className="font-bold">Game Designer</p>
-                        <div className="w-10 h-1 md:w-32 bg-orange-500 shrink-0"/>
-                        <p>Game Programmer</p>
-                    </div>
-                    <div id="title-about-3" className=" mt-5 flex item-center justify-center gap-3 -translate-x-48">
-                        <p>UI/UX Designer</p>
-                        <div className=" mt-5 w-10 h-1 md:w-32 bg-orange-500"/>
-                        <p className="font-bold">3D Artist</p>
-                        <div className=" mt-3 w-10 h-1 md:w-32 bg-orange-500 shrink-0"/>
-                        <p>Animator</p>
-                    </div>
-                    <div id="title-about-4" className="mt-5 flex item-center justify-center gap-3 translate-x-16">
-                        <p className="font-bold">Electronics Engineer</p>
-                        <div className="mt-3 w-10 h-1 md:w-32 bg-orange-500"/>
-                        <p>VLSI Design</p>
-                    </div>
-                </div>
+            <div className='bg-black border-t-orange-500 border-t-2 py-20 px-5 md:px-10 rounded-t-[50px]'>
+                
             </div>
-        </div>
-    </section>
-  )
+        </section>
+    )
 }
 
 export default About

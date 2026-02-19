@@ -91,8 +91,8 @@ const hero = () => {
                 <div className='relative text-black'>
                     <div className='absolute inset-x-0 border-t-2 border-t-orange-500' />
                     <div className='py-12 px-10 bg-white z-50'>
-                        <div ref={headerRef} className='text-end'>
-                            <AutoType />
+                        <div className='text-end'>
+                            <AutoType subTitle={"I am a passonate "} text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]} Ntextcolor="text-black" AnimTextcolor="text-orange-500" NtextSize="text-1xl md:text-2xl" AnimTextSize="text-[1.5rem] md:text-[4rem]"/>
                         </div>
 
                     </div>
