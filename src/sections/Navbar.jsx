@@ -3,7 +3,7 @@ import React, { use, useEffect, useState } from 'react'
 import { useRef } from 'react'
 import { socials } from '../constants';
 import { useGSAP } from '@gsap/react';
-import { Link } from 'react-scroll';
+import { Link, Events, scrollSpy } from 'react-scroll';
 
 const Navbar = () => {
     const navRef = useRef(null);
@@ -92,6 +92,19 @@ const Navbar = () => {
         setIsOpen(!isOpen);
     };
 
+    useEffect(() => {
+        // Update active link on page load
+        scrollSpy.update();
+
+        // Also update after window load (important for refresh cases)
+        window.addEventListener("load", scrollSpy.update);
+
+        return () => {
+            window.removeEventListener("load", scrollSpy.update);
+        };
+    }, []);
+
+
 
 
     return (
@@ -112,7 +125,8 @@ const Navbar = () => {
                             <div key={index} ref={(el) => (linkRef2.current[index] = el)}>
                                 <Link
                                     spy={true}
-                                    className="transition-all duration-300 cursor-pointer hover:text-[1.6rem]"
+                                    activeClass='text-white bg-orange-500 p-5 rounded-full drop-shadow-2xl pointer-events-none'
+                                    className="transition-all duration-300 cursor-pointer hover:text-orange-500 uppercase"
                                     to={section}
                                     smooth
                                     duration={200}
@@ -126,7 +140,7 @@ const Navbar = () => {
                 </nav>
 
                 {/* Resume Capsule (Separate Background) */}
-                <button 
+                <button
                     className="px-6 py-4 rounded-full bg-orange-500 text-white hover:scale-105 transition-all duration-300 ml-2 text-2xl cursor-pointer"><a href="/Documets/Resume.pdf" target='_blank'>
                         Resume
                     </a>
