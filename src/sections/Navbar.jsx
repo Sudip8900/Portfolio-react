@@ -104,9 +104,6 @@ const Navbar = () => {
         };
     }, []);
 
-
-
-
     return (
         <>
             <div ref={navref2} className="hidden md:flex fixed top-2 left-2 right-2 z-50 items-center">

@@ -3,7 +3,7 @@ import { Typewriter } from "react-simple-typewriter";
 import { useRef } from "react";
 import gsap from "gsap";
 
-function AutoType({ subTitle, text, Ntextcolor, AnimTextcolor, NtextSize, AnimTextSize}) {
+function AutoType({subTitle,title, text, Ntextcolor, AnimTextcolor, NtextSize, AnimTextSize, TtextSize, Ttextcolor, TtextAlign}) {
   const AutotypeRef = useRef(null);
 
   useGSAP(() => {
@@ -19,6 +19,7 @@ function AutoType({ subTitle, text, Ntextcolor, AnimTextcolor, NtextSize, AnimTe
   return (
     <h2 ref={AutotypeRef} className={`font-bold`}>
       <span className={`uppercase tracking-[0.5rem] ${NtextSize} ${Ntextcolor}`}>{subTitle}</span> <br />
+      <span className={`${TtextSize} ${Ttextcolor} text-${TtextAlign}`}>{title}</span>
       <span className={`${AnimTextcolor} ${AnimTextSize}`}>
         <Typewriter
           words={text}
