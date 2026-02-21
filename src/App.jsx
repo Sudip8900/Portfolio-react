@@ -4,6 +4,7 @@ import Hero from './sections/hero'
 import AboutSummery from './sections/AboutSummery';
 import About from './sections/About';
 import ReactLenis from 'lenis/react';
+import Works from './sections/works';
 
 const App = () => {
 
@@ -18,11 +19,17 @@ const App = () => {
   }, []);
 
   return (
-    <ReactLenis root className='relative w-screen min-h-screen'>
+    <ReactLenis root
+      options={{
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        prevent: (node) => node.closest('.scroll-container')
+      }} className='relative w-screen min-h-screen'>
       <Navbar />
       <Hero />
       <AboutSummery />
       <About />
+      <Works />
     </ReactLenis>
   )
 }

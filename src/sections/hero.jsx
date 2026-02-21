@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Canvas } from '@react-three/fiber';
 import { Helmet } from '../componnts/helmet';
-import { Circle, Environment, Float, Lightformer } from '@react-three/drei';
+import { Environment, Float, Lightformer } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -25,9 +25,9 @@ const hero = () => {
 
     useGSAP(() => {
 
-        // ===== LOAD ANIMATION =====
         const tl = gsap.timeline();
 
+        // Context reveal
         tl.from(contextRef.current, {
             duration: 1,
             opacity: 0,
@@ -35,13 +35,16 @@ const hero = () => {
             ease: "circ.out",
         });
 
-        tl.from(headerRef.current, {
+        // Header lines staggered
+        tl.from(headerRef.current.children, {
             duration: 1,
             opacity: 0,
-            y: 200,
+            y: 150,
             ease: "circ.out",
+            stagger: 0.4,
         }, "<0.5");
 
+        // Background image
         tl.from(ImageRef.current, {
             scale: 1.5,
             opacity: 0,
@@ -49,6 +52,7 @@ const hero = () => {
             ease: "circ.out",
         }, "<");
 
+        // Social icons
         tl.from(SocialRef.current, {
             duration: 1,
             opacity: 0,
@@ -56,6 +60,7 @@ const hero = () => {
             ease: "circ.out",
         }, "<-0.5");
 
+        // Hire button
         tl.from(hireRef.current, {
             duration: 1,
             opacity: 0,
@@ -92,7 +97,7 @@ const hero = () => {
                     <div className='absolute inset-x-0 border-t-2 border-t-orange-500' />
                     <div className='py-12 px-10 bg-white z-50'>
                         <div className='text-end'>
-                            <AutoType subTitle={"I am a passonate "} text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]} Ntextcolor="text-black" AnimTextcolor="text-orange-500" NtextSize="text-1xl md:text-2xl" AnimTextSize="text-[1.5rem] md:text-[4rem]"/>
+                            <AutoType subTitle={"I am a passonate "} text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]} Ntextcolor="text-black" AnimTextcolor="text-orange-500" NtextSize="text-1xl md:text-2xl" AnimTextSize="text-[1.5rem] md:text-[4rem]" />
                         </div>
 
                     </div>
@@ -129,7 +134,7 @@ const hero = () => {
                     <a href="https://www.facebook.com/sudip.pan.792/" target='_blank'><img src="/Images/facebook-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 hover:rounded-full hover:bg-white' /></a>
                 </div>
                 <div className='relative z-50 md:hidden'>
-                    <button className='bg-orange-500 p-2 rounded-full'><img width="30"  src="https://img.icons8.com/pulsar-line/48/hire-me.png" alt="hire-me"/></button>
+                    <button className='bg-orange-500 p-2 rounded-full'><img width="30" src="https://img.icons8.com/pulsar-line/48/hire-me.png" alt="hire-me" /></button>
                 </div>
             </div>
             <div ref={hireRef} className=' hidden md:flex absolute mb-10 ml-10'>

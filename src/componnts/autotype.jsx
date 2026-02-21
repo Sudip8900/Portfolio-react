@@ -3,18 +3,20 @@ import { Typewriter } from "react-simple-typewriter";
 import { useRef } from "react";
 import gsap from "gsap";
 
-function AutoType({subTitle,title, text, Ntextcolor, AnimTextcolor, NtextSize, AnimTextSize, TtextSize, Ttextcolor, TtextAlign}) {
+function AutoType({ subTitle, title, text, Ntextcolor, AnimTextcolor, NtextSize, AnimTextSize, TtextSize, Ttextcolor, TtextAlign }) {
   const AutotypeRef = useRef(null);
 
   useGSAP(() => {
     const tl = gsap.timeline();
-    tl.from(AutotypeRef.current, {
+
+    tl.from(AutotypeRef.current.children, {
       duration: 1,
       opacity: 0,
-      yPercent: 200,
+      y: 80,
       ease: "circ.out",
-    })
-  });
+      stagger: 0.3, // delay between lines
+    });
+  }, []);
 
   return (
     <h2 ref={AutotypeRef} className={`font-bold`}>

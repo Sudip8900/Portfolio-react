@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { socials } from '../constants';
 import { useGSAP } from '@gsap/react';
 import { Link, Events, scrollSpy } from 'react-scroll';
+import { useLenis } from 'lenis/react';
 
 const Navbar = () => {
     const navRef = useRef(null);
@@ -92,17 +93,47 @@ const Navbar = () => {
         setIsOpen(!isOpen);
     };
 
+    const lenis = useLenis();
+
     useEffect(() => {
         // Update active link on page load
         scrollSpy.update();
 
         // Also update after window load (important for refresh cases)
         window.addEventListener("load", scrollSpy.update);
+        
+        if (!lenis || !navref2.current) return;
+
+        let lastScroll = 0;
+
+        const onScroll = (e) => {
+            const currentScroll = e.scroll;
+
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                // Scrolling Down → Hide Navbar
+                gsap.to(navref2.current, {
+                    yPercent: -150,
+                    duration: 0.4,
+                    ease: "power3.out"
+                });
+            } else {
+                // Scrolling Up → Show Navbar
+                gsap.to(navref2.current, {
+                    yPercent: 0,
+                    duration: 0.4,
+                    ease: "power3.out"
+                });
+            }
+
+            lastScroll = currentScroll;
+        };
+
+        lenis.on("scroll", onScroll);
 
         return () => {
-            window.removeEventListener("load", scrollSpy.update);
+            lenis.off("scroll", onScroll);
         };
-    }, []);
+    }, [lenis]);
 
     return (
         <>

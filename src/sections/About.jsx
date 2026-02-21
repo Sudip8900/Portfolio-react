@@ -43,10 +43,11 @@ const About = () => {
             }
         });
 
-        gsap.from(nameRef.current, {
+        gsap.from(nameRef.current.children, {
             xPercent: 100,
             opacity: 0,
             duration: 1,
+            stagger: 0.3,
             scrollTrigger: {
                 trigger: nameRef.current,
                 start: "top 80%",
@@ -72,7 +73,7 @@ const About = () => {
             }
         });
 
-        gsap.from(EducationRef1.current, {
+        gsap.from(EducationRef1.current.children, {
             xPercent: 100,
             opacity: 0,
             duration: 1,
@@ -82,7 +83,7 @@ const About = () => {
                 start: "top 100%",
             }
         });
-        gsap.from(EducationRef2.current, {
+        gsap.from(EducationRef2.current.children, {
             xPercent: -100,
             opacity: 0,
             duration: 1,
@@ -93,7 +94,7 @@ const About = () => {
             }
         });
 
-        gsap.from(EducationRef3.current, {
+        gsap.from(EducationRef3.current.children, {
             xPercent: 100,
             opacity: 0,
             duration: 1,
@@ -104,7 +105,7 @@ const About = () => {
             }
         });
 
-        gsap.from(langRef.current, {
+        gsap.from(langRef.current.children, {
             yPercent: 100,
             opacity: 0,
             duration: 1,
@@ -115,7 +116,7 @@ const About = () => {
             }
         });
 
-        gsap.from(toolsRef.current, {
+        gsap.from(toolsRef.current.children, {
             yPercent: 100,
             opacity: 0,
             duration: 1,
@@ -146,7 +147,7 @@ const About = () => {
             }
         });
 
-        gsap.from(SRef.current, {
+        gsap.from(SRef.current.children, {
             yPercent: 100,
             opacity: 0,
             duration: 1,
@@ -156,14 +157,25 @@ const About = () => {
                 start: "top 100%",
             }
         });
+
+        gsap.to("#about", {
+            scale: 0.95,
+            scrollTrigger: {
+                trigger: "#about",
+                start: "bottom 80%",
+                end: "bottom 20%",
+                scrub: true,
+            },
+            ease: "power1.out",
+        });
     });
 
     return (
-        <section id="about" className='min-h-screen bg-black rounded-t-4xl'>
+        <section id="about" className='min-h-screen bg-black rounded-t-4xl rounded-b-4xl'>
             <div className='text-white text-4xl md:text-8xl font-bold p-5 pl-2 pb-1 md:p-10 md:pb-1'>
                 <h1 ref={headingRef} className='inline-block text-center w-full md:text-start'>About Me</h1>
             </div>
-            <div className='bg-black border-t-orange-500 border-t-2 py-20 px-5 md:px-10 rounded-t-[50px]'>
+            <div className=' border-t-orange-500 border-t-2 py-20 px-5 md:px-10 rounded-t-[50px]'>
                 <div className='md:hidden flex flex-col'>
                     <div className='flex flex-row gap-x-5'>
                         <img ref={imgRef} src="/Images/ProfilePic.png" alt="profile pic" className='w-40 rounded-[25px] border-orange-500 border-2' />
