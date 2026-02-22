@@ -6,28 +6,28 @@ gsap.registerPlugin(ScrollTrigger);
 
 const AboutSummery = () => {
     useGSAP(()=> {
-        gsap.from("#title-about-1", {
+        gsap.to("#title-about-1", {
             xPercent: 20,
             scrollTrigger: {
                 target: "#title-about-1",
                 scrub: true,
             },
         });
-        gsap.from("#title-about-2", {
+        gsap.to("#title-about-2", {
             xPercent: -30,
             scrollTrigger: {
                 target: "#title-about-2",
                 scrub: true,
             },
         });
-        gsap.from("#title-about-3", {
+        gsap.to("#title-about-3", {
             xPercent: 100,
             scrollTrigger: {
                 target: "#title-about-3",
                 scrub: true,
             },
         });
-        gsap.from("#title-about-4", {
+        gsap.to("#title-about-4", {
             xPercent:-100,
             scrollTrigger: {
                 target: "#title-about-4",
