@@ -1,5 +1,5 @@
 import React from 'react'
-import Marque from '../componnts/marque';
+import Marque from '../componnts/Marque';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
