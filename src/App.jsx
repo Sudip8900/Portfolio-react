@@ -4,12 +4,11 @@ import Hero from './sections/hero'
 import AboutSummery from './sections/AboutSummery';
 import About from './sections/About';
 import ReactLenis from 'lenis/react';
-import Works from './sections/works';
-import ContactSummary from './sections/contactSummary';
+import Works from './sections/Works';
+import ContactSummary from './sections/ContactSummary';
 import Contact from './sections/Contact';
 import { useProgress } from '@react-three/drei';
 import { useState } from 'react';
-import { div } from 'three/src/nodes/math/OperatorNode.js';
 
 const App = () => {
 
