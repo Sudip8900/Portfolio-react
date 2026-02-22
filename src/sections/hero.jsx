@@ -8,6 +8,7 @@ import { Helmet } from '../componnts/helmet';
 import { Environment, Float, Lightformer } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Link } from 'react-scroll';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -134,11 +135,11 @@ const hero = () => {
                     <a href="https://www.facebook.com/sudip.pan.792/" target='_blank'><img src="/Images/facebook-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 hover:rounded-full hover:bg-white' /></a>
                 </div>
                 <div className='relative z-50 md:hidden'>
-                    <button className='bg-orange-500 p-2 rounded-full'><img width="30" src="https://img.icons8.com/pulsar-line/48/hire-me.png" alt="hire-me" /></button>
+                    <Link to="contact" smooth={true} duration={600} offset={-50}><button className='bg-orange-500 p-2 rounded-full'><img width="30" src="https://img.icons8.com/pulsar-line/48/hire-me.png" alt="hire-me" /></button></Link>
                 </div>
             </div>
             <div ref={hireRef} className=' hidden md:flex absolute mb-10 ml-10'>
-                <button className='bg-orange-500 p-5 text-2xl text-white rounded-[25px] cursor-pointer transition-all duration-300 hover:scale-105'>Get In Touch {">"} </button>
+                <Link to="contact" smooth={true} duration={600} offset={-50}><button className='bg-orange-500 p-5 text-2xl text-white rounded-[25px] cursor-pointer transition-all duration-300 hover:scale-105'>Get In Touch {">"} </button></Link>
             </div>
         </section>
     )

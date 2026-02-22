@@ -20,3 +20,11 @@ body {
   -ms-overflow-style: none;
 }
 
+.contact-text-responsive {
+  font-size: clamp(2rem, 6vw, 6rem);
+  line-height: 1.1;
+}
+
+.marque-text-responsive {
+  font-size: clamp(1.5rem, 2vw, 3rem);
+}

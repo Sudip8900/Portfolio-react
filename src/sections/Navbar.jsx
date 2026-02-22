@@ -17,6 +17,8 @@ const Navbar = () => {
     const tl = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const icontl = useRef(null);
+    const titleRef = useRef(null);
+    const BurgerRef = useRef(null);
 
 
     useGSAP(() => {
@@ -116,10 +118,33 @@ const Navbar = () => {
                     duration: 0.4,
                     ease: "power3.out"
                 });
+
+                gsap.to(titleRef.current, {
+                    yPercent: -150,
+                    duration: 0.4,
+                    ease: "power3.out"
+                });
+
+                gsap.to(BurgerRef.current, {
+                    xPercent: 150,
+                    duration: 0.4,
+                    ease: "power3.out"
+                });
+
             } else {
                 // Scrolling Up → Show Navbar
                 gsap.to(navref2.current, {
                     yPercent: 0,
+                    duration: 0.4,
+                    ease: "power3.out"
+                });
+                gsap.to(titleRef.current, {
+                    yPercent: 0,
+                    duration: 0.4,
+                    ease: "power3.out",
+                });
+                gsap.to(BurgerRef.current, {
+                    xPercent: 0,
                     duration: 0.4,
                     ease: "power3.out"
                 });
@@ -196,8 +221,8 @@ const Navbar = () => {
                 </div>
             </nav>
             <div>
-                <div className='text-2xl m-5 fixed md:hidden bg-white drop-shadow-2xl pl-5 pr-10 py-2 rounded-full z-40'><h1>Sudip's Portfolio</h1></div>
-                <div className='fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-orange-500 rounded-full cursor-pointer w-14 h-14 top-4 right-5 md:hidden' onClick={toggleMenue}>
+                <div ref={titleRef} className='text-2xl m-5 fixed md:hidden bg-white drop-shadow-2xl pl-5 pr-10 py-2 rounded-full z-40'><h1>Sudip's Portfolio</h1></div>
+                <div ref={BurgerRef} className='fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-orange-500 rounded-full cursor-pointer w-14 h-14 top-4 right-5 md:hidden' onClick={toggleMenue}>
                     <span ref={toplineRef} className='block w-8 h-0.5 bg-white rounded-full origin-center'></span>
                     <span ref={bottomlineRef} className='block w-8 h-0.5 bg-white rounded-full origin-center'></span>
                 </div>
