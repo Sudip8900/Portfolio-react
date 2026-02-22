@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { socials } from '../constants';
-import Marque from '../componnts/marque';
+import Marque from '../componnts/Marque';
 
 gsap.registerPlugin(ScrollTrigger);
 
