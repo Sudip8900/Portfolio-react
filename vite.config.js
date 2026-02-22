@@ -4,5 +4,5 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ mode }) => ({
   plugins: [tailwindcss(), react()],
-  base: process.env.VITE_BASE_PATH || "/Portfolio-react",
+  base: "/",
 }))
