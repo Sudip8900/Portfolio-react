@@ -137,6 +137,6 @@ export const UnrealProjects = [
     {
         id: 4,
         name: "Basic enemy AI",
-        link: "https://www.linkedin.com/posts/sudip-pan-7a3946253_everyone-gamedevelopment-unrealengine-activity-7391847547138408448-kh--?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAD6cDOsBFOByRF8HlviCci3sUNgr2EflDIo",
+        Link: "https://www.linkedin.com/posts/sudip-pan-7a3946253_everyone-gamedevelopment-unrealengine-activity-7391847547138408448-kh--?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAD6cDOsBFOByRF8HlviCci3sUNgr2EflDIo",
     }
 ];
