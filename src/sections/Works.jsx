@@ -213,7 +213,6 @@ const Works = () => {
                                 </div>
                             </div>
                         ))}
-                        {/* desktop floating preview images */}
 
                     </div>
                 </div>
@@ -268,6 +267,8 @@ const Works = () => {
                 </div>
 
             </div>
+
+            {/* desktop floating preview images */}
             <div ref={previewRef} className='fixed -top-2/4 left-0 z-50 overflow-hidden border-2 border-orange-500 rounded-2xl pointer-events-none w-240 md:block hidden opacity-0'>
                 {CurrentIndex !== null && (
                     <img src={BlenderProjects[CurrentIndex].image} alt="Preview" className='object-cover h-full w-full' />
