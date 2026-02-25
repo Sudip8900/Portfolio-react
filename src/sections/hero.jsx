@@ -65,9 +65,9 @@ const hero = () => {
         tl.from(hireRef.current, {
             duration: 1,
             opacity: 0,
-            y: "100vh",
-            ease: "circ.out",
-        }, "<-0.5");
+            scale: 0,
+            ease: "bounce.out",
+        }, "<+0.5");
 
     }, []);
 
