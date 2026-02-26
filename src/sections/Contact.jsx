@@ -120,15 +120,15 @@ const Contact = () => {
                         <h2 className='text-orange-500 text-4xl text-center'>Catch Me</h2>
                         <div className='input-box flex flex-col m-5'>
                             <label className='text-white mb-5'>Full Name</label>
-                            <input type="text" className='field bg-white/10 h-15 placeholder:text-white border-orange-500 border rounded-[25px] p-5 text-white' placeholder='Enter Your Name' name='name' required />
+                            <input type="text" className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white' placeholder='Enter Your Name' name='name' required />
                         </div>
                         <div className='input-box flex flex-col m-5'>
                             <label className='text-white mb-5'>Email Address</label>
-                            <input type="email" className='field bg-white/10 h-15 placeholder:text-white border-orange-500 border rounded-[25px] p-5 text-white' placeholder='Enter Your Email' name='email' required />
+                            <input type="email" className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white' placeholder='Enter Your Email' name='email' required />
                         </div>
                         <div className='input-box flex flex-col m-5'>
                             <label className='text-white mb-5'>Message</label>
-                            <textarea name="message" placeholder='Message' className='bg-white/10 field mess placeholder:text-white border-orange-500 border rounded-[20px] p-5 text-white ' required></textarea>
+                            <textarea name="message" placeholder='Message' className='bg-white/10 field mess placeholder:text-white/60 border-orange-500 border rounded-[20px] p-5 text-white ' required></textarea>
                         </div>
                         <div className='input-box'>
                             <button type="submit" className='text-white bg-orange-600 p-5 rounded-[25px] text-[1.1rem] cursor-pointer transition-all duration-500 hover:scale-105'>Send Mssage</button>
