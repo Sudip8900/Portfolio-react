@@ -45,7 +45,7 @@ const AboutSummery = () => {
                     </div>
                     <div id="title-about-2" className=" mt-5 flex items-center justify-center gap-3 translate-x-16 ">
                         <p className="font-bold">Game Designer</p>
-                        <div className="w-10 h-1 md:w-32 bg-orange-500 shrink-0 md:mt-5"/>
+                        <div className="w-10 h-1 md:w-32 bg-orange-500 shrink-0 md:mt-3"/>
                         <p>Game Programmer</p>
                     </div>
                     <div id="title-about-3" className=" mt-5 flex item-center justify-center gap-3 -translate-x-48">

@@ -56,7 +56,7 @@ const Navbar = () => {
             opacity: 0,
             duration: 0.5,
             ease: "power3.out"
-        });
+        }, "<+1");
 
         gsap.set(linkRef2.current, {
             autoAlpha: 0,
@@ -69,7 +69,7 @@ const Navbar = () => {
             duration: 0.5,
             stagger: 0.1,
             ease: "power3.out"
-        });
+        }, "<");
 
         icontl.current = gsap.timeline({ paused: true }).to(toplineRef.current, {
             rotate: 45,
