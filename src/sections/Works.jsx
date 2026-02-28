@@ -21,6 +21,7 @@ const Works = () => {
     const moveX = useRef(null);
     const moveY = useRef(null);
     const mouse = useRef({ x: 0, y: 0 });
+    const [videoLoading, setVideoLoading] = useState(false);
 
     useGSAP(() => {
 
@@ -109,6 +110,10 @@ const Works = () => {
 
         setCurrentPreview({ type, index });
 
+        if (type === "unreal") {
+            setVideoLoading(true);
+        }
+
         gsap.to(previewRef.current, {
             opacity: 1,
             scale: 1,
@@ -121,6 +126,7 @@ const Works = () => {
         if (window.innerWidth < 768) return;
 
         setCurrentPreview(null);
+        setVideoLoading(false);
 
         gsap.to(previewRef.current, {
             opacity: 0,
@@ -266,14 +272,25 @@ const Works = () => {
                 )}
 
                 {currentPreview && currentPreview.type === "unreal" && (
-                    <video
-                        src={UnrealProjects[currentPreview.index].video}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="w-[900px] h-[550px]"
-                    />
+                    <div className="relative">
+
+                        {/* 🔥 Loader Overlay */}
+                        {videoLoading && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black text-orange-500 z-10">
+                                <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                        )}
+
+                        <video
+                            src={UnrealProjects[currentPreview.index].video}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            onLoadedData={() => setVideoLoading(false)}
+                            className="w-[900px] h-[550px]"
+                        />
+                    </div>
                 )}
             </div>
 
