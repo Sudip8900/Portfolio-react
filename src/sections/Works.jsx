@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Works = () => {
 
-    // 🔥 Preview State (Blender images / Unreal videos)
     const [currentPreview, setCurrentPreview] = useState(null);
 
     const headingRef = useRef(null);
@@ -23,7 +22,6 @@ const Works = () => {
     const moveY = useRef(null);
     const mouse = useRef({ x: 0, y: 0 });
 
-    // ================= GSAP Animations =================
     useGSAP(() => {
 
         moveX.current = gsap.quickTo(previewRef.current, "x", { duration: 0.3, ease: "power2.out" });
@@ -106,7 +104,6 @@ const Works = () => {
 
     }, []);
 
-    // ================= Hover Logic =================
     const handleMouseEnter = (type, index) => {
         if (window.innerWidth < 768) return;
 
@@ -146,7 +143,6 @@ const Works = () => {
     return (
         <section id="works" className='relative z-10 min-h-screen flex flex-col'>
 
-            {/* ================= Heading ================= */}
             <div ref={headingRef} className='p-5 pl-2 pb-0 md:p-10 md:pb-1'>
                 <p className='text-1xl md:tracking-[15px] tracking-widest text-center pb-5 font-lighter'>
                     Building Immersive Experiences
@@ -156,10 +152,8 @@ const Works = () => {
                 </h1>
             </div>
 
-            {/* Line */}
             <div ref={lineRef} className='bg-orange-500 h-0.5 md:mt-2' />
 
-            {/* Desktop Description */}
             <div
                 ref={subRef}
                 className='hidden lg:block text-end mt-5 md:mt-10 px-5 md:px-10 md:text-xl font-light tracking-wide text-gray-500'
@@ -170,7 +164,6 @@ const Works = () => {
                 <p>Each project reflects creativity, technical skill, and passion for innovation.</p>
             </div>
 
-            {/* Mobile Description */}
             <div
                 ref={subRef2}
                 className='text-end m-5 text-[0.7rem] md:text-sm text-gray-500 md:hidden'
@@ -181,14 +174,13 @@ const Works = () => {
                 <p>Focused on creativity and technical excellence.</p>
             </div>
 
-            {/* ================= Project Boxes ================= */}
             <div
                 ref={projectRef}
                 className='flex flex-col relative md:flex-row'
                 onMouseMove={handleMouseMove}
             >
 
-                {/* ===== Blender ===== */}
+                {/* Blender */}
                 <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5 scroll-container'>
                     <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5'>
                         Blender
@@ -204,13 +196,11 @@ const Works = () => {
                                 <h2 className='lg:text-[32px] text-[26px] leading-none group-hover:text-white transition'>
                                     {project.name}
                                 </h2>
-
                                 <a href={project.link} target="_blank" rel="noopener noreferrer">
                                     <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500' width="30" height="30" />
                                 </a>
                             </div>
 
-                            {/* Mobile image */}
                             <div className='relative flex px-10 md:hidden h-auto py-5 bg-gray-200 mb-5 rounded-lg'>
                                 <img src={project.image} alt={project.name} className="rounded-lg w-full" />
                             </div>
@@ -218,7 +208,7 @@ const Works = () => {
                     ))}
                 </div>
 
-                {/* ===== Unreal ===== */}
+                {/* Unreal */}
                 <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5 scroll-container'>
                     <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5'>
                         Unreal Engine
@@ -242,14 +232,13 @@ const Works = () => {
                                 <h2 className='lg:text-[32px] text-[26px] leading-none group-hover:text-white transition'>
                                     {project.name}
                                 </h2>
-
                                 <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500' width="30" height="30" />
                             </a>
                         </div>
                     ))}
                 </div>
 
-                {/* ===== VLSI ===== */}
+                {/* VLSI */}
                 <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5'>
                     <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5'>
                         VLSI
@@ -261,17 +250,19 @@ const Works = () => {
                 </div>
             </div>
 
-            {/* ================= Floating Preview ================= */}
+            {/* Floating Preview */}
             <div
                 ref={previewRef}
-                className='fixed -top-2/4 left-0 z-50 overflow-hidden border-2 border-orange-500 rounded-2xl pointer-events-none w-240 md:block hidden opacity-0 bg-black'
+                className='fixed -top-125 left-0 z-50 overflow-hidden border-2 border-orange-500 rounded-2xl pointer-events-none md:block hidden opacity-0 bg-black'
             >
                 {currentPreview && currentPreview.type === "blender" && (
-                    <img
-                        src={BlenderProjects[currentPreview.index].image}
-                        alt="Preview"
-                        className='object-cover h-full w-full'
-                    />
+                    <div className="w-[840px] h-[560px] overflow-hidden">
+                        <img
+                            src={BlenderProjects[currentPreview.index].image}
+                            alt="Preview"
+                            className='object-cover w-full h-full'
+                        />
+                    </div>
                 )}
 
                 {currentPreview && currentPreview.type === "unreal" && (
@@ -281,7 +272,7 @@ const Works = () => {
                         muted
                         loop
                         playsInline
-                        className="object-cover h-full w-full"
+                        className="w-[900px] h-[550px]"
                     />
                 )}
             </div>
