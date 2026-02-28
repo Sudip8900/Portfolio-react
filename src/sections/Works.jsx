@@ -250,7 +250,7 @@ const Works = () => {
                 </div>
 
                 {/* ===== VLSI ===== */}
-                <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5 scroll-container'>
+                <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5'>
                     <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5'>
                         VLSI
                     </h1>
