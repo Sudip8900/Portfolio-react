@@ -222,6 +222,7 @@ const About = () => {
                             <img width="48" height="48" src="https://img.icons8.com/color/48/blender-3d.png" alt="blender-3d" className='bg-white border-orange-500 border rounded-[10px]' />
                             <img width="48" height="48" src="https://img.icons8.com/color/48/visual-studio-code-2019.png" alt="visual-studio-code-2019" className='bg-white border-orange-500 border rounded-[10px]' />
                             <img width="48" height="48" src="https://img.icons8.com/fluency/48/visual-studio.png" alt="visual-studio" className='bg-white border-orange-500 border rounded-[10px]' />
+                            <img width="48" height="48" src="https://img.icons8.com/color/48/figma--v1.png" alt="figma--v1" className='bg-white border-orange-500 border rounded-[10px]'/>
                         </div>
                     </div>
                 </div>
@@ -265,6 +266,7 @@ const About = () => {
                                             <img width="48" height="48" src="https://img.icons8.com/color/48/blender-3d.png" alt="blender-3d" className='bg-white border-orange-500 border rounded-[10px]' />
                                             <img width="48" height="48" src="https://img.icons8.com/color/48/visual-studio-code-2019.png" alt="visual-studio-code-2019" className='bg-white border-orange-500 border rounded-[10px]' />
                                             <img width="48" height="48" src="https://img.icons8.com/fluency/48/visual-studio.png" alt="visual-studio" className='bg-white border-orange-500 border rounded-[10px]' />
+                                            <img width="48" height="48" src="https://img.icons8.com/color/48/figma--v1.png" alt="figma--v1" className='bg-white border-orange-500 border rounded-[10px]'/>
                                         </div>
                                     </div>
                                 </div>
