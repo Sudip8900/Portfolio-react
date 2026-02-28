@@ -122,21 +122,25 @@ export const UnrealProjects = [
     {
         id: 1,
         name: "Environment",
-        Link: "https://www.linkedin.com/posts/sudip-pan-7a3946253_everyone-epicgames-unrealengine-activity-7319668143038050310-gkS7?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAD6cDOsBFOByRF8HlviCci3sUNgr2EflDIo",
+        video: "/Videos/Env.mp4",
+        Link: "https://youtu.be/TqjBTywDG_o",
     },
     {
         id: 2,
         name: "Combat System",
-        Link: "https://www.linkedin.com/posts/sudip-pan-7a3946253_everyone-gamedevelopment-gamedevelopment-activity-7362883981492563969-9yQe?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAD6cDOsBFOByRF8HlviCci3sUNgr2EflDIo",
+        video: "/Videos/combat System.mp4",
+        Link: "https://youtu.be/U1AXgNLlE80",
     },
     {
         id: 3,
         name: "Optimization",
-        Link: "https://www.linkedin.com/posts/sudip-pan-7a3946253_everyone-nvidia-gamedevelopment-activity-7423447139646660608-SfBM?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAD6cDOsBFOByRF8HlviCci3sUNgr2EflDIo",
+        video: "/Videos/Optimization.mp4",
+        Link: "https://youtu.be/-7pP8e9L3Zk",
     },
     {
         id: 4,
         name: "Basic enemy AI",
-        Link: "https://www.linkedin.com/posts/sudip-pan-7a3946253_everyone-gamedevelopment-unrealengine-activity-7391847547138408448-kh--?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAD6cDOsBFOByRF8HlviCci3sUNgr2EflDIo",
+        video: "/Videos/Enemy AI.mp4",
+        Link: "https://youtu.be/fO_3uYWMa3w",
     }
 ];
