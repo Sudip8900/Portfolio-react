@@ -28,3 +28,8 @@ body {
 .marque-text-responsive {
   font-size: clamp(1.5rem, 2vw, 3rem);
 }
+
+.outlined-text {
+  color: transparent;              /* makes inside transparent */
+  -webkit-text-stroke: 0.5px #ff6900; /* outline thickness + color */
+}

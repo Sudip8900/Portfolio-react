@@ -98,7 +98,7 @@ const hero = () => {
                     <div className='absolute inset-x-0 border-t-2 border-t-orange-500' />
                     <div className='py-12 px-10 bg-white z-50'>
                         <div className='text-end'>
-                            <AutoType subTitle={"I am a passonate "} text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]} Ntextcolor="text-black" AnimTextcolor="text-orange-500" NtextSize="text-1xl md:text-2xl" AnimTextSize="text-[1.5rem] md:text-[4rem]" />
+                            <AutoType subTitle={"I am a passonate "} text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]} Ntextcolor="text-black" AnimTextcolor="outlined-text uppercase" NtextSize="text-1xl md:text-2xl" AnimTextSize="text-[1.5rem] md:text-[4rem]" />
                         </div>
 
                     </div>
@@ -139,7 +139,7 @@ const hero = () => {
                 </div>
             </div>
             <div ref={hireRef} className=' hidden md:flex absolute mb-10 ml-10'>
-                <Link to="contact" smooth={true} duration={600} offset={-50}><button className='bg-orange-500 p-5 text-2xl text-white rounded-[25px] cursor-pointer transition-all duration-300 hover:scale-105'>Get In Touch {">"} </button></Link>
+                <Link to="contact" smooth={true} duration={600} offset={-50}><button className='bg-transparent p-5 text-2xl text-orange-500 border-orange-500 border-2 rounded-[25px] cursor-pointer transition-all duration-300 hover:scale-105 hover:border-none hover:bg-orange-500 hover:text-white'>Get In Touch {">"} </button></Link>
             </div>
         </section>
     )
