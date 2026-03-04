@@ -1,5 +1,5 @@
 import { useGSAP } from '@gsap/react';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BlenderProjects, UnrealProjects } from '../constants';
@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Works = () => {
 
     const [currentPreview, setCurrentPreview] = useState(null);
+    const [videoLoading, setVideoLoading] = useState(false);
 
     const headingRef = useRef(null);
     const lineRef = useRef(null);
@@ -17,11 +18,13 @@ const Works = () => {
     const subRef2 = useRef(null);
     const projectRef = useRef(null);
     const previewRef = useRef(null);
+    const DesRef = useRef(null);
 
     const moveX = useRef(null);
     const moveY = useRef(null);
     const mouse = useRef({ x: 0, y: 0 });
-    const [videoLoading, setVideoLoading] = useState(false);
+
+    /* ================= GSAP SETUP ================= */
 
     useGSAP(() => {
 
@@ -105,6 +108,30 @@ const Works = () => {
 
     }, []);
 
+    /* ================= DESCRIPTION POPUP FIX ================= */
+
+    useEffect(() => {
+        if (!currentPreview || !DesRef.current) return;
+
+        gsap.fromTo(
+            DesRef.current,
+            {
+                opacity: 0,
+                y: 40,
+                scale: 0.95
+            },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.4,
+                ease: "back.out(1.7)"
+            }
+        );
+    }, [currentPreview]);
+
+    /* ================= MOUSE HANDLERS ================= */
+
     const handleMouseEnter = (type, index) => {
         if (window.innerWidth < 768) return;
 
@@ -145,6 +172,8 @@ const Works = () => {
         moveX.current(mouse.current.x);
         moveY.current(mouse.current.y);
     };
+
+    /* ================= UI ================= */
 
     return (
         <section id="works" className='relative z-10 min-h-screen flex flex-col'>
@@ -253,6 +282,7 @@ const Works = () => {
                         Currently working on a high gain CMOS amplifier.<br />
                         Updates coming soon.
                     </p>
+                    <Icon icon="line-md:downloading-loop" className='w-75 h-75 text-orange-500 text-center mt-20 ml-5 md:ml-30' />
                 </div>
             </div>
 
@@ -262,19 +292,23 @@ const Works = () => {
                 className='fixed -top-125 left-0 z-50 overflow-hidden border-2 border-orange-500 rounded-2xl pointer-events-none md:block hidden opacity-0 bg-black'
             >
                 {currentPreview && currentPreview.type === "blender" && (
-                    <div className="w-[840px] h-[560px] overflow-hidden">
+                    <div className="w-[840px] h-[560px] overflow-hidden relative">
                         <img
                             src={BlenderProjects[currentPreview.index].image}
                             alt="Preview"
                             className='object-cover w-full h-full'
                         />
+                        <div
+                            ref={DesRef}
+                            className='bg-white absolute bottom-0 p-5 rounded-2xl text-[1.2rem] m-5 border border-orange-500'
+                        >
+                            {BlenderProjects[currentPreview.index].description}
+                        </div>
                     </div>
                 )}
 
                 {currentPreview && currentPreview.type === "unreal" && (
                     <div className="relative">
-
-                        {/* 🔥 Loader Overlay */}
                         {videoLoading && (
                             <div className="absolute inset-0 flex items-center justify-center bg-black text-orange-500 z-10">
                                 <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>

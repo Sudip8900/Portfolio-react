@@ -9,6 +9,7 @@ import { Environment, Float, Lightformer } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from 'react-scroll';
+import RippleGrid from '../componnts/RippleGrid.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +24,7 @@ const hero = () => {
     const SocialRef = useRef(null);
     const hireRef = useRef(null);
     const [showSocial, setShowSocial] = useState(true);
+    const animRef = useRef(null);
 
     useGSAP(() => {
 
@@ -69,6 +71,13 @@ const hero = () => {
             ease: "bounce.out",
         }, "<+0.5");
 
+        tl.from(animRef.current, {
+            duration: 1,
+            opacity: 0,
+            scale: 0,
+            ease: "circ.out",
+        });
+
     }, []);
 
     useEffect(() => {
@@ -111,6 +120,18 @@ const hero = () => {
                     alt="background"
                     className="absolute inset-0 w-full h-full object-cover opacity-50 -z-50"
                 />
+                <div ref={animRef} className='absolute w-full h-full opacity-75'>
+                    <RippleGrid
+                        enableRainbow={false}
+                        gridColor="#ff6900"
+                        rippleIntensity={0.05}
+                        gridSize={15}
+                        gridThickness={50}
+                        mouseInteraction={true}
+                        mouseInteractionRadius={1.2}
+                        opacity={0.8}
+                    />
+                </div>
                 <Canvas shadows camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }}>
                     <ambientLight intensity={2} />
                     <Environment resolution={256}>
