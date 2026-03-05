@@ -49,7 +49,6 @@ const App = () => {
         <Hero />
         <AboutSummery />
         <About />
-        <WorkSummary/>
         <Works />
         <ContactSummary />
         <Contact />
