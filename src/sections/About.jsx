@@ -158,12 +158,23 @@ const About = () => {
             }
         });
 
-        gsap.to("#about", {
+        // gsap.to("#about", {
+        //     scale: 0.95,
+        //     scrollTrigger: {
+        //         trigger: "#about",
+        //         start: "bottom 80%",
+        //         end: "bottom 20%",
+        //         scrub: true,
+        //     },
+        //     ease: "power1.out",
+        // });
+
+        gsap.from("#about", {
             scale: 0.95,
             scrollTrigger: {
                 trigger: "#about",
-                start: "bottom 80%",
-                end: "bottom 20%",
+                start: "top 80%",
+                end: "top 20%",
                 scrub: true,
             },
             ease: "power1.out",

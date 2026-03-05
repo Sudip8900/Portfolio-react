@@ -9,6 +9,7 @@ import ContactSummary from './sections/ContactSummary';
 import Contact from './sections/Contact';
 import { useProgress } from '@react-three/drei';
 import { useState } from 'react';
+import WorkSummary from './sections/WorkSummary';
 
 const App = () => {
 
@@ -48,6 +49,7 @@ const App = () => {
         <Hero />
         <AboutSummery />
         <About />
+        <WorkSummary/>
         <Works />
         <ContactSummary />
         <Contact />
