@@ -13,6 +13,7 @@ const Experience = () => {
     const headinRef = useRef(null);
     const lineRef = useRef(null);
     const GridRef = useRef(null);
+    const CVRef = useRef(null);
 
     useGSAP(() => {
 
@@ -50,6 +51,18 @@ const Experience = () => {
             scrollTrigger: {
                 trigger: GridRef.current,
                 start: "top 70%",
+            }
+        });
+
+        gsap.from(CVRef.current, {
+            scale:0.5,
+            opacity: 0,
+            duration: 1,
+            delay: 0.5,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: CVRef.current,
+                start: "top 80%",
             }
         });
 
@@ -97,7 +110,7 @@ const Experience = () => {
                         <h1 className='text-white font-light text-8xl'>CV</h1>
 
                         <a href="/Documets/Resume.pdf" target='_blank'>
-                            <button className='flex flex-row justify-between w-full bg-white p-5 mt-15 rounded-4xl font-bold tracking-wider cursor-pointer transition-all duration-500 hover:scale-105'>
+                            <button ref={CVRef} className='flex flex-row justify-between w-full bg-white p-5 mt-15 rounded-4xl font-bold tracking-wider cursor-pointer transition-all duration-500 hover:scale-105'>
                                 Download
                                 <Icon icon="solar:download-minimalistic-bold-duotone" width="24" height="24"/>
                             </button>
