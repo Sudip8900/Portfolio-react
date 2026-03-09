@@ -12,14 +12,32 @@ const Contact = () => {
     const headinRef = useRef(null);
     const lineRef = useRef(null);
     const SubRef = useRef(null);
-    const items = ["just imagine, I'll make it real", "let's turn your vision into reality", "your ideas, my skills, our creation", "bringing your dreams to life", "let's create something extraordinary", "your vision, my expertise, our masterpiece", "turning your ideas into digital reality", "let's innovate and create together", "your imagination, my skills, our success"];
-    const [result, setResult] = useState("");
     const lineRef2 = useRef(null);
     const FormRef = useRef(null);
+
+    const buttonRef = useRef(null);
+    const buttonTextRef = useRef(null);
+    const iconRef = useRef(null);
+
+    const items = [
+        "just imagine, I'll make it real",
+        "let's turn your vision into reality",
+        "your ideas, my skills, our creation",
+        "bringing your dreams to life",
+        "let's create something extraordinary",
+        "your vision, my expertise, our masterpiece",
+        "turning your ideas into digital reality",
+        "let's innovate and create together",
+        "your imagination, my skills, our success"
+    ];
+
+    const [result, setResult] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const onSubmit = async (event) => {
         event.preventDefault();
         setResult("Sending....");
+
         const formData = new FormData(event.target);
         formData.append("access_key", "2fcf6229-254a-4530-a10a-814ba24bd93e");
 
@@ -29,15 +47,61 @@ const Contact = () => {
         });
 
         const data = await response.json();
+
         if (data.success) {
+
             setResult("Form Submitted Successfully");
+            setSuccess(true);
             event.target.reset();
+
+            const tl = gsap.timeline();
+
+            tl.to(buttonRef.current, {
+                backgroundColor: "#16a34a",
+                duration: 0.4
+            })
+                .to(buttonTextRef.current, {
+                    scale: 0,
+                    opacity: 0,
+                    duration: 0.3
+                }, "<")
+                .fromTo(
+                    iconRef.current,
+                    { scale: 0, opacity: 0 },
+                    { scale: 1, opacity: 1, duration: 0.3 },
+                    "-=0.1"
+                )
+
+                // wait before resetting
+                .to({}, { duration: 2 })
+
+                // hide icon
+                .to(iconRef.current, {
+                    scale: 0,
+                    opacity: 0,
+                    duration: 0.3
+                })
+
+                // restore text
+                .to(buttonTextRef.current, {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 0.3
+                }, "-=0.1")
+
+                // restore button color
+                .to(buttonRef.current, {
+                    backgroundColor: "#ea580c",
+                    duration: 0.3
+                }, "<");
+
         } else {
             setResult("Error");
         }
     };
 
     useGSAP(() => {
+
         gsap.from(headinRef.current.children, {
             yPercent: 100,
             opacity: 0,
@@ -103,71 +167,157 @@ const Contact = () => {
                 start: "top 80%",
             }
         });
+
     }, []);
 
     return (
         <section id="contact" className="flex flex-col justify-between min-h-screen bg-black">
+
             <div>
                 <div ref={headinRef}>
-                    <h2 className="text-1xl font-light text-center text-orange-500 pt-10 uppercase tracking-widest md:text-3xl md:tracking-[30px]">You dream it, I build it</h2>
-                    <h1 className="text-4xl font-bold text-center text-white md:text-end md:text-[6rem] md:mx-10">Contact Me</h1>
+                    <h2 className="text-1xl font-light text-center text-orange-500 pt-10 uppercase tracking-widest md:text-3xl md:tracking-[30px]">
+                        You dream it, I build it
+                    </h2>
+
+                    <h1 className="text-4xl font-bold text-center text-white md:text-end md:text-[6rem] md:mx-10">
+                        Contact Me
+                    </h1>
                 </div>
+
                 <div ref={lineRef} className="w-full border-orange-500 border-t-2 rounded-t-[25px]" />
             </div>
+
             <div className='flex flex-row gap-x-5'>
+
                 <div className='md:w-1/2 md:flex md:flex-col hidden'>
-                    <form ref={FormRef} onSubmit={onSubmit} className='p-5 text-center '>
+
+                    <form ref={FormRef} onSubmit={onSubmit} className='p-5 text-center'>
+
                         <h2 className='text-orange-500 text-4xl text-center'>Catch Me</h2>
+
                         <div className='input-box flex flex-col m-5'>
                             <label className='text-white mb-5'>Full Name</label>
-                            <input type="text" className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white' placeholder='Enter Your Name' name='name' required />
+                            <input
+                                type="text"
+                                className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white'
+                                placeholder='Enter Your Name'
+                                name='name'
+                                required
+                            />
                         </div>
+
                         <div className='input-box flex flex-col m-5'>
                             <label className='text-white mb-5'>Email Address</label>
-                            <input type="email" className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white' placeholder='Enter Your Email' name='email' required />
+                            <input
+                                type="email"
+                                className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white'
+                                placeholder='Enter Your Email'
+                                name='email'
+                                required
+                            />
                         </div>
+
                         <div className='input-box flex flex-col m-5'>
                             <label className='text-white mb-5'>Message</label>
-                            <textarea name="message" placeholder='Message' className='bg-white/10 field mess placeholder:text-white/60 border-orange-500 border rounded-[20px] p-5 text-white ' required></textarea>
+                            <textarea
+                                name="message"
+                                placeholder='Message'
+                                className='bg-white/10 field mess placeholder:text-white/60 border-orange-500 border rounded-[20px] p-5 text-white'
+                                required
+                            ></textarea>
                         </div>
-                        <div className='input-box'>
-                            <button type="submit" className='text-white bg-orange-600 p-5 rounded-[25px] text-[1.1rem] cursor-pointer transition-all duration-500 hover:scale-105'>Send Mssage</button>
+
+                        <div className='input-box justify-center flex'>
+                            <button
+                                ref={buttonRef}
+                                type="submit"
+                                className='relative flex items-center justify-center text-white bg-orange-600 p-5 rounded-[25px] text-[1.1rem] cursor-pointer transition-all duration-500 hover:scale-105'
+                            >
+
+                                <span ref={buttonTextRef}>
+                                    Send Message
+                                </span>
+
+                                <span
+                                    ref={iconRef}
+                                    className="absolute opacity-0 text-2xl"
+                                >
+                                    ✓
+                                </span>
+
+                            </button>
                         </div>
+
                     </form>
+
                 </div>
+
                 <div ref={lineRef2} className='bg-orange-500 w-0.5 h-150 md:block hidden' />
+
                 <div className='flex flex-col w-full md:w-1/2'>
-                    <div ref={SubRef} className="text-white/80 text-end mx-5 mt-1 mb-10 md:mx-10 md:text-2xl gap-y-1 md:gap-y-2 flex flex-col items-end">
+
+                    <div
+                        ref={SubRef}
+                        className="text-white/80 text-end mx-5 mt-1 mb-10 md:mx-10 md:text-2xl gap-y-1 md:gap-y-2 flex flex-col items-end"
+                    >
                         <p>Got a question, how or project idea?</p>
                         <p>I would love to hear from you and</p>
                         <p>discuss further!</p>
                     </div>
+
                     <div className='flex px-10 text-white uppercase lg:text-[32px] text-[26px] leading-none mb-10'>
+
                         <div className='flex flex-col w-full gap-10 md:text-end'>
+
                             <div className='social-link'>
                                 <h2>E-mail</h2>
                                 <div className='w-full h-px my-2 bg-orange-400' />
-                                <p className='text-xl text-white/80 lowercase md:text-2xl lg:text-3xl'>iamsudippan@gmail.com</p>
+                                <p className='text-xl text-white/80 lowercase md:text-2xl lg:text-3xl'>
+                                    iamsudippan@gmail.com
+                                </p>
                             </div>
+
                             <div className='social-link'>
                                 <h2>Phone</h2>
                                 <div className='w-full h-px my-2 bg-orange-400' />
-                                <p className='text-xl text-white/80 lowercase md:text-2xl lg:text-3xl'>+91 8900359269</p>
+                                <p className='text-xl text-white/80 lowercase md:text-2xl lg:text-3xl'>
+                                    +91 8900359269
+                                </p>
                             </div>
+
                             <div className='social-link'>
                                 <h2>Social Media</h2>
                                 <div className='w-full h-px my-2 bg-orange-400' />
+
                                 <div className='flex flex-wrap gap-2 md:gap-10'>
-                                    {socials.map((social, index) => (<a key={index} href={social.href} target="_blank" className='text-xs leading-loose tracking-widest uppercase md:text-sm hover:text-orange-500 transition-colors duration-300'>
-                                        {social.name}
-                                    </a>))}
+                                    {socials.map((social, index) => (
+                                        <a
+                                            key={index}
+                                            href={social.href}
+                                            target="_blank"
+                                            className='text-xs leading-loose tracking-widest uppercase md:text-sm hover:text-orange-500 transition-colors duration-300'
+                                        >
+                                            {social.name}
+                                        </a>
+                                    ))}
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
-            <Marque items={items} className='border-orange-500 text-orange-500 bg-transparent border-t' iconName='solar:gameboy-broken' />
+
+            <Marque
+                items={items}
+                className='border-orange-500 text-orange-500 bg-transparent border-t'
+                iconName='solar:gameboy-broken'
+            />
+
         </section>
     )
 }
