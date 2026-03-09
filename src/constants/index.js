@@ -1,3 +1,5 @@
+import { icon } from "@fortawesome/fontawesome-svg-core";
+
 export const socials = [
     {
         name: "Instagram",
@@ -142,5 +144,62 @@ export const UnrealProjects = [
         name: "Basic enemy AI",
         video: "/Videos/Enemy AI.mp4",
         Link: "https://youtu.be/fO_3uYWMa3w",
+    }
+];
+
+export const experience = [
+    {
+        id: 1,
+        role: "3D Artist",
+        icon: "logos:blender",
+        company: "Blender",
+        duration: "Oct 2023 - Present",
+        description: "Creating 3D models, textures, and animations for various projects."
+    },
+    {
+        id: 2,
+        role: "Game Developer",
+        icon: "devicon:unrealengine",
+        company: "Unreal Engine",
+        duration: "Dec 2024 - Present",
+        description: "Developing games using Unreal Engine Blueprint and C++."
+    },
+    {
+        id: 3,
+        role: "VLSI Engineer",
+        company: "Cadence Virtuoso",
+        image: "/Images/cadence.svg",
+        width: "120",
+        height: "60",
+        duration: "Jun 2024 - Present",
+        description: "Designing and simulating VLSI circuits using Cadence tools."
+    },
+    {
+        id:5,
+        role:"Social Media Assistant",
+        company: "GRID",
+        image: "/Images/Grid.jpg",
+        width: "60",
+        height: "60",
+        duration: "Feb 2023 - Oct 2023",
+        description: "Assisting in social media management and content creation."
+    },
+    {
+        id:6,
+        role: "Sales Associate",
+        company: "RENTALSIFY",
+        image: "/Images/rentalsify_logo.jpg",
+        width: "60",
+        height: "60",
+        duration: "Mar 2023 - oct 2023",
+        description: "Assisting customers with rental inquiries and managing bookings."
+    },
+    {
+        id:7,
+        role: "Member",
+        company:"GDSC RKMGEC",
+        icon: "logos:google-developers",
+        duration: "Nov 2022 - Present",
+        description: "Contributing to various projects and events organized by GDSC RKMGEC."
     }
 ];

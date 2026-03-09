@@ -51,7 +51,7 @@ const Contact = () => {
         });
 
         gsap.from(lineRef.current, {
-            xPercent: -100,
+            xPercent: 100,
             opacity: 0,
             duration: 1,
             scrollTrigger: {
@@ -110,7 +110,7 @@ const Contact = () => {
             <div>
                 <div ref={headinRef}>
                     <h2 className="text-1xl font-light text-center text-orange-500 pt-10 uppercase tracking-widest md:text-3xl md:tracking-[30px]">You dream it, I build it</h2>
-                    <h1 className="text-4xl font-bold text-center text-white md:text-start md:text-[6rem] md:mx-10">Contact Me</h1>
+                    <h1 className="text-4xl font-bold text-center text-white md:text-end md:text-[6rem] md:mx-10">Contact Me</h1>
                 </div>
                 <div ref={lineRef} className="w-full border-orange-500 border-t-2 rounded-t-[25px]" />
             </div>

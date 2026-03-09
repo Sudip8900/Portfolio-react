@@ -179,7 +179,7 @@ const Works = () => {
         <section id="works" className='relative z-10 min-h-screen flex flex-col'>
 
             <div ref={headingRef} className='p-5 pl-2 pb-0 md:p-10 md:pb-1'>
-                <p className='text-1xl md:tracking-[15px] tracking-widest text-center pb-5 font-lighter'>
+                <p className='text-1xl font-light text-center text-orange-500 pt-10 uppercase tracking-widest md:text-3xl md:tracking-[30px]'>
                     Building Immersive Experiences
                 </p>
                 <h1 className='inline-block text-center w-full md:text-end text-2xl md:text-8xl font-bold'>

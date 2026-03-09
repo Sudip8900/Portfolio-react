@@ -9,6 +9,7 @@ import ContactSummary from './sections/ContactSummary';
 import Contact from './sections/Contact';
 import { useProgress } from '@react-three/drei';
 import { useState } from 'react';
+import Experience from './sections/Experience';
 
 const App = () => {
 
@@ -49,6 +50,7 @@ const App = () => {
         <AboutSummery />
         <About />
         <Works />
+        <Experience/>
         <ContactSummary />
         <Contact />
       </div>
