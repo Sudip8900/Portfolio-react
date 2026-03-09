@@ -78,9 +78,9 @@ const Experience = () => {
 
                 <div ref={lineRef} className="w-full border-orange-500 border-t-2 rounded-t-[25px]" />
 
-                <div className='flex flex-row justify-between mr-5'>
+                <div className='flex flex-col md:flex-row justify-between mr-5'>
 
-                    <div ref={GridRef} className="grid grid-cols-3 gap-6 p-6 w-2/3">
+                    <div ref={GridRef} className="grid grid-cols-3 gap-6 p-6 w-full md:w-2/3">
                         {experience.map((exp) => (
                             <div
                                 key={exp.id}
@@ -106,7 +106,7 @@ const Experience = () => {
                         ))}
                     </div>
 
-                    <div ref={CVRef} className='mt-5 p-6 bg-orange-500 w-90 h-fit rounded-2xl'>
+                    <div ref={CVRef} className='mx-5 p-6 bg-orange-500 w-auto h-fit rounded-2xl md:mt-5 md:w-80'>
                         <h1 className='text-white font-light text-8xl'>CV</h1>
 
                         <a href="/Documets/Resume.pdf" target='_blank'>
