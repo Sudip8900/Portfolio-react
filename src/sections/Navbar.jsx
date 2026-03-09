@@ -193,11 +193,11 @@ const Navbar = () => {
                 </nav>
 
                 {/* Resume Capsule (Separate Background) */}
-                <button
+                {/* <button
                     className="px-6 py-4 rounded-full bg-orange-500 text-white hover:scale-105 transition-all duration-300 ml-2 text-2xl cursor-pointer"><a href="/Documets/Resume.pdf" target='_blank'>
                         Resume
                     </a>
-                </button>
+                </button> */}
             </div>
 
             <nav ref={navRef} className='fixed z-50 w-full h-full flex flex-col justify-between px-10 uppercase bg-black text-white/80 py-28 gap-y-10 md:hidden rounded-l-[50px] '>

@@ -106,12 +106,18 @@ const Experience = () => {
                         ))}
                     </div>
 
-                    <div ref={CVRef} className='mx-5 p-6 bg-orange-500 w-auto h-fit rounded-2xl md:mt-5 md:w-80'>
+                    <div ref={CVRef} className='mx-5 p-6 bg-orange-500 w-auto h-fit rounded-2xl md:mt-5 md:w-1/3'>
                         <h1 className='text-white font-light text-8xl'>CV</h1>
 
                         <a href="/Documets/Resume.pdf" target='_blank'>
-                            <button className='flex flex-row justify-between w-full bg-white p-5 mt-15 rounded-4xl font-bold tracking-wider cursor-pointer transition-all duration-500 hover:scale-105'>
-                                Download
+                            <button className='flex flex-row justify-between w-full bg-white p-5 mt-15 rounded-4xl font-bold cursor-pointer transition-all duration-500 hover:scale-105'>
+                                Game Developement
+                                <Icon icon="solar:download-minimalistic-bold-duotone" width="24" height="24"/>
+                            </button>
+                        </a>
+                        <a href="/Documets/Resume2.pdf" target='_blank'>
+                            <button className='flex flex-row justify-between w-full bg-white p-5 mt-5 rounded-4xl font-bold cursor-pointer transition-all duration-500 hover:scale-105'>
+                                Electronics Engineering
                                 <Icon icon="solar:download-minimalistic-bold-duotone" width="24" height="24"/>
                             </button>
                         </a>
