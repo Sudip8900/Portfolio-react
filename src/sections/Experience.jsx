@@ -106,11 +106,11 @@ const Experience = () => {
                         ))}
                     </div>
 
-                    <div className='mt-5 p-6 bg-orange-500 w-90 h-fit rounded-2xl'>
+                    <div ref={CVRef} className='mt-5 p-6 bg-orange-500 w-90 h-fit rounded-2xl'>
                         <h1 className='text-white font-light text-8xl'>CV</h1>
 
                         <a href="/Documets/Resume.pdf" target='_blank'>
-                            <button ref={CVRef} className='flex flex-row justify-between w-full bg-white p-5 mt-15 rounded-4xl font-bold tracking-wider cursor-pointer transition-all duration-500 hover:scale-105'>
+                            <button className='flex flex-row justify-between w-full bg-white p-5 mt-15 rounded-4xl font-bold tracking-wider cursor-pointer transition-all duration-500 hover:scale-105'>
                                 Download
                                 <Icon icon="solar:download-minimalistic-bold-duotone" width="24" height="24"/>
                             </button>
