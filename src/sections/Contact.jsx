@@ -58,6 +58,9 @@ const Contact = () => {
 
             tl.to(buttonRef.current, {
                 backgroundColor: "#16a34a",
+                borderRadius: "50px",
+                width: "50px",
+                height: "50px",
                 duration: 0.4
             })
                 .to(buttonTextRef.current, {
@@ -87,11 +90,14 @@ const Contact = () => {
                     scale: 1,
                     opacity: 1,
                     duration: 0.3
-                }, "-=0.1")
+                }, "<+0.5")
 
                 // restore button color
                 .to(buttonRef.current, {
                     backgroundColor: "#ea580c",
+                    borderRadius: "25px",
+                    width: "240px",
+                    height: "72px",
                     duration: 0.3
                 }, "<");
 
@@ -231,7 +237,7 @@ const Contact = () => {
                             <button
                                 ref={buttonRef}
                                 type="submit"
-                                className='relative flex items-center justify-center text-white bg-orange-600 p-5 rounded-[25px] text-[1.1rem] cursor-pointer transition-all duration-500 hover:scale-105'
+                                className='relative flex items-center justify-center text-white bg-orange-600 p-5 rounded-[25px] text-[1.1rem] cursor-pointer transition-all duration-500 hover:scale-105 h-18 w-60'
                             >
 
                                 <span ref={buttonTextRef}>
