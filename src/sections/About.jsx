@@ -21,7 +21,6 @@ const About = () => {
     const SRef = useRef(null);
 
     useGSAP(() => {
-
         gsap.from(headingRef.current, {
             duration: 1,
             opacity: 0,
@@ -158,17 +157,6 @@ const About = () => {
             }
         });
 
-        // gsap.to("#about", {
-        //     scale: 0.95,
-        //     scrollTrigger: {
-        //         trigger: "#about",
-        //         start: "bottom 80%",
-        //         end: "bottom 20%",
-        //         scrub: true,
-        //     },
-        //     ease: "power1.out",
-        // });
-
         gsap.from("#about", {
             scale: 0.95,
             scrollTrigger: {
@@ -182,22 +170,22 @@ const About = () => {
     });
 
     return (
-        <section id="about" className='min-h-screen bg-black rounded-t-4xl rounded-b-4xl'>
-            <div className='text-white text-4xl md:text-8xl font-bold p-5 pl-2 pb-1 md:p-10 md:pb-1'>
+        <section id="about" className='min-h-screen bg-gray-100 dark:bg-[#0a0a0a] transition-colors duration-500 rounded-t-4xl rounded-b-4xl'>
+            <div className='text-black dark:text-white transition-colors duration-500 text-4xl md:text-8xl font-bold p-5 pl-2 pb-1 md:p-10 md:pb-1'>
                 <h1 ref={headingRef} className='inline-block text-center w-full md:text-start'>About Me</h1>
             </div>
             <div className=' border-t-orange-500 border-t-2 py-20 px-5 md:px-10 rounded-t-[50px]'>
                 <div className='md:hidden flex flex-col'>
                     <div className='flex flex-row gap-x-5'>
                         <img ref={imgRef} src="/Images/ProfilePic.png" alt="profile pic" className='w-40 rounded-[25px] border-orange-500 border-2' />
-                        <p ref={nameRef} className='text-white text-2xl text-right mt-10'>Hello I'm<br /><span className='text-orange-500 text-4xl font-bold mt-5 block'>SUDIP PAN</span></p>
+                        <p ref={nameRef} className='text-black dark:text-white transition-colors duration-500 text-2xl text-right mt-10'>Hello I'm<br /><span className='text-orange-500 text-4xl font-bold mt-5 block'>SUDIP PAN</span></p>
                     </div>
                     <div ref={paraRef} className='mt-10'>
-                        <p className='text-white text-justify'>
+                        <p className='text-black dark:text-white transition-colors duration-500 text-justify'>
                             I’m a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, visually engaging games that blend strong design, technical skill, and interactive innovation.
                         </p>
                     </div>
-                    <div ref={paraRef2} className='text-white border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
+                    <div ref={paraRef2} className='text-black dark:text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
                         <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Educations</h1>
                         <div ref={EducationRef1}>
                             <h2 className='text-orange-500 '>Class X</h2>
@@ -215,9 +203,9 @@ const About = () => {
                             <p className='mb-5'>Ramkrishna Mahato Governmet Engineering College {"  [2022-26]"}</p>
                         </div>
                     </div>
-                    <div ref={langRef} className='text-white border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
+                    <div ref={langRef} className='text-black dark:text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
                         <h1 className='text-orange-500 font-bold text-[1rem] text-center mb-5'>Programming Languages</h1>
-                        <div className='flex flex-row gap-x-5 justify-center'>
+                        <div className='flex flex-wrap gap-5 justify-center'>
                             <img width="48" height="48" src="https://img.icons8.com/color/48/c-programming.png" alt="c-programming" className='bg-white border-orange-500 border rounded-[10px]' />
                             <img width="48" height="48" src="https://img.icons8.com/color/48/python.png" alt="python" className='bg-white border-orange-500 border rounded-[10px]' />
                             <img width="48" height="48" src="https://img.icons8.com/color/48/c-plus-plus-logo.png" alt="c++" className='bg-white border-orange-500 border rounded-[10px]' />
@@ -226,9 +214,9 @@ const About = () => {
                             <img width="48" height="48" src="https://img.icons8.com/color/48/tailwind_css.png" alt="tailwind_css" className='bg-white border-orange-500 border rounded-[10px]' />
                         </div>
                     </div>
-                    <div ref={toolsRef} className='text-white border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
+                    <div ref={toolsRef} className='text-black dark:text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
                         <h1 className='text-orange-500 font-bold text-[1rem] text-center mb-5'>Tools</h1>
-                        <div className='flex flex-row gap-x-5 justify-center'>
+                        <div className='flex flex-wrap gap-5 justify-center'>
                             <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/unreal-engine.png" alt="unreal-engine" className='bg-white border-orange-500 border rounded-[10px]' />
                             <img width="48" height="48" src="https://img.icons8.com/color/48/blender-3d.png" alt="blender-3d" className='bg-white border-orange-500 border rounded-[10px]' />
                             <img width="48" height="48" src="https://img.icons8.com/color/48/visual-studio-code-2019.png" alt="visual-studio-code-2019" className='bg-white border-orange-500 border rounded-[10px]' />
@@ -237,16 +225,16 @@ const About = () => {
                         </div>
                     </div>
                 </div>
-                <div className='hidden md:flex md:flex-col gap-y-10 text-white'>
+                <div className='hidden md:flex md:flex-col gap-y-10 text-black dark:text-white transition-colors duration-500'>
                     <div className='flex flex-row gap-x-10'>
                         <img ref={imgRef2} src="/Images/ProfilePic.png" alt="profile pic" className='h-150 border-orange-500 border-2 rounded-[25px] transition-all duration-500 hover:scale-105' />
                         <div ref={paraRef3} className='flex flex-col gap-y-10'>
-                            <h1 className='text-4xl text-white font-bold'>Hello I'm<br /><span className='text-6xl text-orange-500 font-bold mt-5 block'>SUDIP PAN</span></h1>
-                            <p className='text-2xl text-justify'>
+                            <h1 className='text-4xl text-black dark:text-white transition-colors duration-500 font-bold'>Hello I'm<br /><span className='text-6xl text-orange-500 font-bold mt-5 block'>SUDIP PAN</span></h1>
+                            <p className='text-2xl text-justify text-black dark:text-white transition-colors duration-500'>
                                 I’m a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, visually engaging games that blend strong design, technical skill, and interactive innovation.
                             </p>
                             <div ref={SRef} className='flex flex-row gap-x-10'>
-                                <div className='text-white border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px] w-170'>
+                                <div className='text-black dark:text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px] w-full lg:w-170'>
                                     <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Educations</h1>
                                     <p className='text-1xl text-orange-500 ml-5'>Class-X </p>
                                     <div className='h-0.5 w-full bg-orange-500 rounded-full' />
@@ -259,7 +247,7 @@ const About = () => {
                                     <p className='text-1xl ml-5 mb-5'>Ramkrishna Mahato Government Engineering College <span className='block text-end mr-5'>{"[2022-26]"}</span></p>
                                 </div>
                                 <div className='flex flex-col gap-y-10'>
-                                    <div className='text-white border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px] w-170'>
+                                    <div className='text-black dark:text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px] w-full lg:w-170'>
                                         <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Programming Languages</h1>
                                         <div className='flex flex-row justify-between mx-5'>
                                             <img width="48" height="48" src="https://img.icons8.com/color/48/c-programming.png" alt="c-programming" className='bg-white border-orange-500 border rounded-[10px]' />
@@ -270,7 +258,7 @@ const About = () => {
                                             <img width="48" height="48" src="https://img.icons8.com/color/48/tailwind_css.png" alt="tailwind_css" className='bg-white border-orange-500 border rounded-[10px]' />
                                         </div>
                                     </div>
-                                    <div className='text-white border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
+                                    <div className='text-black dark:text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
                                         <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Tools</h1>
                                         <div className='flex flex-row justify-between mx-5'>
                                             <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/unreal-engine.png" alt="unreal-engine" className='bg-white border-orange-500 border rounded-[10px]' />

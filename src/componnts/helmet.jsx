@@ -7,13 +7,17 @@ Source: https://sketchfab.com/3d-models/sci-fi-helmet-785f5cfd848940b1a4a0b8ddee
 Title: Sci-Fi Helmet
 */
 
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useGSAP } from '@gsap/react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 export function Helmet(props) {
   const shapeContainer = useRef(null);
+  const mouseRotateRef = useRef(null);
   const { nodes, materials } = useGLTF('/Model/sci-fi_helmet (1K).glb');
+
   useGSAP(() => {
     const tl = gsap.timeline();
     tl.from(shapeContainer.current.position, {
@@ -21,6 +25,7 @@ export function Helmet(props) {
       duration: 3,
       ease: "circ.out",
     });
+    // Let the GSAP handle large rotation then take over with mouse tracking or combine them!
     gsap.to(shapeContainer.current.rotation, {
       x: 0,
       y: Math.PI * 2,
@@ -29,9 +34,32 @@ export function Helmet(props) {
     }, "<");
   }, [])
 
+  // Capture global mouse independently of Canvas overlay blocking
+  const mouse = useRef({ x: 0, y: 0 });
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+    window.addEventListener('mousemove', onMouseMove);
+    return () => window.removeEventListener('mousemove', onMouseMove);
+  }, []);
+
+  useFrame((state, delta) => {
+    if (mouseRotateRef.current) {
+      // Calculate target rotation based on normalized mouse coordinates
+      const targetX = -(mouse.current.y * Math.PI) / 8; // pitch limits
+      const targetY = (mouse.current.x * Math.PI) / 6; // yaw limits
+
+      // Smoothly damp current rotation toward target
+      mouseRotateRef.current.rotation.x = THREE.MathUtils.damp(mouseRotateRef.current.rotation.x, targetX, 3, delta);
+      mouseRotateRef.current.rotation.y = THREE.MathUtils.damp(mouseRotateRef.current.rotation.y, targetY, 3, delta);
+    }
+  });
+
   return (
     <group ref={shapeContainer} {...props} dispose={null}>
-      <group scale={0.01}>
+      <group ref={mouseRotateRef} scale={0.01}>
         <group position={[-0.726, 260.229, -70.689]} rotation={[-1.62, 0.004, -0.087]} scale={100}>
           <mesh
             castShadow

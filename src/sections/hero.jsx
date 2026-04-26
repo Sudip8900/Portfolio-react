@@ -9,7 +9,7 @@ import { Environment, Float, Lightformer } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from 'react-scroll';
-import RippleGrid from '../componnts/RippleGrid.jsx';
+import Magnetic from '../componnts/Magnetic.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,13 +71,6 @@ const hero = () => {
             ease: "bounce.out",
         }, "<+0.5");
 
-        tl.from(animRef.current, {
-            duration: 1,
-            opacity: 0,
-            scale: 0,
-            ease: "circ.out",
-        });
-
     }, []);
 
     useEffect(() => {
@@ -95,43 +88,31 @@ const hero = () => {
     }, []);
 
     return (
-        <section id="home" className="flex flex-col justify-end min-h-screen">
+        <section id="home" className="flex flex-col justify-end min-h-screen relative">
             <div ref={contextRef}>
                 <div style={{ clipPath: "polygon(0 0, 100% 0%, 100% 100%, 0% 100%)" }}>
                     <div ref={headerRef} className='flex flex-col justify-center gap-6 pt-16 md:gap-12'>
-                        <AnimatedTextSlide text={AboutText} className='ml-5 text-2xl md:ml-10 md:text-4xl font-light tracking-[0.5rem] uppercase' />
-                        <AnimatedTextSlide text={Name} className='text-5xl ml-5 md:text-9xl md:ml-10  font-bold ' />
+                        <AnimatedTextSlide text={AboutText} className='ml-5 text-xl md:ml-10 md:text-4xl font-light tracking-[0.5rem] uppercase' />
+                        <AnimatedTextSlide text={Name} className='text-4xl ml-5 md:text-9xl md:ml-10  font-bold ' />
                     </div>
                 </div>
-                <div className='relative text-black'>
+                <div className='relative text-black dark:text-white transition-colors duration-500'>
                     <div className='absolute inset-x-0 border-t-2 border-t-orange-500' />
-                    <div className='py-12 px-10 bg-white z-50'>
+                    <div className='py-12 px-10 bg-white dark:bg-black transition-colors duration-500 z-50'>
                         <div className='text-end'>
-                            <AutoType subTitle={"I am a passonate "} text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]} Ntextcolor="text-black" AnimTextcolor="outlined-text uppercase" NtextSize="text-1xl md:text-2xl" AnimTextSize="text-[1.5rem] md:text-[4rem]" />
+                            <AutoType subTitle={"I am a passonate "} text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]} Ntextcolor="text-black dark:text-white transition-colors duration-500" AnimTextcolor="outlined-text uppercase" NtextSize="text-1xl md:text-2xl" AnimTextSize="text-[1.5rem] md:text-[4rem]" />
                         </div>
 
                     </div>
                 </div>
             </div>
-            <figure className='absolute inset-0 -z-50' style={{ width: "100vw", height: "100vh" }}>
+            <figure className='absolute inset-0 -z-50' style={{ width: "100%", height: "100vh" }}>
                 {/* Background Image */}
                 <img ref={ImageRef}
                     src="/Images/Background.jpg"
                     alt="background"
                     className="absolute inset-0 w-full h-full object-cover opacity-50 -z-50"
                 />
-                <div ref={animRef} className='absolute w-full h-full opacity-75'>
-                    <RippleGrid
-                        enableRainbow={false}
-                        gridColor="#ff6900"
-                        rippleIntensity={0.05}
-                        gridSize={15}
-                        gridThickness={50}
-                        mouseInteraction={true}
-                        mouseInteractionRadius={1.2}
-                        opacity={0.8}
-                    />
-                </div>
                 <Canvas shadows camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }}>
                     <ambientLight intensity={2} />
                     <Environment resolution={256}>
@@ -148,19 +129,31 @@ const hero = () => {
 
                 </Canvas>
             </figure>
-            <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all, 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all, 0.4s " }} className='absolute mb-auto top-70 right-3 mx-auto h-auto w-auto justify-center flex flex-col align-middle gap-y-5 p-2 z-40 md:gap-y-10'>
+            <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all, 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all, 0.4s " }} className='absolute mb-auto top-40 md:top-70 right-3 mx-auto h-auto w-auto justify-center flex flex-col align-middle gap-y-5 p-2 z-40 md:gap-y-10'>
                 <div className='bg-orange-500 p-2 rounded-full transition-all duration-300 hover:scale-105'>
-                    <a href="https://www.instagram.com/sudip_pan00/" target='_blank'><img src="/Images/instagram-brands-solid.png" alt="Insta" className='w-8 md:w-12 cursor-pointer mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a>
-                    <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank'><img src="/Images/linkedin-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a>
-                    <a href="https://github.com/Sudip8900" target='_blank'><img src="/Images/github-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a>
-                    <a href="https://www.facebook.com/sudip.pan.792/" target='_blank'><img src="/Images/facebook-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 hover:rounded-full hover:bg-white' /></a>
+                    <Magnetic><div className="block"><a href="https://www.instagram.com/sudip_pan00/" target='_blank'><img src="/Images/instagram-brands-solid.png" alt="Insta" className='w-8 md:w-12 cursor-pointer mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a></div></Magnetic>
+                    <Magnetic><div className="block"><a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank'><img src="/Images/linkedin-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a></div></Magnetic>
+                    <Magnetic><div className="block"><a href="https://github.com/Sudip8900" target='_blank'><img src="/Images/github-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 mb-2 md:mb-5 hover:rounded-full hover:bg-white' /></a></div></Magnetic>
+                    <Magnetic><div className="block"><a href="https://www.facebook.com/sudip.pan.792/" target='_blank'><img src="/Images/facebook-brands-solid.png" alt="Insta" className='w-8 cursor-pointer md:w-12 hover:rounded-full hover:bg-white' /></a></div></Magnetic>
                 </div>
                 <div className='relative z-50 md:hidden'>
                     <Link to="contact" smooth={true} duration={600} offset={-50}><button className='bg-orange-500 p-2 rounded-full'><img width="30" src="https://img.icons8.com/pulsar-line/48/hire-me.png" alt="hire-me" /></button></Link>
                 </div>
             </div>
-            <div ref={hireRef} className=' hidden md:flex absolute mb-10 ml-10'>
-                <Link to="contact" smooth={true} duration={600} offset={-50}><button className='bg-transparent p-5 text-2xl text-orange-500 border-orange-500 border-2 rounded-[25px] cursor-pointer transition-all duration-300 hover:scale-105 hover:border-none hover:bg-orange-500 hover:text-white'>Get In Touch {">"} </button></Link>
+            <div ref={hireRef} className=' hidden md:flex absolute bottom-10 ml-10'>
+                <Magnetic>
+                    <div className="inline-block relative">
+                       <Link to="contact" smooth={true} duration={600} offset={-50} className='block w-full h-full'><button className='bg-transparent p-5 text-2xl text-orange-500 border-orange-500 border-2 rounded-[25px] cursor-pointer transition-all duration-300 hover:border-none hover:bg-orange-500 hover:text-white'>Get In Touch {">"} </button></Link>
+                    </div>
+                </Magnetic>
+            </div>
+
+            {/* Scroll Hint */}
+            <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center z-40 text-orange-500 pointer-events-none opacity-80">
+                <span className="text-[10px] md:text-xs tracking-[0.3em] font-light uppercase mb-4 drop-shadow-md">Scroll</span>
+                <div className="w-[1px] h-12 md:h-16 bg-white/20 relative overflow-hidden">
+                    <div className="w-full h-full bg-orange-500 animate-[dropLine_2s_ease-in-out_infinite]" />
+                </div>
             </div>
         </section>
     )

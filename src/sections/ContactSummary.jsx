@@ -47,7 +47,7 @@ const ContactSummary = () => {
                     </p>
                 </div>
             </div>
-            <Marque items={items2} reverse={true} className='text-black bg-transparent border-y-2 border-orange-500' iconClassname='text-orange-500' iconName='mdi:gamepad-circle-right' />
+            <Marque items={items2} reverse={true} className='text-black dark:text-white transition-colors duration-500 bg-transparent border-y-2 border-orange-500' iconClassname='text-orange-500' iconName='mdi:gamepad-circle-right' />
         </section>
     )
 }

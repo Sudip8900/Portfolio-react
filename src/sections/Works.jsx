@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BlenderProjects, UnrealProjects } from '../constants';
 import { Icon } from '@iconify/react';
+import Magnetic from '../componnts/Magnetic.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +21,9 @@ const Works = () => {
     const previewRef = useRef(null);
     const DesRef = useRef(null);
 
+    const blenderItemsRef = useRef([]);
+    const unrealItemsRef = useRef([]);
+
     const moveX = useRef(null);
     const moveY = useRef(null);
     const mouse = useRef({ x: 0, y: 0 });
@@ -33,74 +37,85 @@ const Works = () => {
 
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: headingRef.current,
-                start: "top 80%",
+                trigger: "#works",
+                start: "top 60%",
             }
         });
 
         if (headingRef.current) {
             tl.from(headingRef.current.children, {
-                duration: 1,
+                duration: 0.8,
                 opacity: 0,
-                yPercent: 100,
+                y: 50,
                 ease: "circ.out",
-                stagger: 0.3,
+                stagger: 0.2,
             });
         }
 
         if (lineRef.current) {
-            gsap.from(lineRef.current, {
-                duration: 1,
-                xPercent: 100,
+            tl.from(lineRef.current, {
+                duration: 0.6,
+                scaleX: 0,
+                transformOrigin: "right center",
                 ease: "circ.out",
-                scrollTrigger: {
-                    trigger: lineRef.current,
-                    start: "top 80%",
-                }
-            });
+            }, "-=0.4");
         }
 
-        if (subRef.current) {
-            gsap.from(subRef.current.children, {
-                duration: 1,
-                opacity: 0,
-                y: 50,
-                stagger: 0.2,
-                ease: "circ.out",
-                scrollTrigger: {
-                    trigger: subRef.current,
-                    start: "top 80%",
-                }
-            });
-        }
+        const isMobile = window.innerWidth < 768;
+        const subToAnimate = isMobile ? subRef2.current : subRef.current;
 
-        if (subRef2.current) {
-            gsap.from(subRef2.current.children, {
-                duration: 1,
+        if (subToAnimate) {
+            tl.from(subToAnimate.children, {
+                duration: 0.6,
                 opacity: 0,
-                y: 50,
-                stagger: 0.2,
+                y: 30,
+                stagger: 0.1,
                 ease: "circ.out",
-                scrollTrigger: {
-                    trigger: subRef2.current,
-                    start: "top 80%",
-                }
-            });
+            }, "-=0.3");
         }
 
         if (projectRef.current) {
-            gsap.from(projectRef.current.children, {
+            tl.from(projectRef.current.children, {
                 y: 50,
                 opacity: 0,
                 stagger: 0.2,
-                duration: 1,
+                duration: 0.8,
+                ease: "power2.out",
+            }, "-=0.4");
+        }
+
+        /* Inner Scroll Animations */
+        blenderItemsRef.current.forEach((item) => {
+            if (!item) return;
+            gsap.from(item, {
+                opacity: 0,
+                x: 50,
+                duration: 0.5,
                 ease: "power2.out",
                 scrollTrigger: {
-                    trigger: projectRef.current,
-                    start: "top 80%",
-                },
+                    trigger: item,
+                    scroller: item.closest('.scroll-container'),
+                    start: "top bottom-=10",
+                    toggleActions: "play none none reverse",
+                }
             });
-        }
+        });
+
+        unrealItemsRef.current.forEach((item) => {
+            if (!item) return;
+            gsap.from(item, {
+                opacity: 0,
+                x: 50,
+                duration: 0.5,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: item,
+                    scroller: item.closest('.scroll-container'),
+                    start: "top bottom-=10",
+                    toggleActions: "play none none reverse",
+                }
+            });
+        });
 
         return () => {
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
@@ -216,7 +231,7 @@ const Works = () => {
             >
 
                 {/* Blender */}
-                <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5 scroll-container'>
+                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-gray-300 dark:bg-[#111111] transition-colors duration-500 m-5 rounded-lg p-5 scroll-container'>
                     <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5'>
                         Blender
                     </h1>
@@ -224,19 +239,24 @@ const Works = () => {
                     {BlenderProjects.map((project, index) => (
                         <div
                             key={index}
+                            ref={el => blenderItemsRef.current[index] = el}
                             onMouseEnter={() => handleMouseEnter("blender", index)}
                             onMouseLeave={handleMouseLeave}
                         >
-                            <div className='flex justify-between items-center px-6 py-4 mb-3 bg-gray-200 rounded-lg cursor-pointer group hover:bg-gray-800 transition-all duration-300 hover:scale-105'>
+                            <div className='flex justify-between items-center px-6 py-4 mb-3 bg-gray-200 dark:bg-[#1a1a1a] rounded-lg cursor-pointer group hover:bg-gray-800 dark:hover:bg-orange-500 transition-all duration-300 hover:scale-105'>
                                 <h2 className='lg:text-[32px] text-[26px] leading-none group-hover:text-white transition'>
                                     {project.name}
                                 </h2>
-                                <a href={project.link} target="_blank" rel="noopener noreferrer">
-                                    <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500' width="30" height="30" />
-                                </a>
+                                <Magnetic>
+                                    <div className="inline-block relative">
+                                        <a href={project.link} target="_blank" rel="noopener noreferrer">
+                                            <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500' width="30" height="30" />
+                                        </a>
+                                    </div>
+                                </Magnetic>
                             </div>
 
-                            <div className='relative flex px-10 md:hidden h-auto py-5 bg-gray-200 mb-5 rounded-lg'>
+                            <div className='relative flex px-10 md:hidden h-auto py-5 bg-gray-200 dark:bg-[#1a1a1a] mb-5 rounded-lg transition-colors duration-500'>
                                 <img src={project.image} alt={project.name} className="rounded-lg w-full" />
                             </div>
                         </div>
@@ -244,7 +264,7 @@ const Works = () => {
                 </div>
 
                 {/* Unreal */}
-                <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5 scroll-container'>
+                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-gray-300 dark:bg-[#111111] transition-colors duration-500 m-5 rounded-lg p-5 scroll-container'>
                     <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5'>
                         Unreal Engine
                     </h1>
@@ -254,9 +274,10 @@ const Works = () => {
                     {UnrealProjects.map((project, index) => (
                         <div
                             key={index}
+                            ref={el => unrealItemsRef.current[index] = el}
                             onMouseEnter={() => handleMouseEnter("unreal", index)}
                             onMouseLeave={handleMouseLeave}
-                            className='px-6 py-4 mb-3 bg-gray-200 rounded-lg cursor-pointer group hover:bg-gray-800 transition-all duration-300 hover:scale-105'
+                            className='px-6 py-4 mb-3 bg-gray-200 dark:bg-[#1a1a1a] rounded-lg cursor-pointer group hover:bg-gray-800 dark:hover:bg-orange-500 transition-all duration-300 hover:scale-105'
                         >
                             <a
                                 href={project.Link}
@@ -267,14 +288,18 @@ const Works = () => {
                                 <h2 className='lg:text-[32px] text-[26px] leading-none group-hover:text-white transition'>
                                     {project.name}
                                 </h2>
-                                <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500' width="30" height="30" />
+                                <Magnetic>
+                                    <div className="inline-block relative">
+                                        <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500' width="30" height="30" />
+                                    </div>
+                                </Magnetic>
                             </a>
                         </div>
                     ))}
                 </div>
 
                 {/* VLSI */}
-                <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 m-5 rounded-lg p-5'>
+                <div className='w-auto md:w-1/3 h-150 overflow-y-auto bg-gray-300 dark:bg-[#111111] transition-colors duration-500 m-5 rounded-lg p-5'>
                     <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5'>
                         VLSI
                     </h1>
@@ -300,7 +325,7 @@ const Works = () => {
                         />
                         <div
                             ref={DesRef}
-                            className='bg-white absolute bottom-0 p-5 rounded-2xl text-[1.2rem] m-5 border border-orange-500'
+                            className='bg-white dark:bg-black dark:text-white transition-colors duration-500 absolute bottom-0 p-5 rounded-2xl text-[1.2rem] m-5 border border-orange-500'
                         >
                             {BlenderProjects[currentPreview.index].description}
                         </div>

@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
-body{
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
   font-family: "Michroma", sans-serif;
+  @apply bg-gray-50 text-black dark:bg-[#050505] dark:text-white transition-colors duration-500;
 }
 
 /* Hide scrollbar for Chrome, Edge, Safari */
@@ -20,6 +23,12 @@ body {
   -ms-overflow-style: none;
 }
 
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
 .contact-text-responsive {
   font-size: clamp(2rem, 6vw, 6rem);
   line-height: 1.1;
@@ -32,4 +41,11 @@ body {
 .outlined-text {
   color: transparent;              /* makes inside transparent */
   -webkit-text-stroke: 0.5px #ff6900; /* outline thickness + color */
+}
+
+@keyframes dropLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  50.1% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
 }

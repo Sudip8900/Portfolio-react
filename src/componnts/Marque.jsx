@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import gsap from 'gsap';
 import React, { useEffect, useRef } from 'react';
-import { Observer } from 'gsap/Observer';
+import { Observer } from 'gsap/all';
 
 gsap.registerPlugin(Observer);
 
@@ -71,36 +71,65 @@ const Marque = ({
     }
 
     useEffect(() => {
-        const tl = horizontalLoop(itemsRef.current, {
-            repeat: -1,
-            paddingRight: 30,
-        });
+        let tl;
+        let observer;
 
-        const baseDirection = reverse ? -1 : 1;
+        const initMarquee = () => {
+            // Safely filter out any null elements React left behind during unmounts
+            const liveItems = itemsRef.current.filter(Boolean);
+            if (!liveItems.length) return;
 
-        if (reverse) {
-            tl.progress(1);
+            // Clear any old inline styles when recalculating layout
+            gsap.set(liveItems, { clearProps: "all" });
+
+            tl = horizontalLoop(liveItems, {
+                repeat: -1,
+                paddingRight: 30,
+            });
+
+            const baseDirection = reverse ? -1 : 1;
+
+            if (reverse) {
+                tl.progress(1);
+            }
+
+            tl.timeScale(baseDirection);
+
+            observer = Observer.create({
+                onChangeY(self) {
+                    let direction = baseDirection;
+
+                    if (self.deltaY < 0) {
+                        direction *= -1;
+                    }
+
+                    gsap.timeline({ defaults: { ease: "none" } })
+                        .to(tl, { timeScale: direction * 3, duration: 0.2, overwrite: true })
+                        .to(tl, { timeScale: baseDirection, duration: 1 }, "+=0.3");
+                }
+            });
+        };
+
+        // Guarantee web fonts are totally loaded before GSAP measures width to avoid overlapping!
+        if (document.fonts) {
+            document.fonts.ready.then(initMarquee);
+        } else {
+            setTimeout(initMarquee, 200);
         }
 
-        tl.timeScale(baseDirection);
+        // Handle mathematical resize overlaps
+        const debounceResize = () => {
+            if (tl) tl.kill();
+            if (observer) observer.kill();
+            initMarquee();
+        };
 
-        const observer = Observer.create({
-            onChangeY(self) {
-                let direction = baseDirection;
-
-                if (self.deltaY < 0) {
-                    direction *= -1;
-                }
-
-                gsap.timeline({ defaults: { ease: "none" } })
-                    .to(tl, { timeScale: direction * 3, duration: 0.2, overwrite: true })
-                    .to(tl, { timeScale: baseDirection, duration: 1 }, "+=0.3");
-            }
-        });
+        window.addEventListener("resize", debounceResize);
 
         return () => {
-            tl.kill();
-            observer.kill();
+            if (tl) tl.kill();
+            if (observer) observer.kill();
+            window.removeEventListener("resize", debounceResize);
         };
     }, [items, reverse]);
 
