@@ -155,7 +155,7 @@ const Contact = () => {
     }, []);
 
     return (
-        <section id="contact" className="flex flex-col justify-between min-h-screen bg-gray-100 dark:bg-black transition-colors duration-500">
+        <section id="contact" className="flex flex-col justify-between min-h-screen bg-black transition-colors duration-500">
 
             <div>
                 <div ref={headinRef}>
@@ -163,7 +163,7 @@ const Contact = () => {
                         You dream it, I build it
                     </h2>
 
-                    <h1 className="text-4xl font-bold text-center text-black dark:text-white transition-colors duration-500 md:text-end md:text-[6rem] md:mx-10">
+                    <h1 className="text-4xl font-bold text-center text-white transition-colors duration-500 md:text-end md:text-[6rem] md:mx-10">
                         Contact Me
                     </h1>
                 </div>
@@ -180,10 +180,10 @@ const Contact = () => {
                         <h2 className='text-orange-500 text-4xl text-center'>Catch Me</h2>
 
                         <div className='input-box flex flex-col m-5'>
-                            <label className='text-black dark:text-white transition-colors duration-500 mb-5'>Full Name</label>
+                            <label className='text-white transition-colors duration-500 mb-5'>Full Name</label>
                             <input
                                 type="text"
-                                className='field bg-black/5 dark:bg-white/10 h-15 placeholder:text-black/60 dark:placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-black dark:text-white transition-colors duration-500'
+                                className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white transition-colors duration-500'
                                 placeholder='Enter Your Name'
                                 name='name'
                                 required
@@ -191,10 +191,10 @@ const Contact = () => {
                         </div>
 
                         <div className='input-box flex flex-col m-5'>
-                            <label className='text-black dark:text-white transition-colors duration-500 mb-5'>Email Address</label>
+                            <label className='text-white transition-colors duration-500 mb-5'>Email Address</label>
                             <input
                                 type="email"
-                                className='field bg-black/5 dark:bg-white/10 h-15 placeholder:text-black/60 dark:placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-black dark:text-white transition-colors duration-500'
+                                className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white transition-colors duration-500'
                                 placeholder='Enter Your Email'
                                 name='email'
                                 required
@@ -202,11 +202,11 @@ const Contact = () => {
                         </div>
 
                         <div className='input-box flex flex-col m-5'>
-                            <label className='text-black dark:text-white transition-colors duration-500 mb-5'>Message</label>
+                            <label className='text-white transition-colors duration-500 mb-5'>Message</label>
                             <textarea
                                 name="message"
                                 placeholder='Message'
-                                className='bg-black/5 dark:bg-white/10 field mess placeholder:text-black/60 dark:placeholder:text-white/60 border-orange-500 border rounded-[20px] p-5 text-black dark:text-white transition-colors duration-500'
+                                className='bg-white/10 field mess placeholder:text-white/60 border-orange-500 border rounded-[20px] p-5 text-white transition-colors duration-500'
                                 required
                             ></textarea>
                         </div>
@@ -247,21 +247,21 @@ const Contact = () => {
 
                     <div
                         ref={SubRef}
-                        className="text-black/80 dark:text-white/80 transition-colors duration-500 text-end mx-5 mt-1 mb-10 md:mx-10 md:text-2xl gap-y-1 md:gap-y-2 flex flex-col items-end"
+                        className="text-white/80 transition-colors duration-500 text-end mx-5 mt-1 mb-10 md:mx-10 md:text-2xl gap-y-1 md:gap-y-2 flex flex-col items-end"
                     >
                         <p>Got a question, how or project idea?</p>
                         <p>I would love to hear from you and</p>
                         <p>discuss further!</p>
                     </div>
 
-                    <div className='flex px-10 text-black dark:text-white transition-colors duration-500 uppercase lg:text-[32px] text-[26px] leading-none mb-10'>
+                    <div className='flex px-10 text-white transition-colors duration-500 uppercase lg:text-[32px] text-[26px] leading-none mb-10'>
 
                         <div className='flex flex-col w-full gap-10 md:text-end'>
 
                             <div className='social-link'>
                                 <h2>E-mail</h2>
                                 <div className='w-full h-px my-2 bg-orange-400' />
-                                <p className='text-xl text-black/80 dark:text-white/80 transition-colors duration-500 lowercase md:text-2xl lg:text-3xl'>
+                                <p className='text-xl text-white/80 transition-colors duration-500 lowercase md:text-2xl lg:text-3xl'>
                                     iamsudippan@gmail.com
                                 </p>
                             </div>
@@ -269,7 +269,7 @@ const Contact = () => {
                             <div className='social-link'>
                                 <h2>Phone</h2>
                                 <div className='w-full h-px my-2 bg-orange-400' />
-                                <p className='text-xl text-black/80 dark:text-white/80 transition-colors duration-500 lowercase md:text-2xl lg:text-3xl'>
+                                <p className='text-xl text-white/80 transition-colors duration-500 lowercase md:text-2xl lg:text-3xl'>
                                     +91 8900359269
                                 </p>
                             </div>
