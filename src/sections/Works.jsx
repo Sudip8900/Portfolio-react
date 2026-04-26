@@ -332,25 +332,26 @@ const Works = () => {
                     </div>
                 )}
 
-                {currentPreview && currentPreview.type === "unreal" && (
-                    <div className="relative">
-                        {videoLoading && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black text-orange-500 z-10">
-                                <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                            </div>
-                        )}
+                {currentPreview && currentPreview.type === "unreal" && (() => {
+                    const project = UnrealProjects[currentPreview.index];
+                    const videoId = project.Link ? project.Link.split('/').pop().split('?')[0] : '';
+                    return (
+                        <div className="relative overflow-hidden w-[900px] h-[550px]">
+                            {videoLoading && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black text-orange-500 z-10">
+                                    <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                                </div>
+                            )}
 
-                        <video
-                            src={UnrealProjects[currentPreview.index].video}
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            onLoadedData={() => setVideoLoading(false)}
-                            className="w-[900px] h-[550px]"
-                        />
-                    </div>
-                )}
+                            <iframe
+                                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0`}
+                                allow="autoplay; encrypted-media"
+                                onLoad={() => setVideoLoading(false)}
+                                className="w-full h-full border-none pointer-events-none scale-[1.35]"
+                            />
+                        </div>
+                    );
+                })()}
             </div>
 
         </section>
