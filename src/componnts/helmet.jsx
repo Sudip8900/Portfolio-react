@@ -13,12 +13,13 @@ import { useGSAP } from '@gsap/react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export function Helmet(props) {
+export function Helmet({ IsReady, ...props }) {
   const shapeContainer = useRef(null);
   const mouseRotateRef = useRef(null);
   const { nodes, materials } = useGLTF('/Model/sci-fi_helmet (1K).glb');
 
   useGSAP(() => {
+    if (!IsReady) return;
     const tl = gsap.timeline();
     tl.from(shapeContainer.current.position, {
       y: 5,
@@ -32,7 +33,7 @@ export function Helmet(props) {
       duration: 10,
       ease: "power3.inOut",
     }, "<");
-  }, [])
+  }, { dependencies: [IsReady] })
 
   // Capture global mouse independently of Canvas overlay blocking
   const mouse = useRef({ x: 0, y: 0 });

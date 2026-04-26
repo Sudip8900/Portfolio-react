@@ -18,7 +18,6 @@ const AnimatedTextSlide = ({ text, className }) => {
         opacity: 0,
         duration: 0.6,
         ease: "back.out(1.7)",
-        stagger: 0.2,
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 80%",

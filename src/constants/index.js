@@ -105,7 +105,7 @@ export const BlenderProjects = [
         link: "https://www.linkedin.com/posts/sudip-pan-7a3946253_everyone-blender-3ddesign-activity-7251186012389793792-BImF?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAD6cDOsBFOByRF8HlviCci3sUNgr2EflDIo"
     },
     {
-        id: 13 ,
+        id: 13,
         name: "Dungeon Environment",
         description: "A realistic dungeon environment model created using Blender, showcasing advanced modeling techniques and attention to detail.",
         image: "/Images/dungeon.jpg",
@@ -124,26 +124,27 @@ export const UnrealProjects = [
     {
         id: 1,
         name: "Environment",
-        video: "/Videos/Env.mp4",
         Link: "https://youtu.be/TqjBTywDG_o",
     },
     {
         id: 2,
         name: "Combat System",
-        video: "/Videos/combat System.mp4",
         Link: "https://youtu.be/U1AXgNLlE80",
     },
     {
         id: 3,
         name: "Optimization",
-        video: "/Videos/Optimization.mp4",
         Link: "https://youtu.be/-7pP8e9L3Zk",
     },
     {
         id: 4,
         name: "Basic enemy AI",
-        video: "/Videos/Enemy AI.mp4",
         Link: "https://youtu.be/fO_3uYWMa3w",
+    },
+    {
+        id: 5,
+        name: "Target System",
+        Link: "https://youtu.be/4Ns_uGD0uA8",
     }
 ];
 
@@ -175,8 +176,8 @@ export const experience = [
         description: "Designing and simulating VLSI circuits using Cadence tools."
     },
     {
-        id:5,
-        role:"Social Media Assistant",
+        id: 5,
+        role: "Social Media Assistant",
         company: "GRID",
         image: "/Images/Grid.jpg",
         width: "60",
@@ -185,7 +186,7 @@ export const experience = [
         description: "Assisting in social media management and content creation."
     },
     {
-        id:6,
+        id: 6,
         role: "Sales Associate",
         company: "RENTALSIFY",
         image: "/Images/rentalsify_logo.jpg",
@@ -195,9 +196,9 @@ export const experience = [
         description: "Assisting customers with rental inquiries and managing bookings."
     },
     {
-        id:7,
+        id: 7,
         role: "Member",
-        company:"GDSC RKMGEC",
+        company: "GDSC RKMGEC",
         icon: "logos:google-developers",
         duration: "Nov 2022 - Present",
         description: "Contributing to various projects and events organized by GDSC RKMGEC."

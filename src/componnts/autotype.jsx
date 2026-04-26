@@ -14,7 +14,6 @@ function AutoType({ subTitle, title, text, Ntextcolor, AnimTextcolor, NtextSize,
       opacity: 0,
       y: 80,
       ease: "circ.out",
-      stagger: 0.3, // delay between lines
     });
   }, []);
 

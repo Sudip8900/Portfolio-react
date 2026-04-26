@@ -7,7 +7,7 @@ import { Link, Events, scrollSpy } from 'react-scroll';
 import { useLenis } from 'lenis/react';
 import Magnetic from '../componnts/Magnetic.jsx';
 import { Icon } from '@iconify/react';
-import { useTheme } from '../componnts/ThemeContext.jsx';
+
 
 const Navbar = () => {
     const navRef = useRef(null);
@@ -22,26 +22,12 @@ const Navbar = () => {
     const icontl = useRef(null);
     const titleRef = useRef(null);
     const BurgerRef = useRef(null);
-    const { theme, toggleTheme } = useTheme();
-    const [showHint, setShowHint] = useState(false);
 
-    useEffect(() => {
-        const hasSeenHint = localStorage.getItem('hasSeenThemeHint');
-        if (!hasSeenHint) {
-            const timer = setTimeout(() => setShowHint(true), 3000);
-            return () => clearTimeout(timer);
-        }
-    }, []);
-
-    const dismissHint = () => {
-        setShowHint(false);
-        localStorage.setItem('hasSeenThemeHint', 'true');
-    };
 
     // Smooth sliding indicator state
     const indicatorRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    const sectionsList = ['home', 'about', 'works', 'contact'];
+    const sectionsList = ['home', 'about', 'works', 'experience', 'contact'];
 
 
     useGSAP(() => {
@@ -61,13 +47,11 @@ const Navbar = () => {
             autoAlpha: 1,
             x: 0,
             duration: 0.5,
-            stagger: 0.1,
             ease: "power3.out"
         }, "<").to(contactRef.current, {
             autoAlpha: 1,
             x: 0,
             duration: 0.5,
-            stagger: 0.1,
             ease: "power3.out"
         }, "<").to(navRef.current, {
             borderTopLeftRadius: 0,
@@ -83,16 +67,10 @@ const Navbar = () => {
             transformOrigin: "center center"
         }, "<+1");
 
-        gsap.set(linkRef2.current, {
-            autoAlpha: 0,
-            y: -20
-        });
-
         gsap.to(linkRef2.current, {
             autoAlpha: 1,
             y: 0,
             duration: 0.5,
-            stagger: 0.1,
             ease: "power3.out"
         }, "<");
 
@@ -158,10 +136,10 @@ const Navbar = () => {
 
                 {/* Main Glass Navbar */}
                 <nav
-                    className="flex items-center justify-between px-10 py-5 rounded-full bg-white/60 dark:bg-black/60 backdrop-blur-[32px] backdrop-saturate-[180%] border border-black/10 dark:border-white/10 w-full max-w-7xl relative pointer-events-auto shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-colors duration-500">
+                    className="flex items-center justify-between px-10 py-4 rounded-full bg-[#0a0a0a]/80 backdrop-blur-[32px] border border-orange-500/30 w-full max-w-7xl relative pointer-events-auto shadow-[0_0_30px_rgba(255,105,0,0.05)]">
                     {/* Logo */}
-                    <div className="text-2xl font-bold tracking-widest uppercase text-black dark:text-white transition-colors duration-500 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></span>
+                    <div className="text-xl font-bold tracking-widest uppercase text-white flex items-center gap-3">
+                        <span className="w-2 h-2 bg-orange-500 animate-pulse drop-shadow-[0_0_5px_rgba(255,105,0,1)]"></span>
                         <h1>SUDIP.DEV</h1>
                     </div>
 
@@ -178,8 +156,8 @@ const Navbar = () => {
                                 <div className="inline-block relative py-1" ref={(el) => (linkRef2.current[index] = el)}>
                                     <Link
                                         spy={true}
-                                        activeClass='!text-black dark:!text-white pointer-events-none scale-110 drop-shadow-[0_0_10px_rgba(255,105,0,0.5)]'
-                                        className="transition-all duration-300 cursor-pointer text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white uppercase inline-block"
+                                        activeClass='!text-orange-500 pointer-events-none scale-110 drop-shadow-[0_0_10px_rgba(255,105,0,0.5)]'
+                                        className="transition-all duration-300 cursor-pointer tracking-widest text-xs text-white/50 hover:text-orange-500 uppercase inline-block"
                                         to={section}
                                         smooth
                                         duration={200}
@@ -194,72 +172,43 @@ const Navbar = () => {
                     </div>
                 </nav>
 
-                <div className="relative group">
-                    <button 
-                        onClick={() => { toggleTheme(); if(showHint) dismissHint(); }} 
-                        className="flex items-center justify-center p-5 rounded-full bg-white/60 dark:bg-black/60 backdrop-blur-[32px] backdrop-saturate-[180%] border border-black/10 dark:border-white/10 text-black dark:text-white pointer-events-auto shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:text-orange-500 dark:hover:text-orange-500 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-500 z-50"
-                    >
-                        {theme === 'light' ? <Icon icon="solar:moon-bold" width="24" height="24" /> : <Icon icon="solar:sun-bold" width="24" height="24" />}
-                    </button>
-                    {showHint && (
-                        <div className="absolute top-full right-0 mt-4 w-40 bg-black/80 backdrop-blur-md border border-orange-500/50 rounded-xl p-3 shadow-[0_5px_20px_rgba(255,105,0,0.2)] pointer-events-auto animate-bounce z-50">
-                            <p className="text-white text-xs text-center font-bold">Try the new Light/Dark mode!</p>
-                            <div className="absolute -top-2 right-6 w-4 h-4 bg-black border-t border-l border-orange-500/50 rotate-45"></div>
-                            <button onClick={dismissHint} className="absolute -top-2 -right-2 text-gray-400 hover:text-white bg-black rounded-full border border-orange-500/50 p-0.5">
-                                <Icon icon="solar:close-circle-bold" width="16" height="16" />
-                            </button>
-                        </div>
-                    )}
-                </div>
+
             </div>
 
-            {/* Mobile Menu Slide-Out */}
-            <nav ref={navRef} className='fixed z-50 w-full h-full flex flex-col justify-between px-10 uppercase bg-white/90 dark:bg-black/90 backdrop-blur-xl border-l border-black/10 dark:border-white/10 text-black/80 dark:text-white/80 transition-colors duration-500 py-32 gap-y-10 md:hidden rounded-l-[40px] shadow-2xl'>
-                <div className='flex flex-col text-5xl gap-y-4 font-bold tracking-wider'>
-                    {['home', 'about', 'works', 'contact'].map((section, index) => (
-                        <div key={index} ref={(el) => (linkRef.current[index] = el)}>
-                            <Link onClick={toggleMenue} className='transition-all duration-300 cursor-pointer hover:text-orange-500 hover:pl-4' to={`${section}`} smooth offset={0} duration={200}>{section}</Link>
+            <nav ref={navRef} className='fixed z-50 w-full h-full flex flex-col justify-between px-10 uppercase bg-[#0a0a0a]/95 backdrop-blur-xl border-l-2 border-orange-500/30 text-white/80 pt-24 pb-16 gap-y-10 md:hidden shadow-2xl overflow-y-auto'>
+                <div className='flex flex-col text-3xl gap-y-10 font-bold tracking-widest mt-10'>
+                    <div className="text-orange-500/50 text-[10px] tracking-widest mb-2 border-b border-orange-500/20 pb-2">// SELECT_DIRECTORY</div>
+                    {['home', 'about', 'works', 'experience', 'contact'].map((section, index) => (
+                        <div key={index} ref={(el) => (linkRef.current[index] = el)} className="group">
+                            <Link onClick={toggleMenue} className='flex items-center transition-all duration-300 cursor-pointer text-white/70 hover:text-orange-500' to={`${section}`} smooth offset={0} duration={200}>
+                                <span className="text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity mr-4">{'>'}</span>
+                                {section}
+                            </Link>
                         </div>
                     ))}
                 </div>
-                <div ref={contactRef} className='flex flex-col flex-wrap justify-between gap-8 mb-10'>
+                <div ref={contactRef} className='flex flex-col gap-10 mb-10'>
                     <div>
-                        <p className='text-orange-500 tracking-widest text-sm mb-2'>E-MAIL</p>
-                        <p className='text-xl'>iamsudippan@gmail.com</p>
+                        <p className='text-orange-500 tracking-widest text-[10px] mb-2 border-b border-orange-500/20 pb-2'>// SYS.CONTACT</p>
+                        <p className='text-sm text-white/70 hover:text-orange-500 transition-colors cursor-pointer'>iamsudippan@gmail.com</p>
                     </div>
                     <div className='flex flex-col'>
-                        <p className='text-orange-500 tracking-widest text-sm mb-2'>SOCIALS</p>
-                        <div className='flex flex-col gap-2'>{socials.map((social, index) => (
-                            <a key={index} href={social.href} target='_blank' className='text-xl hover:text-orange-500 transition-colors'>{social.name}</a>
+                        <p className='text-orange-500 tracking-widest text-[10px] mb-2 border-b border-orange-500/20 pb-2'>// SYS.SOCIALS</p>
+                        <div className='flex flex-col gap-4'>{socials.map((social, index) => (
+                            <a key={index} href={social.href} target='_blank' className='text-sm text-white/70 hover:text-orange-500 transition-colors'>[ {social.name} ]</a>
                         ))}</div>
                     </div>
-                    <button className='bg-transparent border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white transition-colors duration-300 py-4 text-xl rounded-full'><a href="/Documets/Resume.pdf" target='_blank'>Download Resume</a></button>
                 </div>
             </nav>
 
-            {/* Mobile Top Bar */}
             <div>
-                <div ref={titleRef} className='text-xl font-bold tracking-widest uppercase text-black dark:text-white fixed m-5 md:hidden bg-white/40 dark:bg-black/40 backdrop-blur-md border border-black/10 dark:border-white/10 transition-colors duration-500 shadow-lg px-6 py-3 rounded-full z-40 flex items-center gap-2'>
-                    <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
+                <div ref={titleRef} className='text-lg font-bold tracking-widest uppercase text-white fixed m-5 md:hidden bg-[#0a0a0a]/80 backdrop-blur-md border border-orange-500/30 shadow-[0_0_15px_rgba(255,105,0,0.1)] px-5 py-3 flex items-center gap-3 z-40'>
+                    <span className="w-2 h-2 bg-orange-500 animate-pulse drop-shadow-[0_0_5px_rgba(255,105,0,1)]"></span>
                     <h1>SUDIP.DEV</h1>
                 </div>
-                <div className="fixed z-[60] top-5 right-24 md:hidden pointer-events-none">
-                    <button onClick={() => { toggleTheme(); if(showHint) dismissHint(); }} className='flex items-center justify-center text-black dark:text-white bg-white/40 dark:bg-black/40 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-full cursor-pointer w-14 h-14 shadow-lg hover:border-orange-500 dark:hover:border-orange-500 hover:text-orange-500 dark:hover:text-orange-500 transition-colors duration-500 pointer-events-auto'>
-                        {theme === 'light' ? <Icon icon="solar:moon-bold" width="24" height="24" /> : <Icon icon="solar:sun-bold" width="24" height="24" />}
-                    </button>
-                    {showHint && (
-                        <div className="absolute top-full right-0 mt-4 w-40 bg-black/80 backdrop-blur-md border border-orange-500/50 rounded-xl p-3 shadow-[0_5px_20px_rgba(255,105,0,0.2)] pointer-events-auto animate-bounce z-50">
-                            <p className="text-white text-xs text-center font-bold">Try the new Light/Dark mode!</p>
-                            <div className="absolute -top-2 right-6 w-4 h-4 bg-black border-t border-l border-orange-500/50 rotate-45"></div>
-                            <button onClick={dismissHint} className="absolute -top-2 -right-2 text-gray-400 hover:text-white bg-black rounded-full border border-orange-500/50 p-0.5">
-                                <Icon icon="solar:close-circle-bold" width="16" height="16" />
-                            </button>
-                        </div>
-                    )}
-                </div>
-                <div ref={BurgerRef} className='fixed z-[60] flex flex-col items-center justify-center gap-1.5 transition-all duration-500 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-full cursor-pointer w-14 h-14 top-5 right-5 md:hidden shadow-lg hover:border-orange-500 dark:hover:border-orange-500' onClick={toggleMenue}>
-                    <span ref={toplineRef} className='block w-6 h-0.5 bg-orange-500 rounded-full origin-center transition-all'></span>
-                    <span ref={bottomlineRef} className='block w-6 h-0.5 bg-orange-500 rounded-full origin-center transition-all'></span>
+                <div ref={BurgerRef} className='fixed z-[60] flex flex-col items-center justify-center gap-1.5 transition-all duration-500 bg-[#0a0a0a]/80 backdrop-blur-md border border-orange-500/30 shadow-[0_0_15px_rgba(255,105,0,0.1)] cursor-pointer w-12 h-12 top-5 right-5 md:hidden hover:border-orange-500 hover:bg-orange-500/10' onClick={toggleMenue}>
+                    <span ref={toplineRef} className='block w-5 h-[2px] bg-orange-500 origin-center transition-all'></span>
+                    <span ref={bottomlineRef} className='block w-5 h-[2px] bg-orange-500 origin-center transition-all'></span>
                 </div>
             </div>
         </>

@@ -5,274 +5,188 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+import InteractiveCard from '../componnts/InteractiveCard.jsx';
+
 const About = () => {
+    const sectionRef = useRef(null);
     const headingRef = useRef(null);
-    const imgRef = useRef(null);
-    const nameRef = useRef(null);
-    const paraRef = useRef(null);
-    const paraRef2 = useRef(null);
-    const EducationRef1 = useRef(null);
-    const EducationRef2 = useRef(null);
-    const EducationRef3 = useRef(null);
-    const langRef = useRef(null);
-    const toolsRef = useRef(null);
-    const imgRef2 = useRef(null);
-    const paraRef3 = useRef(null);
-    const SRef = useRef(null);
+    const terminalRef = useRef(null);
+    const profileContainerRef = useRef(null);
+    const textRef = useRef(null);
+    const dataModulesRef = useRef(null);
 
     useGSAP(() => {
+        // Section reveal (just the header)
         gsap.from(headingRef.current, {
-            duration: 1,
+            yPercent: 100,
             opacity: 0,
-            yPercent: 200,
+            duration: 1,
             ease: "circ.out",
             scrollTrigger: {
-                trigger: headingRef.current,
+                trigger: sectionRef.current,
                 start: "top 80%",
             }
         });
 
-        gsap.from(imgRef.current, {
-            xPercent: -100,
-            opacity: 0,
-            duration: 1,
+        // CRT TV Terminal Opening Timeline
+        const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: imgRef.current,
-                start: "top 80%",
+                trigger: sectionRef.current,
+                start: "top 60%", // Start when section is comfortably in view
             }
         });
 
-        gsap.from(nameRef.current.children, {
-            xPercent: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: nameRef.current,
-                start: "top 80%",
-            }
-        });
+        // Setup initial states for CRT effect
+        gsap.set(terminalRef.current, { scaleY: 0.005, scaleX: 0, opacity: 1, transformOrigin: "center center" });
+        gsap.set(profileContainerRef.current, { opacity: 0, xPercent: -50 });
+        gsap.set(textRef.current, { opacity: 0, xPercent: 50 });
+        gsap.set(".data-module", { opacity: 0, yPercent: 50 });
 
-        gsap.from(paraRef.current, {
-            yPercent: 100,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: paraRef.current,
-            }
-        });
+        // Step 1: The fast horizontal bright line
+        tl.to(terminalRef.current, {
+            scaleX: 1,
+            duration: 0.25,
+            ease: "power4.out"
+        })
+        // Step 2: The vertical snap open
+        .to(terminalRef.current, {
+            scaleY: 1,
+            duration: 0.4,
+            ease: "back.out(1.5)" 
+        })
+        // Step 3: Reveal internal modules
+        .to(profileContainerRef.current, { opacity: 1, xPercent: 0, duration: 0.6, ease: "power3.out" }, "-=0.1")
+        .to(textRef.current, { opacity: 1, xPercent: 0, duration: 0.6, ease: "power3.out" }, "<0.1")
+        .to(".data-module", { opacity: 1, yPercent: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" }, "<0.2");
 
-        gsap.from(paraRef2.current, {
-            yPercent: 100,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: paraRef2.current,
-                start: "top 80%",
-            }
-        });
-
-        gsap.from(EducationRef1.current.children, {
-            xPercent: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: EducationRef1.current,
-                start: "top 100%",
-            }
-        });
-        gsap.from(EducationRef2.current.children, {
-            xPercent: -100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: EducationRef2.current,
-                start: "top 100%",
-            }
-        });
-
-        gsap.from(EducationRef3.current.children, {
-            xPercent: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: EducationRef3.current,
-                start: "top 100%",
-            }
-        });
-
-        gsap.from(langRef.current.children, {
-            yPercent: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: langRef.current,
-                start: "top 100%",
-            }
-        });
-
-        gsap.from(toolsRef.current.children, {
-            yPercent: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: toolsRef.current,
-                start: "top 100%",
-            }
-        });
-
-        gsap.from(imgRef2.current, {
-            xPercent: -100,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: imgRef2.current,
-                start: "top 80%",
-            }
-        });
-
-        gsap.from(paraRef3.current, {
-            xPercent: 100,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: paraRef3.current,
-                start: "top 80%",
-            }
-        });
-
-        gsap.from(SRef.current.children, {
-            yPercent: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3,
-            scrollTrigger: {
-                trigger: SRef.current,
-                start: "top 100%",
-            }
-        });
-
-        gsap.from("#about", {
-            scale: 0.95,
-            scrollTrigger: {
-                trigger: "#about",
-                start: "top 80%",
-                end: "top 20%",
-                scrub: true,
-            },
-            ease: "power1.out",
-        });
     });
 
     return (
-        <section id="about" className='min-h-screen bg-black dark:bg-[#0a0a0a] transition-colors duration-500 rounded-t-4xl rounded-b-4xl'>
-            <div className='text-white transition-colors duration-500 text-4xl md:text-8xl font-bold p-5 pl-2 pb-1 md:p-10 md:pb-1'>
-                <h1 ref={headingRef} className='inline-block text-center w-full md:text-start'>About Me</h1>
+        <section id="about" ref={sectionRef} className='min-h-screen bg-[#050505] py-20 px-5 md:px-10 overflow-hidden'>
+            
+            {/* Sci-Fi Section Header */}
+            <div className='flex items-center gap-4 mb-16'>
+                <div className='w-12 h-2 bg-orange-500/50' />
+                <h1 ref={headingRef} className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest'>
+                    [ SYS.PROFILE ]
+                </h1>
+                <div className='flex-1 h-[1px] bg-orange-500/20' />
             </div>
-            <div className=' border-t-orange-500 border-t-2 py-20 px-5 md:px-10 rounded-t-[50px]'>
-                <div className='md:hidden flex flex-col'>
-                    <div className='flex flex-row gap-x-5'>
-                        <img ref={imgRef} src="/Images/ProfilePic.png" alt="profile pic" className='w-40 rounded-[25px] border-orange-500 border-2' />
-                        <p ref={nameRef} className='text-white transition-colors duration-500 text-2xl text-right mt-10'>Hello I'm<br /><span className='text-orange-500 text-4xl font-bold mt-5 block'>SUDIP PAN</span></p>
-                    </div>
-                    <div ref={paraRef} className='mt-10'>
-                        <p className='text-white transition-colors duration-500 text-justify'>
-                            I’m a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, visually engaging games that blend strong design, technical skill, and interactive innovation.
-                        </p>
-                    </div>
-                    <div ref={paraRef2} className='text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
-                        <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Educations</h1>
-                        <div ref={EducationRef1}>
-                            <h2 className='text-orange-500 '>Class X</h2>
-                            <div className='h-0.5 w-full bg-orange-500 rounded-full'></div>
-                            <p className='mb-5'>Ramjibanpur Babulal Institution {"  [2019]"}</p>
+
+            {/* Terminal Window */}
+            <div ref={terminalRef} className='w-full relative perspective-[2000px]'>
+                <InteractiveCard className='w-full border border-orange-500/30 bg-[#0a0a0a]/80 backdrop-blur-md p-6 md:p-12 relative overflow-hidden group shadow-[0_0_50px_rgba(255,105,0,0.1)]'>
+                    
+                    {/* Decorative Scanline */}
+                    <div className="absolute top-0 left-0 w-full h-[2px] bg-orange-500/50 animate-[dropLine_3s_linear_infinite] z-0 pointer-events-none" />
+
+                    {/* Window Header */}
+                    <div className="flex justify-between items-center border-b-2 border-orange-500/30 pb-4 mb-10 z-10 relative" style={{ transform: "translateZ(20px)" }}>
+                        <div className="flex items-center gap-4">
+                            <div className="w-3 h-3 bg-orange-500 animate-pulse" />
+                            <h2 className="text-orange-500 tracking-[0.5em] text-sm md:text-base uppercase">// DOSSIER.ACCESS</h2>
                         </div>
-                        <div ref={EducationRef2}>
-                            <h2 className='text-orange-500 '>Class XII</h2>
-                            <div className='h-0.5 w-full bg-orange-500 rounded-full'></div>
-                            <p className='mb-5'>Ramjibanpur Babulal Institution {"  [2021]"}</p>
-                        </div>
-                        <div ref={EducationRef3}>
-                            <h2 className='text-orange-500 '>Bachelor's Degree <span>{"  [E.C.E]"}</span></h2>
-                            <div className='h-0.5 w-full bg-orange-500 rounded-full'></div>
-                            <p className='mb-5'>Ramkrishna Mahato Governmet Engineering College {"  [2022-26]"}</p>
-                        </div>
+                        <div className="text-white/30 text-xs hidden md:block">ENCRYPTED_CONNECTION_ESTABLISHED</div>
                     </div>
-                    <div ref={langRef} className='text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
-                        <h1 className='text-orange-500 font-bold text-[1rem] text-center mb-5'>Programming Languages</h1>
-                        <div className='flex flex-wrap gap-5 justify-center'>
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/c-programming.png" alt="c-programming" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/python.png" alt="python" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/c-plus-plus-logo.png" alt="c++" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/javascript.png" alt="javascript" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="24" src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/24/external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo.png" alt="external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/tailwind_css.png" alt="tailwind_css" className='bg-white border-orange-500 border rounded-[10px]' />
+
+                    {/* Top Section: ID Badge + Bio */}
+                    <div className='flex flex-col lg:flex-row gap-10 md:gap-16 z-10 relative mb-16'>
+                        
+                        {/* ID Badge (Left) */}
+                        <div ref={profileContainerRef} className="w-full lg:w-1/3 flex-shrink-0 flex flex-col items-center justify-start gap-6" style={{ transform: "translateZ(40px)" }}>
+                            
+                            <div className="relative w-48 h-48 md:w-64 md:h-64">
+                                {/* Hexagon Border/Glow */}
+                                <div className="absolute -inset-2 border border-orange-500/50 z-0 animate-pulse" style={{ clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" }} />
+                                
+                                {/* Hexagon Profile Image */}
+                                <div className="w-full h-full relative z-10 overflow-hidden bg-orange-500/10 border-2 border-orange-500 shadow-[0_0_30px_rgba(255,105,0,0.4)]" style={{ clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" }}>
+                                    <img src="/Images/ProfilePic.png" alt="SUDIP PAN" className="w-full h-full object-cover opacity-90 scale-110 hover:scale-100 transition-transform duration-700" />
+                                </div>
+                            </div>
+                            
+                            {/* Badge Info */}
+                            <div className="w-full max-w-xs border border-orange-500/30 bg-orange-500/5 p-4 text-center flex flex-col gap-2">
+                                <div className="text-orange-500 text-xs tracking-[0.2em]">[ CLASS: DEVELOPER ]</div>
+                                <div className="text-white text-sm tracking-widest border-b border-orange-500/30 pb-2">ID: SP-049</div>
+                                <div className="text-green-500 animate-pulse text-xs tracking-widest mt-1">STATUS: ONLINE</div>
+                            </div>
+
                         </div>
-                    </div>
-                    <div ref={toolsRef} className='text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
-                        <h1 className='text-orange-500 font-bold text-[1rem] text-center mb-5'>Tools</h1>
-                        <div className='flex flex-wrap gap-5 justify-center'>
-                            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/unreal-engine.png" alt="unreal-engine" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/blender-3d.png" alt="blender-3d" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/visual-studio-code-2019.png" alt="visual-studio-code-2019" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/fluency/48/visual-studio.png" alt="visual-studio" className='bg-white border-orange-500 border rounded-[10px]' />
-                            <img width="48" height="48" src="https://img.icons8.com/color/48/figma--v1.png" alt="figma--v1" className='bg-white border-orange-500 border rounded-[10px]'/>
-                        </div>
-                    </div>
-                </div>
-                <div className='hidden md:flex md:flex-col gap-y-10 text-white transition-colors duration-500'>
-                    <div className='flex flex-row gap-x-10'>
-                        <img ref={imgRef2} src="/Images/ProfilePic.png" alt="profile pic" className='h-150 border-orange-500 border-2 rounded-[25px] transition-all duration-500 hover:scale-105' />
-                        <div ref={paraRef3} className='flex flex-col gap-y-10'>
-                            <h1 className='text-4xl text-white transition-colors duration-500 font-bold'>Hello I'm<br /><span className='text-6xl text-orange-500 font-bold mt-5 block'>SUDIP PAN</span></h1>
-                            <p className='text-2xl text-justify text-white transition-colors duration-500'>
+
+                        {/* Bio Section (Right) */}
+                        <div ref={textRef} className="w-full lg:w-2/3 flex flex-col justify-center" style={{ transform: "translateZ(30px)" }}>
+                            <h2 className='text-orange-500/70 text-sm md:text-xl mb-2 uppercase tracking-[0.3em]'>// Identity Confirmed</h2>
+                            <h1 className='text-white text-4xl md:text-6xl font-bold uppercase drop-shadow-[0_0_15px_rgba(255,105,0,0.5)] leading-tight mb-6 tracking-tighter'>
+                                SUDIP <span className='text-orange-500'>PAN</span>
+                            </h1>
+                            <div className='w-full h-[1px] bg-gradient-to-r from-orange-500 to-transparent mb-8' />
+                            <p className='text-white/80 text-base md:text-xl leading-relaxed text-justify font-sans'>
                                 I’m a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, visually engaging games that blend strong design, technical skill, and interactive innovation.
                             </p>
-                            <div ref={SRef} className='flex flex-row gap-x-10'>
-                                <div className='text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px] w-full lg:w-170'>
-                                    <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Educations</h1>
-                                    <p className='text-1xl text-orange-500 ml-5'>Class-X </p>
-                                    <div className='h-0.5 w-full bg-orange-500 rounded-full' />
-                                    <p className='text-1xl ml-5 mb-5'>Ramjibanpur Babulal Institution <span className='block text-end mr-5'>{"[2019]"}</span></p>
-                                    <p className='text-1xl text-orange-500 ml-5'>Class-X </p>
-                                    <div className='h-0.5 w-full bg-orange-500 rounded-full' />
-                                    <p className='text-1xl ml-5 mb-5'>Ramjibanpur Babulal Institution <span className='block text-end mr-5'>{"[2021]"}</span></p>
-                                    <p className='text-1xl text-orange-500 ml-5'>Graduation <span className='text-orange-500'>[E.C.E]</span> </p>
-                                    <div className='h-0.5 w-full bg-orange-500 rounded-full' />
-                                    <p className='text-1xl ml-5 mb-5'>Ramkrishna Mahato Government Engineering College <span className='block text-end mr-5'>{"[2022-26]"}</span></p>
+                        </div>
+                    </div>
+
+                    {/* Bottom Section: Data Strips */}
+                    <div ref={dataModulesRef} className="w-full flex flex-col gap-6 z-10 relative" style={{ transform: "translateZ(20px)" }}>
+                        
+                        {/* Strip 1: Education */}
+                        <div className="data-module w-full border border-orange-500/30 bg-black/50 p-6 flex flex-col lg:flex-row gap-6 items-start lg:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
+                            <div className="w-full lg:w-40 flex-shrink-0 lg:border-r-2 border-b-2 lg:border-b-0 pb-4 lg:pb-0 border-orange-500/50 pr-4">
+                                <h3 className="text-orange-500 text-xs tracking-widest">// EDU_DATA</h3>
+                            </div>
+                            <div className="flex-1 flex flex-col md:flex-row gap-8 text-xs text-white/80 w-full justify-between">
+                                <div className="flex flex-col gap-1 w-full">
+                                    <div className="flex justify-between text-white"><span className="text-orange-500">[2019]</span> <span>CLASS-X</span></div>
+                                    <div className="h-[2px] bg-orange-500/30 w-full my-1"><div className="h-full bg-orange-500 w-full" /></div>
+                                    <span className="opacity-50">RAMJIBANPUR BABULAL INST</span>
                                 </div>
-                                <div className='flex flex-col gap-y-10'>
-                                    <div className='text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px] w-full lg:w-170'>
-                                        <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Programming Languages</h1>
-                                        <div className='flex flex-row justify-between mx-5'>
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/c-programming.png" alt="c-programming" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/python.png" alt="python" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/c-plus-plus-logo.png" alt="c++" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/javascript.png" alt="javascript" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="24" src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/24/external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo.png" alt="external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/tailwind_css.png" alt="tailwind_css" className='bg-white border-orange-500 border rounded-[10px]' />
-                                        </div>
-                                    </div>
-                                    <div className='text-white transition-colors duration-500 border-t-2 border-t-orange-500 mt-10 pt-5 rounded-t-[50px]'>
-                                        <h1 className='text-orange-500 font-bold text-2xl text-center mb-5'>Tools</h1>
-                                        <div className='flex flex-row justify-between mx-5'>
-                                            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/unreal-engine.png" alt="unreal-engine" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/blender-3d.png" alt="blender-3d" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/visual-studio-code-2019.png" alt="visual-studio-code-2019" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/fluency/48/visual-studio.png" alt="visual-studio" className='bg-white border-orange-500 border rounded-[10px]' />
-                                            <img width="48" height="48" src="https://img.icons8.com/color/48/figma--v1.png" alt="figma--v1" className='bg-white border-orange-500 border rounded-[10px]'/>
-                                        </div>
-                                    </div>
+                                <div className="flex flex-col gap-1 w-full">
+                                    <div className="flex justify-between text-white"><span className="text-orange-500">[2021]</span> <span>CLASS-XII</span></div>
+                                    <div className="h-[2px] bg-orange-500/30 w-full my-1"><div className="h-full bg-orange-500 w-full" /></div>
+                                    <span className="opacity-50">RAMJIBANPUR BABULAL INST</span>
+                                </div>
+                                <div className="flex flex-col gap-1 w-full">
+                                    <div className="flex justify-between text-white"><span className="text-orange-500">[2022-26]</span> <span>B.TECH (ECE)</span></div>
+                                    <div className="h-[2px] bg-orange-500/30 w-full my-1"><div className="h-full bg-orange-500 w-[75%]" /></div>
+                                    <span className="opacity-50">R.K.M GOVT. ENGG. COLLEGE</span>
                                 </div>
                             </div>
                         </div>
+
+                        {/* Strip 2 & 3: Tech & Tools (Side by side on desktop) */}
+                        <div className="flex flex-col xl:flex-row gap-6 w-full">
+                            <div className="data-module flex-1 border border-orange-500/30 bg-black/50 p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
+                                <div className="w-full sm:w-32 flex-shrink-0 sm:border-r-2 border-b-2 sm:border-b-0 pb-4 sm:pb-0 border-orange-500/50 pr-4">
+                                    <h3 className="text-orange-500 text-xs tracking-widest">// LANGUAGES</h3>
+                                </div>
+                                <div className="flex flex-wrap gap-4">
+                                    {/* Tech Icons */}
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/c-programming.png" alt="C" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/python.png" alt="Python" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/c-plus-plus-logo.png" alt="C++" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/javascript.png" alt="JS" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/react-native.png" alt="React" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/tailwind_css.png" alt="Tailwind" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                </div>
+                            </div>
+                            
+                            <div className="data-module flex-1 border border-orange-500/30 bg-black/50 p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
+                                <div className="w-full sm:w-32 flex-shrink-0 sm:border-r-2 border-b-2 sm:border-b-0 pb-4 sm:pb-0 border-orange-500/50 pr-4">
+                                    <h3 className="text-orange-500 text-xs tracking-widest">// TOOLS</h3>
+                                </div>
+                                <div className="flex flex-wrap gap-4">
+                                    <img width="32" height="32" src="https://img.icons8.com/ios-filled/50/ffffff/unreal-engine.png" alt="Unreal" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/blender-3d.png" alt="Blender" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/visual-studio-code-2019.png" alt="VSCode" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/fluency/48/visual-studio.png" alt="VS" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                    <img width="32" height="32" src="https://img.icons8.com/color/48/figma--v1.png" alt="Figma" className='opacity-80 hover:opacity-100 hover:scale-110 transition-all drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' />
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
+                </InteractiveCard>
             </div>
         </section>
     )

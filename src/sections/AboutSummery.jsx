@@ -5,66 +5,73 @@ import { ScrollTrigger } from "gsap/all";
 gsap.registerPlugin(ScrollTrigger);
 
 const AboutSummery = () => {
-    useGSAP(()=> {
+    useGSAP(() => {
         gsap.to("#title-about-1", {
-            xPercent: 20,
+            xPercent: -20,
             scrollTrigger: {
-                target: "#title-about-1",
+                trigger: "#title-about-1",
                 scrub: true,
             },
         });
         gsap.to("#title-about-2", {
-            xPercent: -30,
+            xPercent: 30,
             scrollTrigger: {
-                target: "#title-about-2",
+                trigger: "#title-about-2",
                 scrub: true,
             },
         });
         gsap.to("#title-about-3", {
-            xPercent: 100,
+            xPercent: -100,
             scrollTrigger: {
-                target: "#title-about-3",
+                trigger: "#title-about-3",
                 scrub: true,
             },
         });
         gsap.to("#title-about-4", {
-            xPercent:-100,
+            xPercent: 100,
             scrollTrigger: {
-                target: "#title-about-4",
+                trigger: "#title-about-4",
                 scrub: true,
             },
         });
     });
-  return (
-    <section className="mt-20 overflow-hidden font-light leading-snug text-center mb-42 contact-text-responsive">
-        <div className="w-full flex flex-col h-auto whitespace-nowrap">
-            <div className="font-light">
-                <div className="w-full h-auto text-[1.5rem] p-5 md:text-4xl">
-                    <div id="title-about-1">
-                        <p>Game Developer</p>
-                    </div>
-                    <div id="title-about-2" className=" mt-5 flex items-center justify-center gap-3 translate-x-16 ">
-                        <p className="font-bold">Game Designer</p>
-                        <div className="w-10 h-1 md:w-32 bg-orange-500 shrink-0 md:mt-3"/>
-                        <p>Game Programmer</p>
-                    </div>
-                    <div id="title-about-3" className=" mt-5 flex item-center justify-center gap-3 -translate-x-48">
-                        <p>UI/UX Designer</p>
-                        <div className=" mt-3 w-10 h-1 md:w-32 bg-orange-500 shrink-0 md:mt-5"/>
-                        <p className="font-bold">3D Artist</p>
-                        <div className=" mt-3 w-10 h-1 md:w-32 bg-orange-500 shrink-0 md:mt-5"/>
-                        <p>Animator</p>
-                    </div>
-                    <div id="title-about-4" className="mt-5 flex item-center justify-center gap-3 translate-x-16">
-                        <p className="font-bold">Electronics Engineer</p>
-                        <div className="mt-3 w-10 h-1 md:w-32 bg-orange-500 md:mt-5 shrink-0"/>
-                        <p>VLSI Design</p>
+    return (
+        <section className="mt-20 overflow-hidden leading-snug text-center mb-42 contact-text-responsive">
+            <div className="w-full flex flex-col h-auto whitespace-nowrap">
+                <div className="font-light uppercase tracking-[0.2em] md:tracking-[0.4em]">
+                    <div className="w-full h-auto text-[1.2rem] p-5 md:text-5xl flex flex-col gap-10 opacity-90">
+
+                        <div id="title-about-1" className="flex items-center justify-center gap-4 md:gap-8">
+                            <span className="text-orange-500 opacity-50">{'<'}</span>
+                            <p className="outlined-text">Game Developer</p>
+                            <span className="text-orange-500 opacity-50 animate-pulse">{'_'}</span>
+                        </div>
+
+                        <div id="title-about-2" className="flex items-center justify-center gap-4 md:gap-8 translate-x-16">
+                            <p className="font-bold text-orange-500 drop-shadow-[0_0_15px_rgba(255,105,0,0.8)]">Game Designer</p>
+                            <div className="text-orange-500 opacity-40 text-xl md:text-4xl">{'//'}</div>
+                            <p className="outlined-text">Game Programmer</p>
+                        </div>
+
+                        <div id="title-about-3" className="flex items-center justify-center gap-4 md:gap-8 -translate-x-48">
+                            <p className="outlined-text">UI/UX Designer</p>
+                            <div className="text-orange-500 opacity-40 text-xl md:text-4xl">{'>>'}</div>
+                            <p className="font-bold text-orange-500 drop-shadow-[0_0_15px_rgba(255,105,0,0.8)]">3D Artist</p>
+                            <div className="text-orange-500 opacity-40 text-xl md:text-4xl">{'<<'}</div>
+                            <p className="outlined-text">Animator</p>
+                        </div>
+
+                        <div id="title-about-4" className="flex items-center justify-center gap-4 md:gap-8 translate-x-16">
+                            <p className="font-bold text-orange-500 drop-shadow-[0_0_15px_rgba(255,105,0,0.8)]">Electronics Engineer</p>
+                            <div className="text-orange-500 opacity-40 text-xl md:text-4xl">{'::'}</div>
+                            <p className="outlined-text">VLSI Design</p>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-  )
+        </section>
+    )
 }
 
 export default AboutSummery

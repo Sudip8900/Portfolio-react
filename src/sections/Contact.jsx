@@ -1,317 +1,274 @@
+import React, { useState } from 'react';
+import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import React, { useRef, useState } from 'react'
-import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { socials } from '../constants';
 import Marque from '../componnts/Marque';
 import Magnetic from '../componnts/Magnetic.jsx';
+import InteractiveCard from '../componnts/InteractiveCard.jsx';
+import { Icon } from '@iconify/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
 
-    const headinRef = useRef(null);
-    const lineRef = useRef(null);
-    const SubRef = useRef(null);
-    const lineRef2 = useRef(null);
-    const FormRef = useRef(null);
-
-    const buttonRef = useRef(null);
-    const buttonTextRef = useRef(null);
-    const iconRef = useRef(null);
+    const [result, setResult] = useState("");
+    const [isTransmitting, setIsTransmitting] = useState(false);
 
     const items = [
-        "just imagine, I'll make it real",
-        "let's turn your vision into reality",
-        "your ideas, my skills, our creation",
-        "bringing your dreams to life",
-        "let's create something extraordinary",
-        "your vision, my expertise, our masterpiece",
-        "turning your ideas into digital reality",
-        "let's innovate and create together",
-        "your imagination, my skills, our success"
+        "SYSTEM OVERRIDE",
+        "ACCESS GRANTED",
+        "DATA TRANSMISSION COMPLETE",
+        "ENCRYPTED COMM LINK OPEN",
+        "AWAITING DIRECTIVES",
+        "PROTOCOL ENGAGED",
+        "CONNECTION STABLE",
+        "SECURE UPLINK ESTABLISHED"
     ];
-
-    const [result, setResult] = useState("");
-    const [success, setSuccess] = useState(false);
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        setResult("Sending....");
+        setResult("TRANSMITTING...");
+        setIsTransmitting(true);
 
         const formData = new FormData(event.target);
         formData.append("access_key", "2fcf6229-254a-4530-a10a-814ba24bd93e");
 
-        const response = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: formData
-        });
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (data.success) {
-
-            setResult("Form Submitted Successfully");
-            setSuccess(true);
-            event.target.reset();
-
-            const tl = gsap.timeline();
-
-            tl.to(buttonRef.current, {
-                backgroundColor: "#16a34a",
-                borderRadius: "50px",
-                width: "50px",
-                height: "50px",
-                duration: 0.4
-            })
-                .to(buttonTextRef.current, {
-                    scale: 0,
-                    opacity: 0,
-                    duration: 0.3
-                }, "<")
-                .fromTo(
-                    iconRef.current,
-                    { scale: 0, opacity: 0 },
-                    { scale: 1, opacity: 1, duration: 0.3 },
-                    "-=0.1"
-                )
-
-                // wait before resetting
-                .to({}, { duration: 2 })
-
-                // hide icon
-                .to(iconRef.current, {
-                    scale: 0,
-                    opacity: 0,
-                    duration: 0.3
-                })
-
-                // restore text
-                .to(buttonTextRef.current, {
-                    scale: 1,
-                    opacity: 1,
-                    duration: 0.3
-                }, "<+0.5")
-
-                // restore button color
-                .to(buttonRef.current, {
-                    backgroundColor: "#ea580c",
-                    borderRadius: "25px",
-                    width: "240px",
-                    height: "72px",
-                    duration: 0.3
-                }, "<");
-
-        } else {
-            setResult("Error");
+            if (data.success) {
+                setResult("TRANSMISSION SUCCESSFUL");
+                event.target.reset();
+                setTimeout(() => {
+                    setResult("");
+                    setIsTransmitting(false);
+                }, 3000);
+            } else {
+                setResult("TRANSMISSION FAILED");
+                setIsTransmitting(false);
+            }
+        } catch (error) {
+            setResult("NETWORK ERROR");
+            setIsTransmitting(false);
         }
     };
 
     useGSAP(() => {
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#contact",
-                start: "top 60%",
-            }
+        // Robust isolated scroll triggers for all contact elements
+        const elements = gsap.utils.toArray('.gsap-contact-element');
+        
+        elements.forEach((el) => {
+            gsap.fromTo(el, 
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 90%", 
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
         });
-
-        tl.from(headinRef.current.children, {
-            yPercent: 100,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "power2.out",
-        })
-        .from(lineRef.current, {
-            xPercent: 100,
-            opacity: 0,
-            duration: 0.8,
-        }, "-=0.4")
-        .from(SubRef.current.children, {
-            yPercent: 100,
-            opacity: 0,
-            stagger: 0.2,
-            duration: 0.8,
-        }, "-=0.4")
-        .from(lineRef2.current, {
-            height: 0,
-            opacity: 0,
-            duration: 0.8,
-        }, "-=0.6")
-        .from(FormRef.current.querySelectorAll("h2, .input-box"), {
-            y: -50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
-        }, "-=0.4")
-        .from(".social-link", {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power2.out",
-        }, "-=0.6");
-
     }, []);
 
     return (
-        <section id="contact" className="flex flex-col justify-between min-h-screen bg-black transition-colors duration-500">
+        <section id="contact" className="min-h-screen bg-black text-white relative overflow-hidden flex flex-col justify-between">
 
-            <div>
-                <div ref={headinRef}>
-                    <h2 className="text-1xl font-light text-center text-orange-500 pt-10 uppercase tracking-widest md:text-3xl md:tracking-[30px]">
-                        You dream it, I build it
-                    </h2>
+            {/* Background elements */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500/5 via-black to-black pointer-events-none" />
 
-                    <h1 className="text-4xl font-bold text-center text-white transition-colors duration-500 md:text-end md:text-[6rem] md:mx-10">
-                        Contact Me
+            <div className="pt-20 px-5 md:px-10 relative z-10 w-full flex-1">
+                
+                {/* Header */}
+                <div className='flex items-center gap-4 mb-20 gsap-contact-element'>
+                    <div className='w-12 h-2 bg-orange-500/50' />
+                    <h1 className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest'>
+                        [ SYS.COMM_LINK ]
                     </h1>
+                    <div className='flex-1 h-[1px] bg-orange-500/20' />
                 </div>
 
-                <div ref={lineRef} className="w-full border-orange-500 border-t-2 rounded-t-[25px]" />
-            </div>
+                <div className='flex flex-col md:flex-row gap-12 lg:gap-20 perspective-[2000px]'>
 
-            <div className='flex flex-col md:flex-row gap-5'>
-
-                <div className='w-full md:w-1/2 flex flex-col'>
-
-                    <form ref={FormRef} onSubmit={onSubmit} className='p-5 text-center'>
-
-                        <h2 className='text-orange-500 text-4xl text-center'>Catch Me</h2>
-
-                        <div className='input-box flex flex-col m-5'>
-                            <label className='text-white transition-colors duration-500 mb-5'>Full Name</label>
-                            <input
-                                type="text"
-                                className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white transition-colors duration-500'
-                                placeholder='Enter Your Name'
-                                name='name'
-                                required
-                            />
-                        </div>
-
-                        <div className='input-box flex flex-col m-5'>
-                            <label className='text-white transition-colors duration-500 mb-5'>Email Address</label>
-                            <input
-                                type="email"
-                                className='field bg-white/10 h-15 placeholder:text-white/60 border-orange-500 border rounded-[25px] p-5 text-white transition-colors duration-500'
-                                placeholder='Enter Your Email'
-                                name='email'
-                                required
-                            />
-                        </div>
-
-                        <div className='input-box flex flex-col m-5'>
-                            <label className='text-white transition-colors duration-500 mb-5'>Message</label>
-                            <textarea
-                                name="message"
-                                placeholder='Message'
-                                className='bg-white/10 field mess placeholder:text-white/60 border-orange-500 border rounded-[20px] p-5 text-white transition-colors duration-500'
-                                required
-                            ></textarea>
-                        </div>
-
-                        <div className='input-box justify-center flex'>
-                            <Magnetic>
-                                <div className="block">
-                                    <button
-                                        ref={buttonRef}
-                                        type="submit"
-                                        className='relative flex items-center justify-center text-white bg-orange-600 p-5 rounded-[25px] text-[1.1rem] cursor-pointer transition-all duration-500 hover:scale-105 h-18 w-60'
-                                    >
-
-                                        <span ref={buttonTextRef}>
-                                            Send Message
-                                        </span>
-
-                                        <span
-                                            ref={iconRef}
-                                            className="absolute opacity-0 text-2xl"
-                                        >
-                                            ✓
-                                        </span>
-
-                                    </button>
+                    {/* Left Side: Terminal Form */}
+                    <div className='w-full md:w-1/2 flex flex-col gsap-contact-element'>
+                        <InteractiveCard>
+                            <div className="bg-[#050505] border border-orange-500/30 p-8 md:p-10 relative group">
+                                
+                                {/* Terminal Styling */}
+                                <div className='absolute top-0 left-0 w-full h-8 bg-orange-500/10 border-b border-orange-500/30 flex items-center px-4'>
+                                    <div className="flex gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-red-500/50" />
+                                        <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
+                                        <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                                    </div>
+                                    <p className="ml-4 text-orange-500/50 text-[10px] tracking-widest uppercase">bash // root@sudip.dev</p>
                                 </div>
-                            </Magnetic>
-                        </div>
 
-                    </form>
+                                <div className="mt-8">
+                                    <h2 className='text-orange-500 text-sm tracking-widest uppercase mb-8'>
+                                        <span className="animate-pulse mr-2">{'>'}</span> 
+                                        ./initialize_contact.sh
+                                    </h2>
 
-                </div>
+                                    <form onSubmit={onSubmit} className='flex flex-col gap-6'>
 
-                <div ref={lineRef2} className='bg-orange-500 w-0.5 h-150 md:block hidden' />
-                <div className='border-t border-orange-500 w-[90%] mx-auto my-10 md:hidden' />
-
-                <div className='flex flex-col w-full md:w-1/2'>
-
-                    <div
-                        ref={SubRef}
-                        className="text-white/80 transition-colors duration-500 text-end mx-5 mt-1 mb-10 md:mx-10 md:text-2xl gap-y-1 md:gap-y-2 flex flex-col items-end"
-                    >
-                        <p>Got a question, how or project idea?</p>
-                        <p>I would love to hear from you and</p>
-                        <p>discuss further!</p>
-                    </div>
-
-                    <div className='flex px-10 text-white transition-colors duration-500 uppercase lg:text-[32px] text-[26px] leading-none mb-10'>
-
-                        <div className='flex flex-col w-full gap-10 md:text-end'>
-
-                            <div className='social-link'>
-                                <h2>E-mail</h2>
-                                <div className='w-full h-px my-2 bg-orange-400' />
-                                <p className='text-xl text-white/80 transition-colors duration-500 lowercase md:text-2xl lg:text-3xl'>
-                                    iamsudippan@gmail.com
-                                </p>
-                            </div>
-
-                            <div className='social-link'>
-                                <h2>Phone</h2>
-                                <div className='w-full h-px my-2 bg-orange-400' />
-                                <p className='text-xl text-white/80 transition-colors duration-500 lowercase md:text-2xl lg:text-3xl'>
-                                    +91 8900359269
-                                </p>
-                            </div>
-
-                            <div className='social-link'>
-                                <h2>Social Media</h2>
-                                <div className='w-full h-px my-2 bg-orange-400' />
-
-                                <div className='flex flex-wrap gap-2 md:gap-10'>
-                                    {socials.map((social, index) => (
-                                        <Magnetic key={index}>
-                                            <div className="inline-block relative">
-                                                <a
-                                                    href={social.href}
-                                                    target="_blank"
-                                                    className='text-xs leading-loose tracking-widest uppercase md:text-sm hover:text-orange-500 transition-colors duration-300'
-                                                >
-                                                    {social.name}
-                                                </a>
+                                        <div className='flex flex-col'>
+                                            <label className='text-white/40 text-[10px] tracking-widest uppercase mb-1'>[ ID.NAME ]</label>
+                                            <div className="relative group/input">
+                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-orange-500/30 group-hover/input:bg-orange-500 transition-colors" />
+                                                <div className="absolute left-0 bottom-0 w-0 h-[1px] bg-white transition-all duration-500 focus-within:w-full z-10" />
+                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-500">{'>'}</span>
+                                                <input
+                                                    type="text"
+                                                    className='w-full bg-transparent h-10 pl-6 text-white placeholder:text-white/20 focus:outline-none transition-all'
+                                                    placeholder='Enter target designation...'
+                                                    name='name'
+                                                    required
+                                                />
                                             </div>
-                                        </Magnetic>
-                                    ))}
-                                </div>
+                                        </div>
 
+                                        <div className='flex flex-col'>
+                                            <label className='text-white/40 text-[10px] tracking-widest uppercase mb-1'>[ ID.EMAIL ]</label>
+                                            <div className="relative group/input">
+                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-orange-500/30 group-hover/input:bg-orange-500 transition-colors" />
+                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-500">{'>'}</span>
+                                                <input
+                                                    type="email"
+                                                    className='w-full bg-transparent h-10 pl-6 text-white placeholder:text-white/20 focus:outline-none transition-all'
+                                                    placeholder='Enter return address...'
+                                                    name='email'
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className='flex flex-col'>
+                                            <label className='text-white/40 text-[10px] tracking-widest uppercase mb-1'>[ DATA.PAYLOAD ]</label>
+                                            <div className="relative group/input mt-2 border border-orange-500/20 group-hover/input:border-orange-500/50 bg-white/5 p-4">
+                                                <span className="absolute left-4 top-4 text-orange-500">{'>'}</span>
+                                                <textarea
+                                                    name="message"
+                                                    placeholder='Construct message payload here...'
+                                                    className='w-full bg-transparent h-24 pl-6 text-white placeholder:text-white/20 focus:outline-none transition-all resize-none'
+                                                    required
+                                                ></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div className='mt-6'>
+                                            <Magnetic>
+                                                <button
+                                                    type="submit"
+                                                    disabled={isTransmitting}
+                                                    className={`w-full relative flex items-center justify-center p-4 border transition-all duration-300 group/btn overflow-hidden ${isTransmitting ? 'border-green-500/50 text-green-500' : 'border-orange-500/50 text-orange-500 hover:text-white'}`}
+                                                >
+                                                    {!isTransmitting && <div className="absolute inset-0 bg-orange-500 transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-500 ease-out z-0" />}
+                                                    <span className="tracking-widest uppercase text-xs relative z-10 font-bold">
+                                                        {result || "EXECUTE TRANSMISSION"}
+                                                    </span>
+                                                </button>
+                                            </Magnetic>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </InteractiveCard>
+                    </div>
+
+                    {/* Right Side: Modules */}
+                    <div className='w-full md:w-1/2 flex flex-col gap-8'>
+                        
+                        <div className="text-white/40 tracking-widest uppercase text-xs mb-4 gsap-contact-element flex flex-col gap-2 border-l-2 border-orange-500/30 pl-4">
+                            <p>// Awaiting external connection</p>
+                            <p>// Direct communication channels open</p>
+                            <p>// Establish uplink below</p>
+                        </div>
+
+                        {/* Direct Contacts */}
+                        <div className="flex flex-col gap-4">
+                            <InteractiveCard className="gsap-contact-element">
+                                <a href="mailto:iamsudippan@gmail.com" className="block bg-[#050505] border border-orange-500/20 p-6 relative group hover:border-orange-500/50 transition-colors overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-50 transition-opacity">
+                                        <Icon icon="carbon:email" width="60" height="60" className="text-orange-500" />
+                                    </div>
+                                    <h2 className="text-orange-500/50 text-[10px] tracking-widest uppercase mb-2">[ UPLINK.EMAIL ]</h2>
+                                    <p className='text-white tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-500 transition-colors'>
+                                        iamsudippan@gmail.com
+                                    </p>
+                                </a>
+                            </InteractiveCard>
+
+                            <InteractiveCard className="gsap-contact-element">
+                                <a href="tel:+918900359269" className="block bg-[#050505] border border-orange-500/20 p-6 relative group hover:border-orange-500/50 transition-colors overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-50 transition-opacity">
+                                        <Icon icon="carbon:phone" width="60" height="60" className="text-orange-500" />
+                                    </div>
+                                    <h2 className="text-orange-500/50 text-[10px] tracking-widest uppercase mb-2">[ UPLINK.PHONE ]</h2>
+                                    <p className='text-white tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-500 transition-colors'>
+                                        +91 8900359269
+                                    </p>
+                                </a>
+                            </InteractiveCard>
+                        </div>
+
+                        {/* Social Grid */}
+                        <div className='mt-8 gsap-contact-element'>
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className='w-4 h-[1px] bg-orange-500/50' />
+                                <h2 className="text-orange-500 text-xs tracking-widest uppercase">[ NETWORK.NODES ]</h2>
+                                <div className='flex-1 h-[1px] bg-orange-500/20' />
                             </div>
 
+                            <div className='grid grid-cols-2 gap-4'>
+                                {socials.map((social, index) => (
+                                    <InteractiveCard key={index}>
+                                        <Magnetic>
+                                            <a
+                                                href={social.href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className='flex items-center justify-center bg-white/5 border border-orange-500/20 p-4 hover:bg-orange-500 hover:border-orange-500 transition-all duration-300 group'
+                                            >
+                                                <span className='text-[10px] tracking-widest uppercase text-white/60 group-hover:text-black font-bold group-hover:drop-shadow-none drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]'>
+                                                    {social.name}
+                                                </span>
+                                            </a>
+                                        </Magnetic>
+                                    </InteractiveCard>
+                                ))}
+                            </div>
                         </div>
 
                     </div>
 
                 </div>
-
             </div>
 
-            <Marque
-                items={items}
-                className='border-orange-500 text-orange-500 bg-transparent border-t'
-                iconName='solar:gameboy-broken'
-            />
+            {/* Bottom Marquee Footer */}
+            <div className="mt-20 border-t border-orange-500/20 bg-[#050505]">
+                <Marque
+                    items={items}
+                    className='text-white'
+                    iconName='carbon:connection-signal'
+                    iconClassname='text-orange-500'
+                />
+            </div>
 
         </section>
-    )
-}
+    );
+};
 
-export default Contact
+export default Contact;

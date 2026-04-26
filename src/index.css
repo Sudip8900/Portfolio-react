@@ -1,10 +1,8 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 body {
   font-family: "Michroma", sans-serif;
-  @apply bg-gray-50 text-black dark:bg-[#050505] dark:text-white transition-colors duration-500;
+  @apply bg-[#050505] text-white;
 }
 
 /* Hide scrollbar for Chrome, Edge, Safari */
@@ -48,4 +46,15 @@ body {
   50% { transform: scaleY(1); transform-origin: top; }
   50.1% { transform: scaleY(1); transform-origin: bottom; }
   100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes hudScroll {
+  0% { transform: translateY(-5px) rotate(45deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(15px) rotate(45deg); opacity: 0; }
+}
+
+@keyframes hudPulse {
+  0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 2px #ff6900); }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px #ff6900); }
 }
