@@ -225,92 +225,96 @@ const Works = () => {
             >
 
                 {/* Blender */}
-                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5 scroll-container relative'>
-                    {/* Decorative Corner Brackets */}
+                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
                     <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
                     <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
+                    <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
+                        {/* Decorative Corner Brackets */}
 
-                    <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
-                        [ DB.BLENDER ]
-                    </h1>
+                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
+                            [ DB.BLENDER ]
+                        </h1>
 
-                    <div className='flex flex-col gap-4'>
-                        {BlenderProjects.map((project, index) => (
-                            <div
-                                key={index}
-                                ref={el => blenderItemsRef.current[index] = el}
-                                onMouseEnter={() => handleMouseEnter("blender", index)}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <InteractiveCard>
-                                    <div className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'>
-                                        {/* Hover Scanning Line */}
-                                        <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                        <div className='flex flex-col gap-4'>
+                            {BlenderProjects.map((project, index) => (
+                                <div
+                                    key={index}
+                                    ref={el => blenderItemsRef.current[index] = el}
+                                    onMouseEnter={() => handleMouseEnter("blender", index)}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <InteractiveCard>
+                                        <div className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'>
+                                            {/* Hover Scanning Line */}
+                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
-                                        <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
-                                            {project.name}
-                                        </h2>
-                                        <Magnetic>
-                                            <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                <a href={project.link} target="_blank" rel="noopener noreferrer">
-                                                    <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
-                                                </a>
-                                            </div>
-                                        </Magnetic>
-                                    </div>
+                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                                {project.name}
+                                            </h2>
+                                            <Magnetic>
+                                                <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
+                                                    <a href={project.link} target="_blank" rel="noopener noreferrer">
+                                                        <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                    </a>
+                                                </div>
+                                            </Magnetic>
+                                        </div>
 
-                                    {/* Mobile Preview Image fallback */}
-                                    <div className='relative flex px-5 md:hidden h-auto py-5 bg-white/5 mb-5 mt-2 transition-colors duration-500 border border-orange-500/10'>
-                                        <img src={project.image} alt={project.name} className="w-full transition-all duration-500 border border-orange-500/20 object-cover" />
-                                    </div>
-                                </InteractiveCard>
-                            </div>
-                        ))}
+                                        {/* Mobile Preview Image fallback */}
+                                        <div className='relative flex px-5 md:hidden h-auto py-5 bg-white/5 mb-5 mt-2 transition-colors duration-500 border border-orange-500/10'>
+                                            <img src={project.image} alt={project.name} className="w-full transition-all duration-500 border border-orange-500/20 object-cover" />
+                                        </div>
+                                    </InteractiveCard>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
                 {/* Unreal */}
-                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5 scroll-container relative'>
-                    {/* Decorative Corner Brackets */}
+                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
                     <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
                     <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
+                    <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
+                        {/* Decorative Corner Brackets */}
 
-                    <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
-                        [ DB.UNREAL ]
-                    </h1>
+                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
+                            [ DB.UNREAL ]
+                        </h1>
 
-                    <p className='my-5 text-white/50 text-sm tracking-widest uppercase'>// Currently working on a sci-fi action game. Demo previews below.</p>
+                        <p className='my-5 text-white/50 text-sm tracking-widest uppercase'>// Currently working on a sci-fi action game. Demo previews below.</p>
 
-                    <div className='flex flex-col gap-4'>
-                        {UnrealProjects.map((project, index) => (
-                            <div
-                                key={index}
-                                ref={el => unrealItemsRef.current[index] = el}
-                                onMouseEnter={() => handleMouseEnter("unreal", index)}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <InteractiveCard>
-                                    <a
-                                        href={project.Link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
-                                    >
-                                        {/* Hover Scanning Line */}
-                                        <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                        <div className='flex flex-col gap-4'>
+                            {UnrealProjects.map((project, index) => (
+                                <div
+                                    key={index}
+                                    ref={el => unrealItemsRef.current[index] = el}
+                                    onMouseEnter={() => handleMouseEnter("unreal", index)}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <InteractiveCard>
+                                        <a
+                                            href={project.Link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                        >
+                                            {/* Hover Scanning Line */}
+                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
-                                        <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
-                                            {project.name}
-                                        </h2>
-                                        <Magnetic>
-                                            <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
-                                            </div>
-                                        </Magnetic>
-                                    </a>
-                                </InteractiveCard>
-                            </div>
-                        ))}
+                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                                {project.name}
+                                            </h2>
+                                            <Magnetic>
+                                                <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
+                                                    <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                </div>
+                                            </Magnetic>
+                                        </a>
+                                    </InteractiveCard>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 

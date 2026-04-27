@@ -145,7 +145,7 @@ export const UnrealProjects = [
         id: 5,
         name: "Target System",
         Link: "https://youtu.be/4Ns_uGD0uA8",
-    }
+    },
 ];
 
 export const experience = [
