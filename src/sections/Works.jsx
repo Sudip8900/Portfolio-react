@@ -1,5 +1,6 @@
 import { useGSAP } from '@gsap/react';
 import React, { useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BlenderProjects, UnrealProjects } from '../constants';
@@ -332,66 +333,69 @@ const Works = () => {
                 </div>
             </div >
 
-            {/* Floating Preview */}
-            < div
-                ref={previewRef}
-                className='fixed -top-125 left-0 z-50 overflow-hidden border border-orange-500/50 pointer-events-none md:block hidden opacity-0 bg-black/90 backdrop-blur-md shadow-[0_0_50px_rgba(255,105,0,0.15)]'
-                style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%)" }}
-            >
-                {/* HUD Overlay Elements for Preview */}
-                < div className='absolute top-2 left-2 text-orange-500 text-[10px] tracking-widest uppercase z-50' > [VIEWPORT ACTIVE]</div >
-                <div className='absolute bottom-2 left-2 text-orange-500 text-[10px] tracking-widest uppercase z-50'>[ RENDERING PREVIEW ]</div>
-                <div className='absolute top-0 left-0 w-4 h-4 border-t border-l border-orange-500 z-50' />
-                <div className='absolute bottom-0 right-0 w-4 h-4 border-b border-r border-orange-500 z-50' />
+            {/* Floating Preview via Portal to escape z-index stacking context */}
+            {createPortal(
+                <div
+                    ref={previewRef}
+                    className='fixed -top-125 left-0 z-[100000] overflow-hidden border border-orange-500/50 pointer-events-none md:block hidden opacity-0 bg-black/90 backdrop-blur-md shadow-[0_0_50px_rgba(255,105,0,0.15)]'
+                    style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%)" }}
+                >
+                    {/* HUD Overlay Elements for Preview */}
+                    <div className='absolute top-2 left-2 text-orange-500 text-[10px] tracking-widest uppercase z-50'>[VIEWPORT ACTIVE]</div>
+                    <div className='absolute bottom-2 left-2 text-orange-500 text-[10px] tracking-widest uppercase z-50'>[ RENDERING PREVIEW ]</div>
+                    <div className='absolute top-0 left-0 w-4 h-4 border-t border-l border-orange-500 z-50' />
+                    <div className='absolute bottom-0 right-0 w-4 h-4 border-b border-r border-orange-500 z-50' />
 
-                {
-                    currentPreview && currentPreview.type === "blender" && (
-                        <div className="w-[840px] h-[560px] overflow-hidden relative p-8">
-                            <img
-                                src={BlenderProjects[currentPreview.index].image}
-                                alt="Preview"
-                                className='object-cover w-full h-full border border-orange-500/30'
-                            />
-                            <div
-                                ref={DesRef}
-                                className='absolute bottom-10 left-10 right-10 bg-[#0a0a0a]/90 backdrop-blur-sm border border-orange-500/50 text-white p-5 text-[1rem] tracking-widest uppercase font-light shadow-[0_0_20px_rgba(255,105,0,0.2)]'
-                                style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
-                            >
-                                <span className="text-orange-500 font-bold mr-2">{'>'}</span> {BlenderProjects[currentPreview.index].description}
-                            </div>
-                        </div>
-                    )
-                }
-
-                {
-                    currentPreview && currentPreview.type === "unreal" && (() => {
-                        const project = UnrealProjects[currentPreview.index];
-                        const videoId = project.Link ? project.Link.split('/').pop().split('?')[0] : '';
-                        return (
-                            <div className="relative overflow-hidden w-[900px] h-[550px] flex items-center justify-center p-8">
-                                {videoLoading && (
-                                    <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/90 backdrop-blur-sm z-10">
-                                        <div className="flex flex-col items-center gap-4">
-                                            <div className="w-12 h-12 border border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
-                                            <span className="text-orange-500 text-xs tracking-widest uppercase animate-pulse">[ INITIATING STREAM ]</span>
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div className="w-full h-full border border-orange-500/30 overflow-hidden relative">
-                                    {/* <div className="absolute inset-0 bg-orange-500/5 pointer-events-none z-10" /> removed as per request */}
-                                    <iframe
-                                        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0&vq=hd1080`}
-                                        allow="autoplay; encrypted-media"
-                                        onLoad={() => setVideoLoading(false)}
-                                        className="absolute w-[1250px] h-[750px] max-w-none border-none pointer-events-none -top-[100px] -left-[175px]"
-                                    />
+                    {
+                        currentPreview && currentPreview.type === "blender" && (
+                            <div className="w-[840px] h-[560px] overflow-hidden relative p-8">
+                                <img
+                                    src={BlenderProjects[currentPreview.index].image}
+                                    alt="Preview"
+                                    className='object-cover w-full h-full border border-orange-500/30'
+                                />
+                                <div
+                                    ref={DesRef}
+                                    className='absolute bottom-10 left-10 right-10 bg-[#0a0a0a]/90 backdrop-blur-sm border border-orange-500/50 text-white p-5 text-[1rem] tracking-widest uppercase font-light shadow-[0_0_20px_rgba(255,105,0,0.2)]'
+                                    style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                >
+                                    <span className="text-orange-500 font-bold mr-2">{'>'}</span> {BlenderProjects[currentPreview.index].description}
                                 </div>
                             </div>
-                        );
-                    })()
-                }
-            </div >
+                        )
+                    }
+
+                    {
+                        currentPreview && currentPreview.type === "unreal" && (() => {
+                            const project = UnrealProjects[currentPreview.index];
+                            const videoId = project.Link ? project.Link.split('/').pop().split('?')[0] : '';
+                            return (
+                                <div className="relative overflow-hidden w-[900px] h-[550px] flex items-center justify-center p-8">
+                                    {videoLoading && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/90 backdrop-blur-sm z-10">
+                                            <div className="flex flex-col items-center gap-4">
+                                                <div className="w-12 h-12 border border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
+                                                <span className="text-orange-500 text-xs tracking-widest uppercase animate-pulse">[ INITIATING STREAM ]</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="w-full h-full border border-orange-500/30 overflow-hidden relative">
+                                        {/* <div className="absolute inset-0 bg-orange-500/5 pointer-events-none z-10" /> removed as per request */}
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0&vq=hd1080`}
+                                            allow="autoplay; encrypted-media"
+                                            onLoad={() => setVideoLoading(false)}
+                                            className="absolute w-[1250px] h-[750px] max-w-none border-none pointer-events-none -top-[100px] -left-[175px]"
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        })()
+                    }
+                </div>,
+                document.body
+            )}
 
         </section >
     );
