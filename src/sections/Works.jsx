@@ -225,7 +225,7 @@ const Works = () => {
             >
 
                 {/* Blender */}
-                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
+                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
                     <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
                     <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
                     <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
@@ -272,7 +272,7 @@ const Works = () => {
                 </div>
 
                 {/* Unreal */}
-                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
+                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
                     <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
                     <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
                     <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
