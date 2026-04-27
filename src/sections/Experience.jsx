@@ -61,7 +61,7 @@ const Experience = () => {
                 {/* Header Section */}
                 <div className='flex items-center gap-4 mb-20 gsap-fade-in'>
                     <div className='w-12 h-2 bg-orange-500/50' />
-                    <h1 className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest'>
+                    <h1 className='text-orange-500 text-xl md:text-5xl font-bold uppercase tracking-widest'>
                         [ SYS.EXPERIENCE_LOGS ]
                     </h1>
                     <div className='flex-1 h-[1px] bg-orange-500/20' />
@@ -79,7 +79,7 @@ const Experience = () => {
 
                         <div className="flex flex-col gap-12">
                             {experience.map((exp, index) => (
-                                <div key={exp.id} className="flex gap-6 md:gap-10 relative gsap-fade-in">
+                                <div key={exp.id} className="flex gap-4 md:gap-10 relative gsap-fade-in">
 
                                     {/* Timeline Node */}
                                     <div className="relative mt-6 z-10 md:ml-5">
@@ -90,7 +90,7 @@ const Experience = () => {
 
                                     {/* Experience Card */}
                                     <InteractiveCard className="flex-1">
-                                        <div className="bg-[#0a0a0a]/90 border border-orange-500/20 p-6 md:p-8 relative group hover:border-orange-500/50 transition-colors duration-500">
+                                        <div className="bg-[#0a0a0a]/90 border border-orange-500/20 p-4 sm:p-6 md:p-8 relative group hover:border-orange-500/50 transition-colors duration-500">
 
                                             {/* Decorative Corners */}
                                             <div className='absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500 z-10 transition-all duration-300 group-hover:-top-1 group-hover:-left-1' />
@@ -112,7 +112,7 @@ const Experience = () => {
                                             </div>
 
                                             {/* Content */}
-                                            <div className="flex flex-col md:flex-row gap-6 items-start" style={{ transform: "translateZ(20px)" }}>
+                                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start" style={{ transform: "translateZ(20px)" }}>
 
                                                 {/* Icon / Image */}
                                                 <div className="w-16 h-16 shrink-0 bg-white/5 border border-orange-500/20 flex items-center justify-center p-2">
@@ -143,9 +143,9 @@ const Experience = () => {
                     </div>
 
                     {/* Right Side: Credentials / CV */}
-                    <div className='w-full xl:w-1/3 h-fit sticky top-32 gsap-fade-in'>
+                    <div className='w-full xl:w-1/3 h-fit relative xl:sticky top-32 gsap-fade-in'>
                         <InteractiveCard>
-                            <div className='p-8 bg-[#050505] border border-orange-500/30 flex flex-col justify-center items-center relative overflow-hidden group'>
+                            <div className='p-6 md:p-8 bg-[#050505] border border-orange-500/30 flex flex-col justify-center items-center relative overflow-hidden group'>
 
                                 {/* Background glow */}
                                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,105,0,0.1)_0%,transparent_70%)] pointer-events-none" />
@@ -159,7 +159,7 @@ const Experience = () => {
 
                                 <Icon icon="carbon:fingerprint-recognition" width="60" height="60" className="text-orange-500/30 mt-10 group-hover:text-orange-500 transition-colors duration-500" style={{ transform: "translateZ(20px)" }} />
 
-                                <h1 className='text-orange-500 font-bold text-4xl md:text-5xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(255,105,0,0.3)] mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
+                                <h1 className='text-orange-500 font-bold text-3xl md:text-5xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(255,105,0,0.3)] mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
                                     CREDENTIALS
                                 </h1>
                                 <p className='text-white/40 text-xs tracking-widest uppercase mt-4 mb-10 text-center' style={{ transform: "translateZ(20px)" }}>
@@ -203,7 +203,7 @@ const Experience = () => {
             {/* Resume Preview Modal */}
             {previewPdf && (
                 <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#050505]/95 backdrop-blur-md p-4 md:p-10" onClick={() => setPreviewPdf(null)}>
-                    <div className="w-full max-w-5xl h-full max-h-[90vh] border border-orange-500/50 bg-[#0a0a0a] flex flex-col relative shadow-[0_0_50px_rgba(255,105,0,0.3)]" onClick={(e) => e.stopPropagation()}>
+                    <div className="w-full max-w-5xl h-full max-h-[95vh] md:max-h-[90vh] border border-orange-500/50 bg-[#0a0a0a] flex flex-col relative shadow-[0_0_50px_rgba(255,105,0,0.3)]" onClick={(e) => e.stopPropagation()}>
 
                         {/* Header */}
                         <div className="flex justify-between items-center p-4 border-b border-orange-500/30 bg-[#050505]">
@@ -212,10 +212,10 @@ const Experience = () => {
                                 // DOCUMENT.PREVIEW
                             </div>
                             <div className="flex gap-4">
-                                <a href={previewPdf} download className="text-xs bg-orange-500 text-black px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-400 transition-colors flex items-center gap-2">
+                                <a href={previewPdf} download className="text-[10px] sm:text-xs bg-orange-500 text-black px-2 sm:px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-400 transition-colors flex items-center gap-1 sm:gap-2">
                                     <Icon icon="carbon:cloud-download" width="16" height="16" /> Download
                                 </a>
-                                <button onClick={() => setPreviewPdf(null)} className="text-xs border border-orange-500/50 text-orange-500 px-4 py-2 uppercase tracking-widest hover:bg-orange-500/20 transition-colors">
+                                <button onClick={() => setPreviewPdf(null)} className="text-[10px] sm:text-xs border border-orange-500/50 text-orange-500 px-2 sm:px-4 py-2 uppercase tracking-widest hover:bg-orange-500/20 transition-colors">
                                     Close
                                 </button>
                             </div>

@@ -39,7 +39,7 @@ const AboutSummery = () => {
         <section className="mt-20 overflow-hidden leading-snug text-center mb-42 contact-text-responsive">
             <div className="w-full flex flex-col h-auto whitespace-nowrap">
                 <div className="font-light uppercase tracking-[0.2em] md:tracking-[0.4em]">
-                    <div className="w-full h-auto text-[1.2rem] p-5 md:text-5xl flex flex-col gap-10 opacity-90">
+                    <div className="w-full h-auto text-[clamp(1.5rem,5vw,3rem)] p-4 md:p-5 md:text-5xl flex flex-col gap-6 md:gap-10 opacity-90">
 
                         <div id="title-about-1" className="flex items-center justify-center gap-4 md:gap-8">
                             <span className="text-orange-500 opacity-50">{'<'}</span>

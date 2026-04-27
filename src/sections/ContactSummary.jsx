@@ -134,7 +134,7 @@ const ContactSummary = () => {
                     </div>
                 </div>
 
-                <div ref={SumRef} className='text-center overflow-hidden font-light contact-text-responsive py-14 px-10 relative z-20 perspective-[1000px]'>
+                <div ref={SumRef} className='text-center overflow-hidden font-light contact-text-responsive py-8 md:py-14 px-4 md:px-10 relative z-20 perspective-[1000px]'>
 
                     {/* Decorative Sci-Fi Brackets */}
                     <div className='absolute left-0 top-0 w-6 h-6 border-l-2 border-t-2 border-orange-500/40 opacity-70 tech-bracket'></div>

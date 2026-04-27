@@ -212,11 +212,11 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Slide-Out Menu */}
-            <nav ref={navRef} className='fixed top-0 right-0 z-50 w-full h-full flex flex-col justify-between px-8 uppercase bg-[#050505]/90 backdrop-blur-2xl border-l border-orange-500/20 text-white/90 pt-28 pb-10 gap-y-8 md:hidden shadow-[-20px_0_50px_rgba(255,105,0,0.1)] overflow-y-auto'>
+            <nav ref={navRef} className='fixed top-0 right-0 z-50 w-full h-full flex flex-col justify-between px-6 uppercase bg-[#050505]/90 backdrop-blur-2xl border-l border-orange-500/20 text-white/90 pt-28 pb-10 gap-y-8 md:hidden shadow-[-20px_0_50px_rgba(255,105,0,0.1)] overflow-y-auto'>
                 {/* Decorative Elements */}
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-orange-500/40 to-transparent" />
 
-                <div className='flex flex-col text-3xl gap-y-8 font-medium tracking-widest relative z-10'>
+                <div className='flex flex-col text-2xl sm:text-3xl gap-y-6 sm:gap-y-8 font-medium tracking-widest relative z-10'>
                     <div className="text-orange-500/60 text-[10px] tracking-[0.3em] mb-4 border-b border-orange-500/20 pb-2 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(255,105,0,0.8)]"></span>
                         DIRECTORY_ACCESS
@@ -253,13 +253,13 @@ const Navbar = () => {
             {/* Mobile Header Elements */}
             <div>
                 {/* Mobile Sci-Fi Logo */}
-                <div ref={titleRef} className='text-sm font-medium tracking-widest uppercase text-orange-50 fixed m-5 md:hidden bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 shadow-[0_8px_32px_rgba(255,105,0,0.15),inset_0_1px_1px_rgba(255,105,0,0.1)] rounded-full px-5 py-3 flex items-center gap-3 z-40'>
+                <div ref={titleRef} className='text-[12px] sm:text-sm font-medium tracking-widest uppercase text-orange-50 fixed top-4 left-4 md:hidden bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 shadow-[0_8px_32px_rgba(255,105,0,0.15),inset_0_1px_1px_rgba(255,105,0,0.1)] rounded-full px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 z-40'>
                     <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(255,105,0,0.8)]"></span>
                     <h1>SUDIP.DEV</h1>
                 </div>
 
                 {/* Mobile Toggle Button */}
-                <div ref={BurgerRef} className='fixed z-[60] flex flex-col items-center justify-center gap-1.5 transition-all duration-500 bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 shadow-[0_8px_32px_rgba(255,105,0,0.15),inset_0_1px_1px_rgba(255,105,0,0.1)] rounded-full cursor-pointer w-12 h-12 top-5 right-5 md:hidden hover:border-orange-500/50 hover:bg-orange-500/10' onClick={toggleMenue}>
+                <div ref={BurgerRef} className='fixed z-[60] flex flex-col items-center justify-center gap-1 sm:gap-1.5 transition-all duration-500 bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 shadow-[0_8px_32px_rgba(255,105,0,0.15),inset_0_1px_1px_rgba(255,105,0,0.1)] rounded-full cursor-pointer w-10 h-10 sm:w-12 sm:h-12 top-4 sm:top-5 right-4 sm:right-5 md:hidden hover:border-orange-500/50 hover:bg-orange-500/10' onClick={toggleMenue}>
                     <span ref={toplineRef} className='block w-5 h-[1.5px] bg-orange-400 origin-center transition-all drop-shadow-[0_0_5px_rgba(255,105,0,0.8)]'></span>
                     <span ref={bottomlineRef} className='block w-5 h-[1.5px] bg-orange-400 origin-center transition-all drop-shadow-[0_0_5px_rgba(255,105,0,0.8)]'></span>
                 </div>

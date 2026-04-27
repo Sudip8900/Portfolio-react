@@ -103,7 +103,7 @@ const Contact = () => {
                     {/* Left Side: Terminal Form */}
                     <div className='w-full md:w-1/2 flex flex-col gsap-contact-element'>
                         <InteractiveCard>
-                            <div className="bg-[#050505] border border-orange-500/30 p-8 md:p-10 relative group">
+                            <div className="bg-[#050505] border border-orange-500/30 p-4 sm:p-6 md:p-10 relative group">
                                 
                                 {/* Terminal Styling */}
                                 <div className='absolute top-0 left-0 w-full h-8 bg-orange-500/10 border-b border-orange-500/30 flex items-center px-4'>
@@ -115,7 +115,7 @@ const Contact = () => {
                                     <p className="ml-4 text-orange-500/50 text-[10px] tracking-widest uppercase">bash // root@sudip.dev</p>
                                 </div>
 
-                                <div className="mt-8">
+                                <div className="mt-8 md:mt-10">
                                     <h2 className='text-orange-500 text-sm tracking-widest uppercase mb-8'>
                                         <span className="animate-pulse mr-2">{'>'}</span> 
                                         ./initialize_contact.sh

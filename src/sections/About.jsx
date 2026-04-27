@@ -62,7 +62,7 @@ const About = () => {
     });
 
     return (
-        <section id="about" ref={sectionRef} className='min-h-screen bg-[#050505] py-20 px-5 md:px-10 overflow-hidden'>
+        <section id="about" ref={sectionRef} className='min-h-screen bg-[#050505] py-12 md:py-20 px-4 md:px-10 overflow-hidden'>
 
             {/* Sci-Fi Section Header */}
             <div className='flex items-center gap-4 mb-16'>
@@ -75,7 +75,7 @@ const About = () => {
 
             {/* Terminal Window */}
             <div ref={terminalRef} className='w-full relative perspective-[2000px]'>
-                <InteractiveCard className='w-full border border-orange-500/30 bg-[#0a0a0a]/80 backdrop-blur-md p-6 md:p-12 relative overflow-hidden group shadow-[0_0_50px_rgba(255,105,0,0.1)]'>
+                <InteractiveCard className='w-full border border-orange-500/30 bg-[#0a0a0a]/80 backdrop-blur-md p-4 sm:p-6 md:p-12 relative overflow-hidden group shadow-[0_0_50px_rgba(255,105,0,0.1)]'>
 
                     {/* Decorative Scanline */}
                     <div className="absolute top-0 left-0 w-full h-[2px] bg-orange-500/50 animate-[dropLine_3s_linear_infinite] z-0 pointer-events-none" />
@@ -90,7 +90,7 @@ const About = () => {
                     </div>
 
                     {/* Top Section: ID Badge + Bio */}
-                    <div className='flex flex-col lg:flex-row gap-10 md:gap-16 z-10 relative mb-16'>
+                    <div className='flex flex-col lg:flex-row gap-8 md:gap-16 z-10 relative mb-12 md:mb-16'>
 
                         {/* ID Badge (Left) */}
                         <div ref={profileContainerRef} className="w-full lg:w-1/3 flex-shrink-0 flex flex-col items-center justify-start gap-6" style={{ transform: "translateZ(40px)" }}>
@@ -117,7 +117,7 @@ const About = () => {
                         {/* Bio Section (Right) */}
                         <div ref={textRef} className="w-full lg:w-2/3 flex flex-col justify-center" style={{ transform: "translateZ(30px)" }}>
                             <h2 className='text-orange-500/70 text-sm md:text-xl mb-2 uppercase tracking-[0.3em]'>// Identity Confirmed</h2>
-                            <h1 className='text-white text-4xl md:text-6xl font-bold uppercase drop-shadow-[0_0_15px_rgba(255,105,0,0.5)] leading-tight mb-6 tracking-tighter'>
+                            <h1 className='text-white text-3xl sm:text-4xl md:text-6xl font-bold uppercase drop-shadow-[0_0_15px_rgba(255,105,0,0.5)] leading-tight mb-4 md:mb-6 tracking-tighter'>
                                 SUDIP <span className='text-orange-500'>PAN</span>
                             </h1>
                             <div className='w-full h-[1px] bg-gradient-to-r from-orange-500 to-transparent mb-8' />
@@ -131,11 +131,11 @@ const About = () => {
                     <div ref={dataModulesRef} className="w-full flex flex-col gap-6 z-10 relative" style={{ transform: "translateZ(20px)" }}>
 
                         {/* Strip 1: Education */}
-                        <div className="data-module w-full border border-orange-500/30 bg-black/50 p-6 flex flex-col lg:flex-row gap-6 items-start lg:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
+                        <div className="data-module w-full border border-orange-500/30 bg-black/50 p-4 md:p-6 flex flex-col lg:flex-row gap-4 md:gap-6 items-start lg:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
                             <div className="w-full lg:w-40 flex-shrink-0 lg:border-r-2 border-b-2 lg:border-b-0 pb-4 lg:pb-0 border-orange-500/50 pr-4">
                                 <h3 className="text-orange-500 text-xs tracking-widest">// EDU_DATA</h3>
                             </div>
-                            <div className="flex-1 flex flex-col md:flex-row gap-8 text-xs text-white/80 w-full justify-between">
+                            <div className="flex-1 flex flex-col md:flex-row gap-6 md:gap-8 text-xs text-white/80 w-full justify-between">
                                 <div className="flex flex-col gap-1 w-full">
                                     <div className="flex justify-between text-white"><span className="text-orange-500">[2019]</span> <span>CLASS-X</span></div>
                                     <div className="h-[2px] bg-orange-500/30 w-full my-1"><div className="h-full bg-orange-500 w-full" /></div>
@@ -156,7 +156,7 @@ const About = () => {
 
                         {/* Strip 2 & 3: Tech & Tools (Side by side on desktop) */}
                         <div className="flex flex-col xl:flex-row gap-6 w-full">
-                            <div className="data-module flex-1 border border-orange-500/30 bg-black/50 p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
+                            <div className="data-module flex-1 border border-orange-500/30 bg-black/50 p-4 md:p-6 flex flex-col sm:flex-row gap-4 md:gap-6 items-start sm:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
                                 <div className="w-full sm:w-32 flex-shrink-0 sm:border-r-2 border-b-2 sm:border-b-0 pb-4 sm:pb-0 border-orange-500/50 pr-4">
                                     <h3 className="text-orange-500 text-xs tracking-widest">// LANGUAGES</h3>
                                 </div>
@@ -171,7 +171,7 @@ const About = () => {
                                 </div>
                             </div>
 
-                            <div className="data-module flex-1 border border-orange-500/30 bg-black/50 p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
+                            <div className="data-module flex-1 border border-orange-500/30 bg-black/50 p-4 md:p-6 flex flex-col sm:flex-row gap-4 md:gap-6 items-start sm:items-center transition-colors hover:border-orange-500/60 hover:bg-orange-500/5">
                                 <div className="w-full sm:w-32 flex-shrink-0 sm:border-r-2 border-b-2 sm:border-b-0 pb-4 sm:pb-0 border-orange-500/50 pr-4">
                                     <h3 className="text-orange-500 text-xs tracking-widest">// TOOLS</h3>
                                 </div>

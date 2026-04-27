@@ -225,7 +225,7 @@ const Works = () => {
             >
 
                 {/* Blender */}
-                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 m-5 p-5 scroll-container relative'>
+                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5 scroll-container relative'>
                     {/* Decorative Corner Brackets */}
                     <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
                     <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
@@ -243,7 +243,7 @@ const Works = () => {
                                 onMouseLeave={handleMouseLeave}
                             >
                                 <InteractiveCard>
-                                    <div className='flex justify-between items-center px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'>
+                                    <div className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'>
                                         {/* Hover Scanning Line */}
                                         <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
@@ -261,7 +261,7 @@ const Works = () => {
 
                                     {/* Mobile Preview Image fallback */}
                                     <div className='relative flex px-5 md:hidden h-auto py-5 bg-white/5 mb-5 mt-2 transition-colors duration-500 border border-orange-500/10'>
-                                        <img src={project.image} alt={project.name} className="w-full transition-all duration-500 border border-orange-500/20" />
+                                        <img src={project.image} alt={project.name} className="w-full transition-all duration-500 border border-orange-500/20 object-cover" />
                                     </div>
                                 </InteractiveCard>
                             </div>
@@ -270,7 +270,7 @@ const Works = () => {
                 </div>
 
                 {/* Unreal */}
-                <div className='w-full md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 m-5 p-5 scroll-container relative'>
+                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5 scroll-container relative'>
                     {/* Decorative Corner Brackets */}
                     <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
                     <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
@@ -294,7 +294,7 @@ const Works = () => {
                                         href={project.Link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className='flex justify-between items-center px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                        className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
                                     >
                                         {/* Hover Scanning Line */}
                                         <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
@@ -315,7 +315,7 @@ const Works = () => {
                 </div>
 
                 {/* VLSI */}
-                <div className='w-full md:w-1/3 h-64 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 m-5 p-5 relative flex flex-col items-center justify-center group'>
+                <div className='w-auto md:w-1/3 h-64 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5 relative flex flex-col items-center justify-center group'>
                     {/* Decorative Corner Brackets */}
                     <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
                     <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />

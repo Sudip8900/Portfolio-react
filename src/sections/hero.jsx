@@ -113,28 +113,28 @@ const hero = () => {
 
             <div ref={contextRef} className="relative z-30 pointer-events-none w-full">
                 <div style={{ clipPath: "polygon(0 0, 100% 0%, 100% 100%, 0% 100%)" }}>
-                    <div ref={headerRef} className='flex flex-col justify-center gap-6 pt-16 md:gap-10 pb-10'>
-                        <div className="flex items-center gap-4 ml-5 md:ml-10">
-                            <div className='w-8 md:w-12 h-1 bg-orange-500 animate-pulse' />
-                            <AnimatedTextSlide text={AboutText} className='text-xl md:text-2xl tracking-widest uppercase text-orange-500' />
+                    <div ref={headerRef} className='flex flex-col justify-center gap-4 md:gap-10 pt-24 md:pt-16 pb-10'>
+                        <div className="flex items-center gap-2 md:gap-4 ml-4 md:ml-10">
+                            <div className='w-6 md:w-12 h-1 bg-orange-500 animate-pulse' />
+                            <AnimatedTextSlide text={AboutText} className='text-sm sm:text-xl md:text-2xl tracking-widest uppercase text-orange-500' />
                         </div>
                         <div style={{ WebkitTextStroke: '2px white', filter: 'drop-shadow(0 0 10px rgba(255,105,0,0.8))' }}>
-                            <AnimatedTextSlide text={Name} className='text-5xl ml-5 md:text-[8rem] md:ml-10 font-bold tracking-tighter text-transparent' />
+                            <AnimatedTextSlide text={Name} className='text-[clamp(3.5rem,12vw,8rem)] ml-4 md:ml-10 font-bold tracking-tighter text-transparent leading-none' />
                         </div>
                     </div>
                 </div>
 
                 <div className='relative transition-colors duration-500 mt-5'>
                     <div className='absolute inset-x-0 border-t border-t-orange-500/30' />
-                    <div className='py-12 px-10 bg-[#0a0a0a]/80 backdrop-blur-sm transition-colors duration-500 border-b border-orange-500/10'>
+                    <div className='py-8 px-6 md:py-12 md:px-10 bg-[#0a0a0a]/80 backdrop-blur-sm transition-colors duration-500 border-b border-orange-500/10'>
                         <div className='text-start md:text-end max-w-7xl ml-auto'>
                             <AutoType
                                 subTitle={"I am a passionate "}
                                 text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]}
                                 Ntextcolor="text-white/60 tracking-widest uppercase"
                                 AnimTextcolor="text-orange-500 font-bold uppercase tracking-widest"
-                                NtextSize="text-sm md:text-xl"
-                                AnimTextSize="text-lg md:text-4xl"
+                                NtextSize="text-[clamp(0.7rem,2.5vw,1.25rem)]"
+                                AnimTextSize="text-[clamp(1rem,4vw,2.25rem)]"
                             />
                         </div>
                     </div>
@@ -142,8 +142,8 @@ const hero = () => {
             </div>
 
             {/* Social Icons - Sci-Fi style */}
-            <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all 0.4s" }} className='absolute mb-auto top-1/2 -translate-y-1/2 right-3 md:right-8 mx-auto h-auto w-auto justify-center flex flex-col align-middle gap-y-5 p-2 z-40 md:gap-y-6 pointer-events-auto'>
-                <div className="flex flex-col items-center gap-4 border-r border-orange-500/30 pr-4">
+            <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all 0.4s" }} className='absolute mb-auto top-1/2 -translate-y-1/2 right-2 md:right-8 mx-auto h-auto w-auto justify-center flex flex-col align-middle gap-y-4 md:gap-y-6 p-2 z-40 pointer-events-auto'>
+                <div className="flex flex-col items-center gap-3 md:gap-4 border-r border-orange-500/30 pr-2 md:pr-4 scale-90 md:scale-100 origin-right">
                     <Magnetic>
                         <a href="https://www.instagram.com/sudip_pan00/" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
                             <Icon icon="mdi:instagram" width="24" height="24" />
