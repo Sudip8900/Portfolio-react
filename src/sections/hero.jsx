@@ -190,7 +190,7 @@ const hero = () => {
             </div>
 
             {/* Scroll Hint */}
-            <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center z-40 text-orange-500 pointer-events-none opacity-80">
+            <div className="hidden md:flex absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center z-40 text-orange-500 pointer-events-none opacity-80">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="w-2 h-4 border-l-2 border-y-2 border-orange-500/50 opacity-70"></div>
                     <span className="text-[10px] tracking-[0.3em] uppercase font-bold text-orange-500">
