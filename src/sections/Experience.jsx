@@ -213,10 +213,10 @@ const Experience = () => {
                             </div>
                             <div className="flex gap-4">
                                 <a href={previewPdf} download className="text-[10px] sm:text-xs bg-orange-500 text-black px-2 sm:px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-400 transition-colors flex items-center gap-1 sm:gap-2">
-                                    <Icon icon="carbon:cloud-download" width="16" height="16" /> Download
+                                    <Icon icon="carbon:cloud-download" width="16" height="16" />
                                 </a>
                                 <button onClick={() => setPreviewPdf(null)} className="text-[10px] sm:text-xs border border-orange-500/50 text-orange-500 px-2 sm:px-4 py-2 uppercase tracking-widest hover:bg-orange-500/20 transition-colors">
-                                    Close
+                                    X
                                 </button>
                             </div>
                         </div>
