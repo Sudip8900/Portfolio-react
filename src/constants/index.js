@@ -148,6 +148,12 @@ export const UnrealProjects = [
     },
 ];
 
+export const VLSIProjects = [
+    // Add your VLSI projects here – the counter updates automatically.
+    // Example entry:
+    // { id: 1, name: "High Gain CMOS Amplifier", status: "In Progress" },
+];
+
 export const experience = [
     {
         id: 1,

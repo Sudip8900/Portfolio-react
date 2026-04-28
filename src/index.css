@@ -58,3 +58,69 @@ body {
   0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 2px #ff6900); }
   50% { opacity: 1; filter: drop-shadow(0 0 8px #ff6900); }
 }
+
+/* ── Radar ── */
+@keyframes radarSweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.cs-radar-arm {
+  animation: radarSweep 3.5s linear infinite;
+}
+
+.cs-radar-sweep {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 105, 0, 0.18) 55deg,
+    transparent 55deg
+  );
+  animation: radarSweep 3.5s linear infinite;
+}
+
+.cs-radar-blip {
+  animation: blipPulse 3.5s linear infinite;
+}
+
+@keyframes blipPulse {
+  0%, 85%        { opacity: 0; }
+  87%, 95%       { opacity: 1; }
+  100%           { opacity: 0; }
+}
+
+/* ── Glitch word hover ── */
+.cs-glitch-word {
+  position: relative;
+}
+.cs-glitch-word::before,
+.cs-glitch-word::after {
+  content: 'CONNECT';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  font: inherit;
+  color: inherit;
+  pointer-events: none;
+  transition: opacity 0.1s;
+}
+.cs-glitch-word:hover::before {
+  opacity: 0.6;
+  color: #00ffff;
+  clip-path: polygon(0 20%, 100% 20%, 100% 45%, 0 45%);
+  transform: translateX(-3px);
+  animation: glitchShift 0.18s steps(2) infinite;
+}
+.cs-glitch-word:hover::after {
+  opacity: 0.5;
+  color: #ff003c;
+  clip-path: polygon(0 55%, 100% 55%, 100% 80%, 0 80%);
+  transform: translateX(3px);
+  animation: glitchShift 0.22s steps(2) infinite reverse;
+}
+
+@keyframes glitchShift {
+  0%   { transform: translateX(-3px) skewX(-2deg); }
+  50%  { transform: translateX( 3px) skewX( 2deg); }
+  100% { transform: translateX(-3px) skewX(-2deg); }
+}

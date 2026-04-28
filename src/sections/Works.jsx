@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BlenderProjects, UnrealProjects } from '../constants';
+import { BlenderProjects, UnrealProjects, VLSIProjects } from '../constants';
 import { Icon } from '@iconify/react';
 import Magnetic from '../componnts/Magnetic.jsx';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
@@ -25,6 +25,7 @@ const Works = () => {
 
     const blenderItemsRef = useRef([]);
     const unrealItemsRef = useRef([]);
+    const countRefs = useRef([]);
 
     const moveX = useRef(null);
     const moveY = useRef(null);
@@ -113,6 +114,24 @@ const Works = () => {
                     start: "top bottom-=10",
                     toggleActions: "play none none reverse",
                 }
+            });
+        });
+
+        /* ── Counter count-up animation ── */
+        const total = BlenderProjects.length + UnrealProjects.length + VLSIProjects.length;
+        const counts = [BlenderProjects.length, UnrealProjects.length, VLSIProjects.length, total];
+
+        countRefs.current.forEach((el, i) => {
+            if (!el) return;
+            const obj = { val: 0 };
+            gsap.to(obj, {
+                val: counts[i],
+                duration: 2,
+                ease: 'power2.out',
+                scrollTrigger: { trigger: el, start: 'top 90%' },
+                onUpdate: () => {
+                    el.textContent = String(Math.round(obj.val)).padStart(2, '0');
+                },
             });
         });
 
@@ -217,6 +236,66 @@ const Works = () => {
                 <p>// 3D and Unreal Engine.</p>
                 <p>// VLSI design.</p>
             </div>
+
+            {/* ══════════ PROJECT COUNTER BOX ══════════ */}
+            <div className="px-5 md:px-10 mt-10 mb-2">
+
+                {/* Section label */}
+                <div className="flex items-center gap-3 mb-4">
+                    <span className="text-[10px] font-mono tracking-[0.35em] text-orange-500/50 uppercase">[ SYS.STAT_OVERVIEW ]</span>
+                    <div className="flex-1 h-px bg-orange-500/15" />
+                    <span className="text-[10px] font-mono text-orange-500/30 animate-pulse">● LIVE</span>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                    {[
+                        { label: 'DB.BLENDER', sub: '3D Models', icon: 'logos:blender', idx: 0 },
+                        { label: 'DB.UNREAL', sub: 'Game Demos', icon: 'devicon:unrealengine', idx: 1 },
+                        { label: 'DB.VLSI', sub: 'Circuit Designs', icon: 'mdi:chip', idx: 2 },
+                        { label: 'TOTAL.OBJ', sub: 'All Projects', icon: 'mdi:database-outline', idx: 3 },
+                    ].map(({ label, sub, icon, idx }) => (
+                        <div
+                            key={idx}
+                            className="relative border border-orange-500/20 bg-[#0a0a0a] p-4 md:p-6 group hover:border-orange-500/55 transition-all duration-300 overflow-hidden cursor-default"
+                        >
+                            {/* Corner brackets */}
+                            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/50 group-hover:border-orange-500 transition-colors duration-300" />
+                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/50 group-hover:border-orange-500 transition-colors duration-300" />
+                            {/* Hover glow */}
+                            <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/5 transition-all duration-300 pointer-events-none" />
+                            {/* Scan line on hover */}
+                            <div className="absolute left-0 top-0 h-full w-[2px] bg-orange-500 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+
+                            <div className="relative z-10 flex flex-col gap-2">
+                                {/* Label + icon row */}
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[9px] md:text-[11px] font-mono tracking-[0.2em] text-orange-500/55 uppercase">{label}</span>
+                                    <Icon
+                                        icon={icon}
+                                        className="text-orange-500/35 group-hover:text-orange-500/80 transition-colors duration-300"
+                                        width={16} height={16}
+                                    />
+                                </div>
+
+                                {/* Animated counter */}
+                                <span
+                                    ref={el => countRefs.current[idx] = el}
+                                    className="text-4xl md:text-5xl font-bold tabular-nums text-white drop-shadow-[0_0_14px_rgba(255,105,0,0.35)] group-hover:drop-shadow-[0_0_22px_rgba(255,105,0,0.7)] transition-all duration-300"
+                                >
+                                    00
+                                </span>
+
+                                {/* Divider */}
+                                <div className="w-full h-px bg-orange-500/12 group-hover:bg-orange-500/40 transition-colors duration-300" />
+
+                                {/* Sub label */}
+                                <span className="text-[9px] font-mono tracking-widest text-orange-500/30 uppercase">{sub}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {/* ═══════════════════════════════════════ */}
 
             <div
                 ref={projectRef}
