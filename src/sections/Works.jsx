@@ -25,6 +25,7 @@ const Works = () => {
 
     const blenderItemsRef = useRef([]);
     const unrealItemsRef = useRef([]);
+    const vlsiItemsRef = useRef([]);
     const countRefs = useRef([]);
 
     const moveX = useRef(null);
@@ -102,6 +103,22 @@ const Works = () => {
         });
 
         unrealItemsRef.current.forEach((item) => {
+            if (!item) return;
+            gsap.from(item, {
+                opacity: 0,
+                x: 50,
+                duration: 0.5,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: item,
+                    scroller: item.closest('.scroll-container'),
+                    start: "top bottom-=10",
+                    toggleActions: "play none none reverse",
+                }
+            });
+        });
+
+        vlsiItemsRef.current.forEach((item) => {
             if (!item) return;
             gsap.from(item, {
                 opacity: 0,
@@ -272,8 +289,8 @@ const Works = () => {
                                     <span className="text-[9px] md:text-[11px] font-mono tracking-[0.2em] text-orange-500/55 uppercase">{label}</span>
                                     <Icon
                                         icon={icon}
-                                        className="text-orange-500/35 group-hover:text-orange-500/80 transition-colors duration-300"
-                                        width={16} height={16}
+                                        className="text-orange-500 group-hover:text-orange-500/80 transition-colors duration-300 bg-orange-300 p-1 rounded-full"
+                                        width={32} height={32}
                                     />
                                 </div>
 
@@ -305,8 +322,6 @@ const Works = () => {
 
                 {/* Blender */}
                 <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
-                    <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
-                    <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
                     <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
                         {/* Decorative Corner Brackets */}
 
@@ -352,8 +367,6 @@ const Works = () => {
 
                 {/* Unreal */}
                 <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
-                    <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
-                    <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
                     <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
                         {/* Decorative Corner Brackets */}
 
@@ -398,21 +411,46 @@ const Works = () => {
                 </div>
 
                 {/* VLSI */}
-                <div className='w-auto md:w-1/3 h-64 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5 relative flex flex-col items-center justify-center group'>
-                    {/* Decorative Corner Brackets */}
-                    <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500 z-10' />
-                    <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500 z-10' />
+                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
+                    <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
+                        {/* Decorative Corner Brackets */}
 
-                    <div className="absolute top-0 left-0 w-full h-[1px] bg-orange-500/50 animate-[dropLine_3s_linear_infinite]" />
+                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
+                            [ DB.VLSI ]
+                        </h1>
 
-                    <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-5 uppercase tracking-widest'>
-                        [ DB.VLSI ]
-                    </h1>
-                    <p className='text-white/50 text-sm tracking-widest uppercase text-center max-w-[200px]'>
-                        // High gain CMOS amplifier in progress.
-                    </p>
-                    <Icon icon="line-md:downloading-loop" className='w-20 h-20 text-orange-500/50 mt-10 group-hover:text-orange-500 transition-colors duration-500' />
-                    <p className='text-orange-500 text-xs tracking-widest uppercase mt-4 animate-pulse'>Awaiting Data...</p>
+                        <p className='my-5 text-white/50 text-sm tracking-widest uppercase'>// Tools & Circuit designs.</p>
+
+                        <div className='flex flex-col gap-4'>
+                            {VLSIProjects.map((project, index) => (
+                                <div
+                                    key={index}
+                                    ref={el => vlsiItemsRef.current[index] = el}
+                                >
+                                    <InteractiveCard>
+                                        <a
+                                            href={project.Link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                        >
+                                            {/* Hover Scanning Line */}
+                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+
+                                            <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                                {project.name}
+                                            </h2>
+                                            <Magnetic>
+                                                <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
+                                                    <Icon icon="mdi:github" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                </div>
+                                            </Magnetic>
+                                        </a>
+                                    </InteractiveCard>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div >
 

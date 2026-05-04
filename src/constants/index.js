@@ -149,9 +149,11 @@ export const UnrealProjects = [
 ];
 
 export const VLSIProjects = [
-    // Add your VLSI projects here – the counter updates automatically.
-    // Example entry:
-    // { id: 1, name: "High Gain CMOS Amplifier", status: "In Progress" },
+    {
+        id: 1,
+        name: "Python Re-plotter",
+        Link: "https://github.com/Sudip8900/python_reploter.git",
+    }
 ];
 
 export const experience = [
