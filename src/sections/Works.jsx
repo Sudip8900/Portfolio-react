@@ -22,6 +22,7 @@ const Works = () => {
     const projectRef = useRef(null);
     const previewRef = useRef(null);
     const DesRef = useRef(null);
+    const scrollTextRef = useRef(null);
 
     const blenderItemsRef = useRef([]);
     const unrealItemsRef = useRef([]);
@@ -178,6 +179,29 @@ const Works = () => {
                 ease: "back.out(1.7)"
             }
         );
+
+        if (scrollTextRef.current) {
+            const el = scrollTextRef.current;
+            gsap.killTweensOf(el);
+            el.scrollTop = 0;
+
+            setTimeout(() => {
+                if (el.scrollHeight > el.clientHeight) {
+                    const maxScroll = el.scrollHeight - el.clientHeight;
+                    const duration = maxScroll / 20;
+
+                    gsap.to(el, {
+                        scrollTop: maxScroll,
+                        duration: duration,
+                        ease: "linear",
+                        delay: 1.5,
+                        yoyo: true,
+                        repeat: -1,
+                        repeatDelay: 1.5
+                    });
+                }
+            }, 50);
+        }
     }, [currentPreview]);
 
     /* ================= MOUSE HANDLERS ================= */
@@ -426,6 +450,8 @@ const Works = () => {
                                 <div
                                     key={index}
                                     ref={el => vlsiItemsRef.current[index] = el}
+                                    onMouseEnter={() => handleMouseEnter("vlsi", index)}
+                                    onMouseLeave={handleMouseLeave}
                                 >
                                     <InteractiveCard>
                                         <a
@@ -491,24 +517,65 @@ const Works = () => {
                             const project = UnrealProjects[currentPreview.index];
                             const videoId = project.Link ? project.Link.split('/').pop().split('?')[0] : '';
                             return (
-                                <div className="relative overflow-hidden w-[900px] h-[550px] flex items-center justify-center p-8">
-                                    {videoLoading && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/90 backdrop-blur-sm z-10">
-                                            <div className="flex flex-col items-center gap-4">
-                                                <div className="w-12 h-12 border border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
-                                                <span className="text-orange-500 text-xs tracking-widest uppercase animate-pulse">[ INITIATING STREAM ]</span>
+                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6">
+                                    <div className="relative w-[700px] h-full border border-orange-500/30 overflow-hidden">
+                                        {videoLoading && (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/90 backdrop-blur-sm z-10">
+                                                <div className="flex flex-col items-center gap-4">
+                                                    <div className="w-12 h-12 border border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
+                                                    <span className="text-orange-500 text-xs tracking-widest uppercase animate-pulse">[ INITIATING STREAM ]</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
 
-                                    <div className="w-full h-full border border-orange-500/30 overflow-hidden relative">
-                                        {/* <div className="absolute inset-0 bg-orange-500/5 pointer-events-none z-10" /> removed as per request */}
                                         <iframe
                                             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0&vq=hd1080`}
                                             allow="autoplay; encrypted-media"
                                             onLoad={() => setVideoLoading(false)}
-                                            className="absolute w-[1250px] h-[750px] max-w-none border-none pointer-events-none -top-[100px] -left-[175px]"
+                                            className="absolute w-[1920px] h-[1080px] max-w-none border-none pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-37"
                                         />
+                                    </div>
+
+                                    <div
+                                        ref={DesRef}
+                                        className="relative flex-1 h-full border border-orange-500/30 bg-[#0a0a0a]/90 backdrop-blur-md p-6 flex flex-col shadow-[inset_0_0_20px_rgba(255,105,0,0.05)]"
+                                        style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                    >
+                                        <div className="text-orange-500 text-[10px] tracking-widest uppercase mb-4 border-b border-orange-500/20 pb-2">
+                                            [ SYS.LOG_DATA ]
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(255,105,0,0.5)]">
+                                            {project.name}
+                                        </h3>
+                                        <div ref={scrollTextRef} className="text-sm text-justify text-white/70 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                                            <span className="text-orange-500 mr-2 font-bold">{'>'}</span> {project.description}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })()
+                    }
+
+                    {
+                        currentPreview && currentPreview.type === "vlsi" && (() => {
+                            const project = VLSIProjects[currentPreview.index];
+                            return (
+                                <div className="relative overflow-hidden w-[500px] h-[350px] flex p-6">
+                                    <div
+                                        ref={DesRef}
+                                        className="relative flex-1 h-full border border-orange-500/30 bg-[#0a0a0a]/90 backdrop-blur-md p-6 flex flex-col shadow-[inset_0_0_20px_rgba(255,105,0,0.05)]"
+                                        style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                    >
+                                        <div className="text-orange-500 text-[10px] tracking-widest uppercase mb-4 border-b border-orange-500/20 pb-2 flex justify-between">
+                                            <span>[ SYS.LOG_DATA ]</span>
+                                            <Icon icon="mdi:chip" width={16} />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(255,105,0,0.5)]">
+                                            {project.name}
+                                        </h3>
+                                        <div ref={scrollTextRef} className="text-sm text-justify text-white/70 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                                            <span className="text-orange-500 mr-2 font-bold">{'>'}</span> {project.description}
+                                        </div>
                                     </div>
                                 </div>
                             );
