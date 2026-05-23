@@ -130,7 +130,7 @@ const hero = () => {
                         <div className='text-start md:text-end max-w-7xl ml-auto'>
                             <AutoType
                                 subTitle={"I am a passionate "}
-                                text={["Game Developer", "Game Designer", "Level Designer", "UE5 Enthusiast", "Electronics Engineer"]}
+                                text={["Game Developer", "Game Designer", "Level Designer", "Unreal Engine Developer", "Electronics Engineer"]}
                                 Ntextcolor="text-white/60 tracking-widest uppercase"
                                 AnimTextcolor="text-orange-500 font-bold uppercase tracking-widest"
                                 NtextSize="text-[clamp(0.7rem,2.5vw,1.25rem)]"
@@ -187,20 +187,6 @@ const hero = () => {
                         </Link>
                     </div>
                 </Magnetic>
-            </div>
-
-            {/* Scroll Hint */}
-            <div className="hidden md:flex absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center z-40 text-orange-500 pointer-events-none opacity-80">
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="w-2 h-4 border-l-2 border-y-2 border-orange-500/50 opacity-70"></div>
-                    <span className="text-[10px] tracking-[0.3em] uppercase font-bold text-orange-500">
-                        SYS.SCROLL
-                    </span>
-                    <div className="w-2 h-4 border-r-2 border-y-2 border-orange-500/50 opacity-70"></div>
-                </div>
-                <div className="w-[1px] h-8 md:h-12 bg-orange-500/20 relative overflow-hidden">
-                    <div className="w-full h-full bg-orange-500 animate-[dropLine_2s_ease-in-out_infinite]" />
-                </div>
             </div>
         </section>
     )
