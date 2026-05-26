@@ -121,9 +121,15 @@ const About = () => {
                                 SUDIP <span className='text-orange-500'>PAN</span>
                             </h1>
                             <div className='w-full h-[1px] bg-gradient-to-r from-orange-500 to-transparent mb-8' />
-                            <p className='text-white/80 text-base md:text-xl leading-relaxed text-justify'>
+                            <p className='text-white/80 text-base md:text-xl leading-relaxed text-justify mb-4'>
                                 I’m a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, visually engaging games that blend strong design, technical skill, and interactive innovation.
                             </p>
+                            <div className='flex items-start gap-2 mt-4'>
+                                <span className='text-orange-500 font-bold uppercase tracking-widest text-sm md:text-base mt-1'>Address:</span>
+                                <p className='text-white/70 text-sm md:text-base leading-relaxed'>
+                                    Rameswarpur, Ramjibanpur, West Medinipur, West Bengal, India, 721242
+                                </p>
+                            </div>
                         </div>
                     </div>
 
