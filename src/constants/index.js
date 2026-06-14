@@ -167,7 +167,7 @@ export const UnrealProjects = [
 
         The project additionally integrated modern upscaling and rendering technologies such as NVIDIA DLSS (Deep Learning Super Sampling) to enhance frame rates while maintaining high-resolution image quality. DLSS allowed the game to render internally at lower resolutions and upscale the final output using AI-assisted reconstruction, providing improved performance on supported hardware.
 
-Other rendering optimizations included shadow distance management, optimized post-processing settings, texture streaming, efficient material usage, foliage optimization, and controlled use of dynamic lighting systems. Asset reuse and modular scene construction also helped reduce memory overhead while improving development efficiency.
+        Other rendering optimizations included shadow distance management, optimized post-processing settings, texture streaming, efficient material usage, foliage optimization, and controlled use of dynamic lighting systems. Asset reuse and modular scene construction also helped reduce memory overhead while improving development efficiency.
 
         To maintain smooth gameplay performance during traversal and combat scenarios, systems such as animation optimization, efficient collision handling, and controlled actor tick usage were implemented where necessary. Combined together, these optimization techniques allowed the project to achieve a balance between visual quality, scalability, and runtime performance in complex real-time environments.`,
     },
@@ -201,11 +201,12 @@ Other rendering optimizations included shadow distance management, optimized pos
     },
 ];
 
-export const VLSIProjects = [
+export const CodingProjects = [
     {
         id: 1,
         name: "Python Re-plotter",
         Link: "https://github.com/Sudip8900/python_reploter.git",
+        image: "/Images/python replotter.png",
         description: `Developed a custom Python-based waveform replotting tool for VLSI simulation analysis that automatically reconstructs low-quality simulation output images into clean, high-resolution plots. The tool processes waveform screenshots and redraws them using programmatic plotting techniques to generate sharper, publication-quality visualizations suitable for reports, presentations, and technical documentation.
 
         Key features include:
@@ -217,8 +218,17 @@ export const VLSIProjects = [
         Faster analysis workflow for VLSI verification and debugging
 
         The system was designed to enhance visualization quality during circuit analysis and reduce manual effort in recreating simulation graphs from EDA tool outputs.`,
+    },
+    {
+        id: 2,
+        name: "Forge IDE (Custom IDE)",
+        Link: "https://github.com/Sudip8900/Forge-IDE-Custom-IDE-.git",
+        image: "/Images/IDE.png",
+        description: `A modern, high-performance IDE built from the ground up with a focus on productivity, extensibility, and developer experience. Features include an advanced integrated terminal, intelligent project management, multi-language support, customizable themes, and a scalable architecture designed to handle projects of any size. The IDE emphasizes performance, clean UI design, and seamless workflow integration for software development across multiple programming languages and frameworks.`,
     }
 ];
+
+export const VLSIProjects = [];
 
 export const experience = [
     {
@@ -274,5 +284,37 @@ export const experience = [
         icon: "logos:google-developers",
         duration: "Nov 2022 - Present",
         description: "Contributing to various projects and events organized by GDSC RKMGEC."
+    }
+];
+
+export const SkillsData = [
+    {
+        category: "LANGUAGES",
+        skills: [
+            { name: "C", icon: "logos:c", level: 90, desc: "System-level programming, core algorithms, and embedded systems foundations." },
+            { name: "Python", icon: "logos:python", level: 85, desc: "Scientific scripting, data analysis, VLSI waveform replotting, and automation scripts." },
+            { name: "C++", icon: "logos:c-plusplus", level: 80, desc: "Unreal Engine gameplay development and high-performance system programming." },
+            { name: "JavaScript", icon: "logos:javascript", level: 85, desc: "Web application logic, interactive UI features, and frontend architecture." },
+            { name: "React", icon: "logos:react", level: 80, desc: "Responsive user interface design, component state architectures, and GSAP sync." }
+        ]
+    },
+    {
+        category: "TOOLS",
+        skills: [
+            { name: "Unreal Engine", icon: "simple-icons:unrealengine", level: 90, desc: "Gameplay programming, modular combat systems, Level Design, AI navigation, blueprints, and C++." },
+            { name: "Blender", icon: "logos:blender", level: 85, desc: "3D hard-surface modeling, game environment creation, texturing, rigging, and animation." },
+            { name: "VS Code", icon: "logos:visual-studio-code", level: 95, desc: "Primary IDE for script development, web apps, and config setups." },
+            { name: "Visual Studio", icon: "logos:visual-studio", level: 80, desc: "Unreal Engine C++ development, compilation, and code debugging." },
+            { name: "Figma", icon: "logos:figma", level: 75, desc: "UI/UX wireframing, branding, and interactive design mockups." }
+        ]
+    },
+    {
+        category: "VLSI / HARDWARE",
+        skills: [
+            { name: "Cadence Virtuoso", icon: "fluent:cpu-24-regular", level: 80, desc: "Analog and digital IC layout design, schematic capture, circuit simulation, and DRC/LVS verification." },
+            { name: "Circuit Design", icon: "icon-park-outline:circuit-board", level: 85, desc: "Microelectronic circuit layout, operational amplifiers, and logical gate layouts." },
+            { name: "Verilog HDL", icon: "carbon:code-reference", level: 75, desc: "Hardware description language for digital design modeling and simulation." },
+            { name: "ECE Core", icon: "carbon:chip", level: 80, desc: "Electronics and Communication engineering foundations, signal processing, and systems." }
+        ]
     }
 ];

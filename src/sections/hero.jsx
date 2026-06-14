@@ -14,7 +14,7 @@ import { Icon } from '@iconify/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const hero = () => {
+const hero = ({ IsReady }) => {
     const contextRef = useRef(null);
     const headerRef = useRef(null);
     const AboutText = "> SYSTEM_USER: ";
@@ -23,53 +23,81 @@ const hero = () => {
     const isMobile = useMediaQuery({ maxWidth: 853 });
     const SocialRef = useRef(null);
     const hireRef = useRef(null);
+    const bannerRef = useRef(null);
     const [showSocial, setShowSocial] = useState(true);
 
     useGSAP(() => {
+        // Initial setup for FOUC prevention (runs once on mount)
+        gsap.set(ImageRef.current, { scale: 1.3, opacity: 0 });
+        gsap.set(".canvas-wrapper", { scale: 0.8, opacity: 0 });
+        gsap.set(contextRef.current, { y: "10vh", opacity: 0 });
+        gsap.set(headerRef.current.children, { y: 60, opacity: 0 });
+        gsap.set(bannerRef.current, { scaleY: 0, opacity: 0, transformOrigin: "center top" });
+        gsap.set(".hero-socials-wrapper", { x: 80, opacity: 0 });
+        gsap.set(hireRef.current, { y: 50, opacity: 0 });
+    }, []);
+
+    useGSAP(() => {
+        if (!IsReady) return;
+
         const tl = gsap.timeline();
 
-        // Context reveal
-        tl.from(contextRef.current, {
-            duration: 1,
-            opacity: 0,
-            y: "10vh",
-            ease: "circ.out",
+        // 1. Background Image fades & zooms out to normal
+        tl.to(ImageRef.current, {
+            scale: 1,
+            opacity: 0.3,
+            duration: 2.5,
+            ease: "power3.out",
         });
 
-        // Header lines staggered
-        tl.from(headerRef.current.children, {
+        // 2. 3D helmet canvas fades and zooms in
+        tl.to(".canvas-wrapper", {
+            scale: 1,
+            opacity: 1,
+            duration: 1.8,
+            ease: "power3.out",
+        }, "<0.2");
+
+        // 3. Context & Header text staggers
+        tl.to(contextRef.current, {
+            y: 0,
+            opacity: 1,
+            duration: 1.2,
+            ease: "power4.out"
+        }, "<0.4")
+        .to(headerRef.current.children, {
+            y: 0,
+            opacity: 1,
             duration: 1,
-            opacity: 0,
-            y: 50,
-            ease: "circ.out",
-            stagger: 0.2,
-        }, "<0.5");
+            stagger: 0.25,
+            ease: "power4.out"
+        }, "<0.3");
 
-        // Background image
-        tl.from(ImageRef.current, {
-            scale: 1.2,
-            opacity: 0,
-            duration: 1.5,
-            ease: "circ.out",
-        }, "<");
+        // 4. AutoType banner hologram opens vertically
+        tl.to(bannerRef.current, {
+            scaleY: 1,
+            opacity: 1,
+            duration: 0.8,
+            ease: "back.out(1.5)"
+        }, "-=0.6");
 
-        // Social icons
-        tl.from(SocialRef.current, {
+        // 5. Social icons slide in from right
+        tl.to(".hero-socials-wrapper", {
+            x: 0,
+            opacity: 1,
+            duration: 1.2,
+            ease: "power3.out"
+        }, "-=0.7");
+
+        // 6. Hire button pops up
+        tl.to(hireRef.current, {
+            y: 0,
+            opacity: 1,
             duration: 1,
-            opacity: 0,
-            x: 50,
-            ease: "circ.out",
-        }, "<-0.2");
+            ease: "bounce.out"
+        }, "-=0.5");
 
-        // Hire button
-        tl.from(hireRef.current, {
-            duration: 1,
-            opacity: 0,
-            y: 50,
-            ease: "bounce.out",
-        }, "<+0.5");
-
-    }, []);
+    }, [IsReady]);
 
     useEffect(() => {
         let lastScrollY = window.scrollY;
@@ -95,7 +123,7 @@ const hero = () => {
                     className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
                 />
 
-                <Canvas shadows camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="z-20 absolute inset-0">
+                <Canvas shadows camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="canvas-wrapper z-20 absolute inset-0">
                     <ambientLight intensity={1.5} />
                     <Environment resolution={256}>
                         <group rotation={[-Math.PI / 3, 4, 1]}>
@@ -124,7 +152,7 @@ const hero = () => {
                     </div>
                 </div>
 
-                <div className='relative transition-colors duration-500 mt-5'>
+                <div ref={bannerRef} className='relative transition-colors duration-500 mt-5'>
                     <div className='absolute inset-x-0 border-t border-t-orange-500/30' />
                     <div className='py-8 px-6 md:py-12 md:px-10 bg-[#0a0a0a]/80 backdrop-blur-sm transition-colors duration-500 border-b border-orange-500/10'>
                         <div className='text-start md:text-end max-w-7xl ml-auto'>
@@ -141,37 +169,39 @@ const hero = () => {
                 </div>
             </div>
 
-            {/* Social Icons - Sci-Fi style */}
-            <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all 0.4s" }} className='absolute mb-auto top-1/2 -translate-y-1/2 right-2 md:right-8 mx-auto h-auto w-auto justify-center flex flex-col align-middle gap-y-4 md:gap-y-6 p-2 z-40 pointer-events-auto'>
-                <div className="flex flex-col items-center gap-3 md:gap-4 border-r border-orange-500/30 pr-2 md:pr-4 scale-90 md:scale-100 origin-right">
-                    <Magnetic>
-                        <a href="https://www.instagram.com/sudip_pan00/" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                            <Icon icon="mdi:instagram" width="24" height="24" />
-                        </a>
-                    </Magnetic>
-                    <Magnetic>
-                        <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                            <Icon icon="mdi:linkedin" width="24" height="24" />
-                        </a>
-                    </Magnetic>
-                    <Magnetic>
-                        <a href="https://github.com/Sudip8900" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                            <Icon icon="mdi:github" width="24" height="24" />
-                        </a>
-                    </Magnetic>
-                    <Magnetic>
-                        <a href="https://www.facebook.com/sudip.pan.792/" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                            <Icon icon="mdi:facebook" width="24" height="24" />
-                        </a>
-                    </Magnetic>
-                </div>
+            {/* Social Icons wrapper for entrance anim */}
+            <div className="hero-socials-wrapper absolute mb-auto top-1/2 -translate-y-1/2 right-2 md:right-8 mx-auto h-auto w-auto z-40 pointer-events-auto">
+                <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all 0.4s" }} className='flex flex-col align-middle gap-y-4 md:gap-y-6 p-2'>
+                    <div className="flex flex-col items-center gap-3 md:gap-4 border-r border-orange-500/30 pr-2 md:pr-4 scale-90 md:scale-100 origin-right">
+                        <Magnetic>
+                            <a href="https://www.instagram.com/sudip_pan00/" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
+                                <Icon icon="mdi:instagram" width="24" height="24" />
+                            </a>
+                        </Magnetic>
+                        <Magnetic>
+                            <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
+                                <Icon icon="mdi:linkedin" width="24" height="24" />
+                            </a>
+                        </Magnetic>
+                        <Magnetic>
+                            <a href="https://github.com/Sudip8900" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
+                                <Icon icon="mdi:github" width="24" height="24" />
+                            </a>
+                        </Magnetic>
+                        <Magnetic>
+                            <a href="https://www.facebook.com/sudip.pan.792/" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
+                                <Icon icon="mdi:facebook" width="24" height="24" />
+                            </a>
+                        </Magnetic>
+                    </div>
 
-                <div className='relative z-50 md:hidden mt-4'>
-                    <Link to="contact" smooth={true} duration={600} offset={-50}>
-                        <button className='w-10 h-10 border border-orange-500/50 bg-[#0a0a0a]/80 flex items-center justify-center text-orange-500'>
-                            <Icon icon="mdi:email-outline" width="20" height="20" />
-                        </button>
-                    </Link>
+                    <div className='relative z-50 md:hidden mt-4'>
+                        <Link to="contact" smooth={true} duration={600} offset={-50}>
+                            <button className='w-10 h-10 border border-orange-500/50 bg-[#0a0a0a]/80 flex items-center justify-center text-orange-500'>
+                                <Icon icon="mdi:email-outline" width="20" height="20" />
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
 

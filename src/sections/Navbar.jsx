@@ -9,9 +9,10 @@ import Magnetic from '../componnts/Magnetic.jsx';
 import { Icon } from '@iconify/react';
 
 
-const Navbar = () => {
+const Navbar = ({ IsReady }) => {
     const navRef = useRef(null);
     const navref2 = useRef(null);
+    const pillRef = useRef(null);
     const linksContainerRef = useRef(null);
     const linkRef = useRef([]);
     const linkRef2 = useRef([]);
@@ -39,6 +40,12 @@ const Navbar = () => {
     };
 
     useGSAP(() => {
+        // Initial state setups to prevent FOUC
+        gsap.set(navref2.current, { opacity: 0 });
+        gsap.set(pillRef.current, { scaleX: 0, scaleY: 0.05, opacity: 0, transformOrigin: "center center" });
+        gsap.set([titleRef.current, BurgerRef.current], { y: -50, opacity: 0 });
+        gsap.set(linkRef2.current, { opacity: 0, y: -10 });
+        gsap.set(indicatorRef.current, { opacity: 0, scaleX: 0 });
 
         gsap.set(navRef.current, { xPercent: 100 });
         gsap.set([linkRef.current, contactRef.current], {
@@ -64,20 +71,6 @@ const Navbar = () => {
             ease: "power3.out"
         }, "<0.3");
 
-        gsap.from(navref2.current, {
-            y: -50,
-            opacity: 0,
-            duration: 1.5,
-            ease: "power3.out",
-        }, "<+1");
-
-        gsap.to(linkRef2.current, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power3.out"
-        }, "<");
-
         icontl.current = gsap.timeline({ paused: true }).to(toplineRef.current, {
             rotate: 45,
             y: 3.3,
@@ -90,6 +83,74 @@ const Navbar = () => {
             ease: "power3.out"
         }, "<");
     }, []);
+
+    useGSAP(() => {
+        if (!IsReady) return;
+
+        const entryTl = gsap.timeline();
+
+        // 1. Show wrapper
+        entryTl.set(navref2.current, { opacity: 1 });
+
+        // 2. Holographic Pill opens horizontally, then snaps open vertically
+        entryTl.to(pillRef.current, {
+            opacity: 1,
+            scaleX: 1,
+            duration: 0.45,
+            ease: "power4.inOut"
+        })
+        .to(pillRef.current, {
+            scaleY: 1,
+            duration: 0.4,
+            ease: "back.out(1.6)"
+        })
+        .fromTo(pillRef.current, 
+            { filter: "brightness(1.5) contrast(1.2)" },
+            { filter: "brightness(1) contrast(1)", duration: 0.3, ease: "power2.out" },
+            "-=0.4"
+        );
+
+        // 3. Scanline sweep
+        entryTl.fromTo(".nav-scanline",
+            { left: "-30%", opacity: 1 },
+            { left: "100%", opacity: 0, duration: 0.8, ease: "power2.out" },
+            "-=0.5"
+        );
+
+        // 4. Logo Glitch/Flicker Reveal
+        entryTl.fromTo(".branding-logo", 
+            { opacity: 0, x: -8 }, 
+            { opacity: 1, x: 0, duration: 0.15 }, 
+            "-=0.6"
+        )
+        .to(".branding-logo", { opacity: 0.3, x: 2, duration: 0.05 })
+        .to(".branding-logo", { opacity: 1, x: 0, duration: 0.05 })
+        .to(".branding-logo", { opacity: 0.5, x: -3, duration: 0.08 })
+        .to(".branding-logo", { opacity: 1, x: 0, duration: 0.1 });
+
+        // 5. Navigation Links reveal
+        entryTl.fromTo(linkRef2.current,
+            { y: -15, opacity: 0, scale: 0.8 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.5, stagger: 0.06, ease: "back.out(1.8)" },
+            "-=0.4"
+        );
+
+        // 6. Sliding indicator snaps in
+        entryTl.fromTo(indicatorRef.current,
+            { scaleX: 0, opacity: 0 },
+            { scaleX: 1, opacity: 1, duration: 0.4, ease: "power3.out" },
+            "-=0.2"
+        );
+
+        // 7. Mobile header logo and burger button reveal
+        entryTl.to([titleRef.current, BurgerRef.current], {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "back.out(1.5)",
+        }, "entry-=0.7");
+    }, [IsReady]);
 
     const toggleMenue = () => {
         if (!isOpen) {
@@ -167,13 +228,17 @@ const Navbar = () => {
 
                 {/* Holographic Glass Pill Navbar */}
                 <nav
-                    className="flex items-center justify-between px-6 py-2 bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 w-full max-w-5xl relative pointer-events-auto shadow-[0_8px_32px_rgba(255,105,0,0.1),inset_0_1px_1px_rgba(255,105,0,0.1)] group rounded-full transition-all duration-500 hover:border-orange-500/40"
+                    ref={pillRef}
+                    className="flex items-center justify-between px-6 py-2 bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 w-full max-w-5xl relative pointer-events-auto shadow-[0_8px_32px_rgba(255,105,0,0.1),inset_0_1px_1px_rgba(255,105,0,0.1)] group rounded-full transition-all duration-500 hover:border-orange-500/40 overflow-hidden"
                 >
                     {/* Glowing Accent */}
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0 rounded-full" />
 
+                    {/* Boot scanline overlay */}
+                    <div className="nav-scanline absolute inset-0 bg-gradient-to-r from-transparent via-orange-500/20 to-transparent w-1/3 h-full pointer-events-none z-0 opacity-0" />
+
                     {/* Branding */}
-                    <div className="relative z-10 flex items-center gap-4 pl-4">
+                    <div className="relative z-10 flex items-center gap-4 pl-4 branding-logo">
                         <div className="text-[0.75rem] font-bold tracking-widest uppercase text-orange-50 drop-shadow-[0_0_8px_rgba(255,105,0,0.3)] flex items-center gap-3">
                             <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(255,105,0,0.8)]"></span>
                             SUDIP.DEV

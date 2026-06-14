@@ -143,9 +143,9 @@ const App = () => {
 
           </div>
         )}
-        <div className={`${IsReady ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000 delay-1000 z-50 relative pointer-events-none`}>
+        <div className="z-50 relative pointer-events-none">
           <div className="pointer-events-auto">
-            <Navbar />
+            <Navbar IsReady={IsReady} />
           </div>
         </div>
         <Hero IsReady={IsReady} />

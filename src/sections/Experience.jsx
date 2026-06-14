@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { experience } from '../constants';
 import { Icon } from '@iconify/react';
 import { gsap } from 'gsap';
@@ -11,6 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Experience = () => {
     const [previewPdf, setPreviewPdf] = useState(null);
+    const headingRef = useRef(null);
+    const lineRef = useRef(null);
     useGSAP(() => {
         // Simple, robust, isolated scroll triggers for every element
         const elements = gsap.utils.toArray('.gsap-fade-in');
@@ -49,6 +51,38 @@ const Experience = () => {
             }
         );
 
+        // Section header reveal animation
+        if (headingRef.current) {
+            const headerTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: headingRef.current,
+                    start: "top 85%",
+                }
+            });
+
+            headerTl.from(headingRef.current.querySelector('.header-block'), {
+                duration: 0.5,
+                scaleX: 0,
+                opacity: 0,
+                transformOrigin: "left center",
+                ease: "power2.out",
+            })
+            .from(headingRef.current.querySelectorAll('.header-char'), {
+                duration: 0.6,
+                opacity: 0,
+                y: 30,
+                rotateX: -90,
+                stagger: 0.03,
+                ease: "back.out(1.7)",
+            }, "-=0.2")
+            .from(lineRef.current, {
+                duration: 0.8,
+                scaleX: 0,
+                transformOrigin: "left center",
+                ease: "power3.out",
+            }, "-=0.4");
+        }
+
     }, []);
 
     return (
@@ -59,12 +93,16 @@ const Experience = () => {
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full">
 
                 {/* Header Section */}
-                <div className='flex items-center gap-4 mb-20 gsap-fade-in'>
-                    <div className='w-12 h-2 bg-orange-500/50' />
-                    <h1 className='text-orange-500 text-xl md:text-5xl font-bold uppercase tracking-widest'>
-                        [ SYS.EXPERIENCE_LOGS ]
+                <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
+                    <div className='header-block w-12 h-2 bg-orange-500/50' />
+                    <h1 className='text-orange-500 text-xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1'>
+                        {"[ SYS.EXPERIENCE_LOGS ]".split("").map((char, index) => (
+                            <span key={index} className="header-char inline-block origin-bottom">
+                                {char === " " ? "\u00A0" : char}
+                            </span>
+                        ))}
                     </h1>
-                    <div className='flex-1 h-[1px] bg-orange-500/20' />
+                    <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
                 </div>
 
                 <div className='flex flex-col xl:flex-row gap-10 lg:gap-20 perspective-[2000px]'>

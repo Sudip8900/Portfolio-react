@@ -3,12 +3,63 @@ import React, { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BlenderProjects, UnrealProjects, VLSIProjects } from '../constants';
+import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects } from '../constants';
 import { Icon } from '@iconify/react';
 import Magnetic from '../componnts/Magnetic.jsx';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const PREVIEW_DIMENSIONS = {
+    blender: { width: 840, height: 560 },
+    coding: { width: 1050, height: 550 },
+    unreal: { width: 1050, height: 550 },
+    vlsi: { width: 500, height: 350 }
+};
+
+const getOriginAndCoords = (e, type) => {
+    const dims = PREVIEW_DIMENSIONS[type] || { width: 500, height: 350 };
+    const width = dims.width;
+    const height = dims.height;
+
+    let targetX = e.clientX + 24;
+    let targetY = e.clientY + 24;
+
+    const pad = 12;
+
+    let hOrigin = "left";
+    let vOrigin = "top";
+
+    // Keep inside horizontal boundary
+    if (targetX + width > window.innerWidth - pad) {
+        targetX = e.clientX - width - 24;
+        hOrigin = "right";
+    }
+    if (targetX < pad) {
+        targetX = pad;
+        hOrigin = "left";
+    }
+
+    // Keep inside vertical boundary
+    if (targetY + height > window.innerHeight - pad) {
+        targetY = e.clientY - height - 24;
+        vOrigin = "bottom";
+    }
+    if (targetY < pad) {
+        targetY = e.clientY + 24;
+        vOrigin = "top";
+        if (targetY + height > window.innerHeight - pad) {
+            targetY = window.innerHeight - height - pad;
+            vOrigin = "bottom";
+        }
+    }
+
+    return {
+        x: targetX,
+        y: targetY,
+        origin: `${hOrigin} ${vOrigin}`
+    };
+};
 
 const Works = () => {
 
@@ -26,12 +77,17 @@ const Works = () => {
 
     const blenderItemsRef = useRef([]);
     const unrealItemsRef = useRef([]);
+    const codingItemsRef = useRef([]);
     const vlsiItemsRef = useRef([]);
     const countRefs = useRef([]);
 
     const moveX = useRef(null);
     const moveY = useRef(null);
     const mouse = useRef({ x: 0, y: 0 });
+    const activeTimeline = useRef(null);
+
+    const total = BlenderProjects.length + UnrealProjects.length + CodingProjects.length + VLSIProjects.length;
+    const counts = [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length, total];
 
     /* ================= GSAP SETUP ================= */
 
@@ -48,20 +104,26 @@ const Works = () => {
         });
 
         if (headingRef.current) {
-            tl.from(headingRef.current, {
-                duration: 0.8,
+            tl.from(headingRef.current.querySelector('.header-block'), {
+                duration: 0.5,
+                scaleX: 0,
                 opacity: 0,
-                y: 50,
-                ease: "circ.out",
-            });
-        }
-
-        if (lineRef.current) {
-            tl.from(lineRef.current, {
+                transformOrigin: "right center",
+                ease: "power2.out",
+            })
+            .from(headingRef.current.querySelectorAll('.header-char'), {
                 duration: 0.6,
+                opacity: 0,
+                y: 30,
+                rotateX: -90,
+                stagger: 0.03,
+                ease: "back.out(1.7)",
+            }, "-=0.2")
+            .from(lineRef.current, {
+                duration: 0.8,
                 scaleX: 0,
                 transformOrigin: "right center",
-                ease: "circ.out",
+                ease: "power3.out",
             }, "-=0.4");
         }
 
@@ -119,6 +181,22 @@ const Works = () => {
             });
         });
 
+        codingItemsRef.current.forEach((item) => {
+            if (!item) return;
+            gsap.from(item, {
+                opacity: 0,
+                x: 50,
+                duration: 0.5,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: item,
+                    scroller: item.closest('.scroll-container'),
+                    start: "top bottom-=10",
+                    toggleActions: "play none none reverse",
+                }
+            });
+        });
+
         vlsiItemsRef.current.forEach((item) => {
             if (!item) return;
             gsap.from(item, {
@@ -136,9 +214,6 @@ const Works = () => {
         });
 
         /* ── Counter count-up animation ── */
-        const total = BlenderProjects.length + UnrealProjects.length + VLSIProjects.length;
-        const counts = [BlenderProjects.length, UnrealProjects.length, VLSIProjects.length, total];
-
         countRefs.current.forEach((el, i) => {
             if (!el) return;
             const obj = { val: 0 };
@@ -157,7 +232,7 @@ const Works = () => {
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         };
 
-    }, []);
+    }, [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length]);
 
     /* ================= DESCRIPTION POPUP FIX ================= */
 
@@ -206,8 +281,12 @@ const Works = () => {
 
     /* ================= MOUSE HANDLERS ================= */
 
-    const handleMouseEnter = (type, index) => {
+    const handleMouseEnter = (e, type, index) => {
         if (window.innerWidth < 768) return;
+
+        if (activeTimeline.current) {
+            activeTimeline.current.kill();
+        }
 
         setCurrentPreview({ type, index });
 
@@ -215,36 +294,60 @@ const Works = () => {
             setVideoLoading(true);
         }
 
-        gsap.to(previewRef.current, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.3,
-            ease: "power3.out",
+        const { x, y, origin } = getOriginAndCoords(e, type);
+
+        // Position it and scale it to 0 instantly, then zoom it up
+        gsap.set(previewRef.current, {
+            x: x,
+            y: y,
+            transformOrigin: origin,
+            scale: 0,
+            opacity: 0
         });
+
+        activeTimeline.current = gsap.timeline()
+            .to(previewRef.current, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.25,
+                ease: "back.out(1.2)"
+            });
     };
 
     const handleMouseLeave = () => {
         if (window.innerWidth < 768) return;
 
-        setCurrentPreview(null);
+        if (activeTimeline.current) {
+            activeTimeline.current.kill();
+        }
+
         setVideoLoading(false);
 
-        gsap.to(previewRef.current, {
+        activeTimeline.current = gsap.timeline({
+            onComplete: () => {
+                setCurrentPreview(null);
+            }
+        })
+        .to(previewRef.current, {
+            scale: 0,
             opacity: 0,
-            scale: 0.9,
-            duration: 0.3,
-            ease: "power2.out",
+            duration: 0.2,
+            ease: "power2.in"
         });
     };
 
     const handleMouseMove = (e) => {
-        if (window.innerWidth < 768) return;
+        if (window.innerWidth < 768 || !previewRef.current || !currentPreview) return;
 
-        mouse.current.x = e.clientX + 24;
-        mouse.current.y = e.clientY + 24;
+        const { x, y, origin } = getOriginAndCoords(e, currentPreview.type);
 
-        moveX.current(mouse.current.x);
-        moveY.current(mouse.current.y);
+        mouse.current.x = x;
+        mouse.current.y = y;
+
+        moveX.current(x);
+        moveY.current(y);
+
+        gsap.set(previewRef.current, { transformOrigin: origin });
     };
 
     /* ================= UI ================= */
@@ -252,12 +355,16 @@ const Works = () => {
     return (
         <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 bg-[#050505] overflow-hidden'>
 
-            <div className='flex items-center gap-4 mb-10 px-5 md:px-10' ref={headingRef}>
-                <div className='w-12 h-2 bg-orange-500/50' />
-                <h1 className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest'>
-                    [ SYS.WORKS_DB ]
-                </h1>
+            <div className='flex items-center gap-4 mb-10 px-5 md:px-10 select-none' ref={headingRef} style={{ perspective: "1000px" }}>
                 <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
+                <h1 className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1'>
+                    {"[ SYS.WORKS_DB ]".split("").map((char, index) => (
+                        <span key={index} className="header-char inline-block origin-bottom">
+                            {char === " " ? "\u00A0" : char}
+                        </span>
+                    ))}
+                </h1>
+                <div className='header-block w-12 h-2 bg-orange-500/50' />
             </div>
 
             <div
@@ -288,12 +395,13 @@ const Works = () => {
                     <span className="text-[10px] font-mono text-orange-500/30 animate-pulse">● LIVE</span>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
                     {[
                         { label: 'DB.BLENDER', sub: '3D Models', icon: 'logos:blender', idx: 0 },
                         { label: 'DB.UNREAL', sub: 'Game Demos', icon: 'devicon:unrealengine', idx: 1 },
-                        { label: 'DB.VLSI', sub: 'Circuit Designs', icon: 'mdi:chip', idx: 2 },
-                        { label: 'TOTAL.OBJ', sub: 'All Projects', icon: 'mdi:database-outline', idx: 3 },
+                        { label: 'DB.CODING', sub: 'Coding Projects', icon: 'mdi:code-braces', idx: 2 },
+                        { label: 'DB.VLSI', sub: 'Circuit Designs', icon: 'mdi:chip', idx: 3 },
+                        { label: 'TOTAL.OBJ', sub: 'All Projects', icon: 'mdi:database-outline', idx: 4 },
                     ].map(({ label, sub, icon, idx }) => (
                         <div
                             key={idx}
@@ -323,7 +431,7 @@ const Works = () => {
                                     ref={el => countRefs.current[idx] = el}
                                     className="text-4xl md:text-5xl font-bold tabular-nums text-white drop-shadow-[0_0_14px_rgba(255,105,0,0.35)] group-hover:drop-shadow-[0_0_22px_rgba(255,105,0,0.7)] transition-all duration-300"
                                 >
-                                    00
+                                    {String(counts[idx]).padStart(2, '0')}
                                 </span>
 
                                 {/* Divider */}
@@ -340,25 +448,26 @@ const Works = () => {
 
             <div
                 ref={projectRef}
-                className='flex flex-col relative md:flex-row mt-10 perspective-[2000px]'
+                className='grid grid-cols-1 lg:grid-cols-12 gap-6 px-5 md:px-10 mt-10 perspective-[2000px]'
                 onMouseMove={handleMouseMove}
             >
 
                 {/* Blender */}
-                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
-                    <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
-                        {/* Decorative Corner Brackets */}
-
-                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
-                            [ DB.BLENDER ]
+                <div className='lg:col-span-5 h-[550px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                    {/* Decorative Corner Brackets */}
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="flex flex-col h-full overflow-hidden">
+                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-6 uppercase tracking-widest flex items-center justify-center gap-2'>
+                            <Icon icon="mdi:cube-outline" width={24} height={24} /> [ DB.BLENDER ]
                         </h1>
 
-                        <div className='flex flex-col gap-4'>
+                        <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
                             {BlenderProjects.map((project, index) => (
                                 <div
                                     key={index}
                                     ref={el => blenderItemsRef.current[index] = el}
-                                    onMouseEnter={() => handleMouseEnter("blender", index)}
+                                    onMouseEnter={(e) => handleMouseEnter(e, "blender", index)}
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <InteractiveCard>
@@ -390,22 +499,23 @@ const Works = () => {
                 </div>
 
                 {/* Unreal */}
-                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
-                    <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
-                        {/* Decorative Corner Brackets */}
-
-                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
-                            [ DB.UNREAL ]
+                <div className='lg:col-span-7 h-[550px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                    {/* Decorative Corner Brackets */}
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="flex flex-col h-full overflow-hidden">
+                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
+                            <Icon icon="mdi:gamepad-variant-outline" width={24} height={24} /> [ DB.UNREAL ]
                         </h1>
 
-                        <p className='my-5 text-white/50 text-sm tracking-widest uppercase'>// Currently working on a sci-fi action game. Demo previews below.</p>
+                        <p className='mb-6 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Currently working on a sci-fi action game. Demo previews below.</p>
 
-                        <div className='flex flex-col gap-4'>
+                        <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
                             {UnrealProjects.map((project, index) => (
                                 <div
                                     key={index}
                                     ref={el => unrealItemsRef.current[index] = el}
-                                    onMouseEnter={() => handleMouseEnter("unreal", index)}
+                                    onMouseEnter={(e) => handleMouseEnter(e, "unreal", index)}
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <InteractiveCard>
@@ -434,23 +544,24 @@ const Works = () => {
                     </div>
                 </div>
 
-                {/* VLSI */}
-                <div className='w-auto md:w-1/3 h-96 md:h-150 overflow-y-auto bg-[#0a0a0a]/80 border border-orange-500/20 mx-4 my-3 md:m-5 p-4 md:p-5'>
-                    <div className='h-96 md:h-150 overflow-y-auto scroll-container relative'>
-                        {/* Decorative Corner Brackets */}
-
-                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-8 uppercase tracking-widest'>
-                            [ DB.VLSI ]
+                {/* Coding Projects */}
+                <div className='lg:col-span-7 h-[450px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                    {/* Decorative Corner Brackets */}
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="flex flex-col h-full overflow-hidden">
+                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
+                            <Icon icon="mdi:code-braces" width={24} height={24} /> [ DB.CODING ]
                         </h1>
 
-                        <p className='my-5 text-white/50 text-sm tracking-widest uppercase'>// Tools & Circuit designs.</p>
+                        <p className='mb-6 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Software & Script developments.</p>
 
-                        <div className='flex flex-col gap-4'>
-                            {VLSIProjects.map((project, index) => (
+                        <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
+                            {CodingProjects.map((project, index) => (
                                 <div
                                     key={index}
-                                    ref={el => vlsiItemsRef.current[index] = el}
-                                    onMouseEnter={() => handleMouseEnter("vlsi", index)}
+                                    ref={el => codingItemsRef.current[index] = el}
+                                    onMouseEnter={(e) => handleMouseEnter(e, "coding", index)}
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <InteractiveCard>
@@ -478,13 +589,94 @@ const Works = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* VLSI */}
+                <div className='lg:col-span-5 h-[450px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                    {/* Decorative Corner Brackets */}
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="flex flex-col h-full overflow-hidden">
+                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
+                            <Icon icon="mdi:chip" width={24} height={24} /> [ DB.VLSI ]
+                        </h1>
+
+                        <p className='mb-6 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Tools & Circuit designs.</p>
+
+                        {VLSIProjects.length > 0 ? (
+                            <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
+                                {VLSIProjects.map((project, index) => (
+                                    <div
+                                        key={index}
+                                        ref={el => vlsiItemsRef.current[index] = el}
+                                        onMouseEnter={(e) => handleMouseEnter(e, "vlsi", index)}
+                                        onMouseLeave={handleMouseLeave}
+                                    >
+                                        <InteractiveCard>
+                                            <a
+                                                href={project.Link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                            >
+                                                {/* Hover Scanning Line */}
+                                                <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+
+                                                <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                                    {project.name}
+                                                </h2>
+                                                <Magnetic>
+                                                    <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
+                                                        <Icon icon="mdi:github" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                    </div>
+                                                </Magnetic>
+                                            </a>
+                                        </InteractiveCard>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-orange-500/20 bg-orange-500/5 p-6 rounded-lg relative overflow-hidden group">
+                                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-500/5 to-transparent h-1/2 w-full animate-[pulse_2s_infinite]" />
+                                <div className="relative mb-4">
+                                    <div className="absolute inset-[-8px] border border-orange-500/20 rounded-full animate-ping duration-1000" />
+                                    <div className="w-16 h-16 rounded-full border-2 border-orange-500/30 flex items-center justify-center bg-black/80 relative z-10">
+                                        <svg 
+                                            viewBox="0 0 24 24" 
+                                            className="w-9 h-9 stroke-orange-500 fill-none animate-[spin_12s_linear_infinite]" 
+                                            strokeWidth="1.5" 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round"
+                                        >
+                                            <rect x="4" y="4" width="16" height="16" rx="2" />
+                                            <rect x="9" y="9" width="6" height="6" />
+                                            <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="text-center relative z-10 flex flex-col gap-1">
+                                    <h3 className="text-orange-500 text-sm font-bold tracking-[0.2em] uppercase animate-pulse">
+                                        [ DB.VLSI_WIP ]
+                                    </h3>
+                                    <p className="text-[10px] text-white/50 tracking-wider uppercase">
+                                        // Circuit designs compiling
+                                    </p>
+                                    <div className="flex items-center justify-center gap-1.5 mt-2">
+                                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-bounce delay-0" />
+                                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-bounce delay-150" />
+                                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-bounce delay-300" />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div >
 
             {/* Floating Preview via Portal to escape z-index stacking context */}
             {createPortal(
                 <div
                     ref={previewRef}
-                    className='fixed -top-125 left-0 z-[100000] overflow-hidden border border-orange-500/50 pointer-events-none md:block hidden opacity-0 bg-black/90 backdrop-blur-md shadow-[0_0_50px_rgba(255,105,0,0.15)]'
+                    className='fixed top-0 left-0 z-[100000] overflow-hidden border border-orange-500/50 pointer-events-none md:block hidden opacity-0 bg-black/90 backdrop-blur-md shadow-[0_0_50px_rgba(255,105,0,0.15)]'
                     style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%)" }}
                 >
                     {/* HUD Overlay Elements for Preview */}
@@ -510,6 +702,39 @@ const Works = () => {
                                 </div>
                             </div>
                         )
+                    }
+
+                    {
+                        currentPreview && currentPreview.type === "coding" && (() => {
+                            const project = CodingProjects[currentPreview.index];
+                            return (
+                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6">
+                                    <div className="relative w-[700px] h-full border border-orange-500/30 overflow-hidden">
+                                        <img
+                                            src={project.image}
+                                            alt="Preview"
+                                            className='object-cover w-full h-full'
+                                        />
+                                    </div>
+
+                                    <div
+                                        ref={DesRef}
+                                        className="relative flex-1 h-full border border-orange-500/30 bg-[#0a0a0a]/90 backdrop-blur-md p-6 flex flex-col shadow-[inset_0_0_20px_rgba(255,105,0,0.05)]"
+                                        style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                    >
+                                        <div className="text-orange-500 text-[10px] tracking-widest uppercase mb-4 border-b border-orange-500/20 pb-2">
+                                            [ SYS.LOG_DATA ]
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(255,105,0,0.5)]">
+                                            {project.name}
+                                        </h3>
+                                        <div ref={scrollTextRef} className="text-sm text-justify text-white/70 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                                            <span className="text-orange-500 mr-2 font-bold">{'>'}</span> {project.description}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })()
                     }
 
                     {

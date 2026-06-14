@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -11,6 +11,8 @@ import { Icon } from '@iconify/react';
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
+    const headingRef = useRef(null);
+    const lineRef = useRef(null);
 
     const [result, setResult] = useState("");
     const [isTransmitting, setIsTransmitting] = useState(false);
@@ -79,6 +81,39 @@ const Contact = () => {
                 }
             );
         });
+
+        // Section header reveal animation
+        if (headingRef.current) {
+            const headerTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: headingRef.current,
+                    start: "top 85%",
+                }
+            });
+
+            headerTl.from(headingRef.current.querySelector('.header-block'), {
+                duration: 0.5,
+                scaleX: 0,
+                opacity: 0,
+                transformOrigin: "right center",
+                ease: "power2.out",
+            })
+            .from(headingRef.current.querySelectorAll('.header-char'), {
+                duration: 0.6,
+                opacity: 0,
+                y: 30,
+                rotateX: -90,
+                stagger: 0.03,
+                ease: "back.out(1.7)",
+            }, "-=0.2")
+            .from(lineRef.current, {
+                duration: 0.8,
+                scaleX: 0,
+                transformOrigin: "right center",
+                ease: "power3.out",
+            }, "-=0.4");
+        }
+
     }, []);
 
     return (
@@ -90,12 +125,16 @@ const Contact = () => {
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full flex-1">
                 
                 {/* Header */}
-                <div className='flex items-center gap-4 mb-20 gsap-contact-element'>
-                    <div className='w-12 h-2 bg-orange-500/50' />
-                    <h1 className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest'>
-                        [ SYS.COMM_LINK ]
+                <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
+                    <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
+                    <h1 className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1'>
+                        {"[ SYS.COMM_LINK ]".split("").map((char, index) => (
+                            <span key={index} className="header-char inline-block origin-bottom">
+                                {char === " " ? "\u00A0" : char}
+                            </span>
+                        ))}
                     </h1>
-                    <div className='flex-1 h-[1px] bg-orange-500/20' />
+                    <div className='header-block w-12 h-2 bg-orange-500/50' />
                 </div>
 
                 <div className='flex flex-col md:flex-row gap-12 lg:gap-20 perspective-[2000px]'>
