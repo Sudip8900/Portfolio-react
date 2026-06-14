@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Canvas } from '@react-three/fiber';
 import { Helmet } from '../componnts/helmet';
+import { SciFiGrid } from '../componnts/SciFiGrid.jsx';
 import { Environment, Float, Lightformer } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -29,7 +30,6 @@ const hero = ({ IsReady }) => {
     useGSAP(() => {
         // Initial setup for FOUC prevention (runs once on mount)
         gsap.set(ImageRef.current, { scale: 1.3, opacity: 0 });
-        gsap.set(".canvas-wrapper", { scale: 0.8, opacity: 0 });
         gsap.set(contextRef.current, { y: "10vh", opacity: 0 });
         gsap.set(headerRef.current.children, { y: 60, opacity: 0 });
         gsap.set(bannerRef.current, { scaleY: 0, opacity: 0, transformOrigin: "center top" });
@@ -50,21 +50,13 @@ const hero = ({ IsReady }) => {
             ease: "power3.out",
         });
 
-        // 2. 3D helmet canvas fades and zooms in
-        tl.to(".canvas-wrapper", {
-            scale: 1,
-            opacity: 1,
-            duration: 1.8,
-            ease: "power3.out",
-        }, "<0.2");
-
-        // 3. Context & Header text staggers
+        // 2. Context & Header text staggers
         tl.to(contextRef.current, {
             y: 0,
             opacity: 1,
             duration: 1.2,
             ease: "power4.out"
-        }, "<0.4")
+        }, "<0.6")
         .to(headerRef.current.children, {
             y: 0,
             opacity: 1,
@@ -123,7 +115,7 @@ const hero = ({ IsReady }) => {
                     className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
                 />
 
-                <Canvas shadows camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="canvas-wrapper z-20 absolute inset-0">
+                <Canvas shadows gl={{ localClippingEnabled: true }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="canvas-wrapper z-20 absolute inset-0">
                     <ambientLight intensity={1.5} />
                     <Environment resolution={256}>
                         <group rotation={[-Math.PI / 3, 4, 1]}>
@@ -133,8 +125,9 @@ const hero = ({ IsReady }) => {
                             <Lightformer form={"circle"} intensity={2} color="#ffffff" position={[10, 1, 0]} scale={16} />
                         </group>
                     </Environment>
+                    <SciFiGrid IsReady={IsReady} />
                     <Float speed={0.5}>
-                        <Helmet position={isMobile ? [0, -2.3, 0] : [1.5, -3.6, 0.5]} shadows scale={isMobile ? 0.7 : 1.1} />
+                        <Helmet IsReady={IsReady} position={isMobile ? [0, -2.3, 0] : [1.5, -3.6, 0.5]} shadows scale={isMobile ? 0.7 : 1.1} />
                     </Float>
                 </Canvas>
             </figure>
