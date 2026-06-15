@@ -65,6 +65,10 @@ const Works = () => {
 
     const [currentPreview, setCurrentPreview] = useState(null);
     const [videoLoading, setVideoLoading] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState("All");
+
+    const categories = ["All", ...new Set(CodingProjects.map(p => p.category).filter(Boolean))];
+    const filteredCodingProjects = CodingProjects.filter(p => selectedCategory === "All" || p.category === selectedCategory);
 
     const headingRef = useRef(null);
     const lineRef = useRef(null);
@@ -111,20 +115,20 @@ const Works = () => {
                 transformOrigin: "right center",
                 ease: "power2.out",
             })
-            .from(headingRef.current.querySelectorAll('.header-char'), {
-                duration: 0.6,
-                opacity: 0,
-                y: 30,
-                rotateX: -90,
-                stagger: 0.03,
-                ease: "back.out(1.7)",
-            }, "-=0.2")
-            .from(lineRef.current, {
-                duration: 0.8,
-                scaleX: 0,
-                transformOrigin: "right center",
-                ease: "power3.out",
-            }, "-=0.4");
+                .from(headingRef.current.querySelectorAll('.header-char'), {
+                    duration: 0.6,
+                    opacity: 0,
+                    y: 30,
+                    rotateX: -90,
+                    stagger: 0.03,
+                    ease: "back.out(1.7)",
+                }, "-=0.2")
+                .from(lineRef.current, {
+                    duration: 0.8,
+                    scaleX: 0,
+                    transformOrigin: "right center",
+                    ease: "power3.out",
+                }, "-=0.4");
         }
 
         const isMobile = window.innerWidth < 768;
@@ -279,6 +283,17 @@ const Works = () => {
         }
     }, [currentPreview]);
 
+    /* ================= CATEGORY SWITCH ANIMATION ================= */
+    useEffect(() => {
+        const items = codingItemsRef.current.filter(Boolean);
+        if (items.length > 0) {
+            gsap.fromTo(items,
+                { opacity: 0, x: 20 },
+                { opacity: 1, x: 0, duration: 0.3, stagger: 0.05, ease: "power2.out" }
+            );
+        }
+    }, [selectedCategory]);
+
     /* ================= MOUSE HANDLERS ================= */
 
     const handleMouseEnter = (e, type, index) => {
@@ -328,12 +343,12 @@ const Works = () => {
                 setCurrentPreview(null);
             }
         })
-        .to(previewRef.current, {
-            scale: 0,
-            opacity: 0,
-            duration: 0.2,
-            ease: "power2.in"
-        });
+            .to(previewRef.current, {
+                scale: 0,
+                opacity: 0,
+                duration: 0.2,
+                ease: "power2.in"
+            });
     };
 
     const handleMouseMove = (e) => {
@@ -554,38 +569,60 @@ const Works = () => {
                             <Icon icon="mdi:code-braces" width={24} height={24} /> [ DB.CODING ]
                         </h1>
 
-                        <p className='mb-6 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Software & Script developments.</p>
+                        <p className='mb-4 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Software & Script developments.</p>
+
+                        {/* Dynamic Category Tabs */}
+                        <div className="flex flex-wrap justify-center gap-5 mb-6">
+                            {categories.map((category) => (
+                                <button
+                                    key={category}
+                                    onClick={() => setSelectedCategory(category)}
+                                    className={`px-3 py-1 text-[15px] tracking-widest uppercase border transition-all duration-300 cursor-pointer ${selectedCategory === category
+                                        ? "border-orange-500 bg-orange-500/10 text-orange-500 shadow-[0_0_10px_rgba(255,105,0,0.2)]"
+                                        : "border-orange-500/20 bg-transparent text-white/40 hover:text-white hover:border-orange-500/50"
+                                        }`}
+                                >
+                                    {category}
+                                </button>
+                            ))}
+                        </div>
 
                         <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
-                            {CodingProjects.map((project, index) => (
-                                <div
-                                    key={index}
-                                    ref={el => codingItemsRef.current[index] = el}
-                                    onMouseEnter={(e) => handleMouseEnter(e, "coding", index)}
-                                    onMouseLeave={handleMouseLeave}
-                                >
-                                    <InteractiveCard>
-                                        <a
-                                            href={project.Link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                            {(() => {
+                                codingItemsRef.current = [];
+                                return filteredCodingProjects.map((project, index) => {
+                                    const originalIndex = CodingProjects.findIndex(p => p.id === project.id);
+                                    return (
+                                        <div
+                                            key={project.id}
+                                            ref={el => codingItemsRef.current[index] = el}
+                                            onMouseEnter={(e) => handleMouseEnter(e, "coding", originalIndex)}
+                                            onMouseLeave={handleMouseLeave}
                                         >
-                                            {/* Hover Scanning Line */}
-                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                                            <InteractiveCard>
+                                                <a
+                                                    href={project.Link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                                >
+                                                    {/* Hover Scanning Line */}
+                                                    <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
-                                            <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
-                                                {project.name}
-                                            </h2>
-                                            <Magnetic>
-                                                <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                    <Icon icon="mdi:github" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
-                                                </div>
-                                            </Magnetic>
-                                        </a>
-                                    </InteractiveCard>
-                                </div>
-                            ))}
+                                                    <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                                        {project.name}
+                                                    </h2>
+                                                    <Magnetic>
+                                                        <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
+                                                            <Icon icon="mdi:github" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                        </div>
+                                                    </Magnetic>
+                                                </a>
+                                            </InteractiveCard>
+                                        </div>
+                                    );
+                                });
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -640,11 +677,11 @@ const Works = () => {
                                 <div className="relative mb-4">
                                     <div className="absolute inset-[-8px] border border-orange-500/20 rounded-full animate-ping duration-1000" />
                                     <div className="w-16 h-16 rounded-full border-2 border-orange-500/30 flex items-center justify-center bg-black/80 relative z-10">
-                                        <svg 
-                                            viewBox="0 0 24 24" 
-                                            className="w-9 h-9 stroke-orange-500 fill-none animate-[spin_12s_linear_infinite]" 
-                                            strokeWidth="1.5" 
-                                            strokeLinecap="round" 
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            className="w-9 h-9 stroke-orange-500 fill-none animate-[spin_12s_linear_infinite]"
+                                            strokeWidth="1.5"
+                                            strokeLinecap="round"
                                             strokeLinejoin="round"
                                         >
                                             <rect x="4" y="4" width="16" height="16" rx="2" />

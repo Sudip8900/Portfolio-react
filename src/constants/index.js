@@ -205,6 +205,7 @@ export const CodingProjects = [
     {
         id: 1,
         name: "Python Re-plotter",
+        category: "Python",
         Link: "https://github.com/Sudip8900/python_reploter.git",
         image: "/Images/python replotter.png",
         description: `Developed a custom Python-based waveform replotting tool for VLSI simulation analysis that automatically reconstructs low-quality simulation output images into clean, high-resolution plots. The tool processes waveform screenshots and redraws them using programmatic plotting techniques to generate sharper, publication-quality visualizations suitable for reports, presentations, and technical documentation.
@@ -222,6 +223,7 @@ export const CodingProjects = [
     {
         id: 2,
         name: "Forge IDE (Custom IDE)",
+        category: "Cpp",
         Link: "https://github.com/Sudip8900/Forge-IDE-Custom-IDE-.git",
         image: "/Images/IDE.png",
         description: `A modern, high-performance IDE built from the ground up with a focus on productivity, extensibility, and developer experience. Features include an advanced integrated terminal, intelligent project management, multi-language support, customizable themes, and a scalable architecture designed to handle projects of any size. The IDE emphasizes performance, clean UI design, and seamless workflow integration for software development across multiple programming languages and frameworks.`,
