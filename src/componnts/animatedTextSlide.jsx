@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const AnimatedTextSlide = ({ text, className }) => {
+const AnimatedTextSlide = ({ text, className, innerClassName }) => {
   const containerRef = useRef(null);
   const lineRef = useRef([]);
 
@@ -32,7 +32,7 @@ const AnimatedTextSlide = ({ text, className }) => {
         <span
           key={index}
           ref={(el) => (lineRef.current[index] = el)}
-          className="block overflow-hidden"
+          className={`block overflow-hidden ${innerClassName || ''}`}
         >
           {line}
         </span>

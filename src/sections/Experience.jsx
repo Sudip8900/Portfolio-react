@@ -95,12 +95,25 @@ const Experience = () => {
                 {/* Header Section */}
                 <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
                     <div className='header-block w-12 h-2 bg-orange-500/50' />
-                    <h1 className='text-orange-500 text-xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1'>
-                        {"[ SYS.EXPERIENCE_LOGS ]".split("").map((char, index) => (
-                            <span key={index} className="header-char inline-block origin-bottom">
-                                {char === " " ? "\u00A0" : char}
-                            </span>
-                        ))}
+                    <h1 className='text-xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
+                        {(() => {
+                            const headerText = "[ SYS.EXPERIENCE_LOGS ]";
+                            return headerText.split("").map((char, index) => (
+                                <span 
+                                    key={index} 
+                                    className="header-char inline-block origin-bottom"
+                                    style={{
+                                        backgroundImage: 'linear-gradient(to right, #f97316, #ffaa66, #ffffff)',
+                                        backgroundSize: `${headerText.length * 100}% 100%`,
+                                        backgroundPosition: `${(index / (headerText.length - 1)) * 100}% 0`,
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                    }}
+                                >
+                                    {char === " " ? "\u00A0" : char}
+                                </span>
+                            ));
+                        })()}
                     </h1>
                     <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
                 </div>

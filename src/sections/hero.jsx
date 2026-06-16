@@ -18,6 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 const hero = ({ IsReady }) => {
     const contextRef = useRef(null);
     const headerRef = useRef(null);
+    const svgTextRef = useRef(null);
     const AboutText = "> SYSTEM_USER: ";
     const Name = "SUDIP PAN";
     const ImageRef = useRef(null);
@@ -35,6 +36,13 @@ const hero = ({ IsReady }) => {
         gsap.set(bannerRef.current, { scaleY: 0, opacity: 0, transformOrigin: "center top" });
         gsap.set(".hero-socials-wrapper", { x: 80, opacity: 0 });
         gsap.set(hireRef.current, { y: 50, opacity: 0 });
+        if (svgTextRef.current) {
+            gsap.set(svgTextRef.current, { 
+                strokeDashoffset: 2000, 
+                fillOpacity: 0, 
+                strokeOpacity: 1 
+            });
+        }
     }, []);
 
     useGSAP(() => {
@@ -56,14 +64,28 @@ const hero = ({ IsReady }) => {
             opacity: 1,
             duration: 1.2,
             ease: "power4.out"
-        }, "<0.6")
-        .to(headerRef.current.children, {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            stagger: 0.25,
-            ease: "power4.out"
-        }, "<0.3");
+        }, "<0.3")
+            .to(headerRef.current.children, {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                stagger: 0.15,
+                ease: "power4.out"
+            }, "<0.15");
+
+        if (svgTextRef.current) {
+            tl.to(svgTextRef.current, {
+                strokeDashoffset: 0,
+                duration: 3.5,
+                ease: "power2.out",
+            }, "<0.05")
+                .to(svgTextRef.current, {
+                    fillOpacity: 1,
+                    strokeOpacity: 0,
+                    duration: 0.4,
+                    ease: "power1.inOut",
+                }, "-=0.4");
+        }
 
         // 4. AutoType banner hologram opens vertically
         tl.to(bannerRef.current, {
@@ -139,8 +161,34 @@ const hero = ({ IsReady }) => {
                             <div className='w-6 md:w-12 h-1 bg-orange-500 animate-pulse' />
                             <AnimatedTextSlide text={AboutText} className='text-sm sm:text-xl md:text-2xl tracking-widest uppercase text-orange-500' />
                         </div>
-                        <div style={{ WebkitTextStroke: '2px white', filter: 'drop-shadow(0 0 10px rgba(255,105,0,0.8))' }}>
-                            <AnimatedTextSlide text={Name} className='text-[clamp(3.5rem,12vw,8rem)] ml-4 md:ml-10 font-bold tracking-tighter text-transparent leading-none' />
+                        <div className="ml-4 md:ml-10 w-[95%] sm:w-[90%] max-w-6xl overflow-visible" style={{ filter: 'drop-shadow(0 0 25px rgba(255, 106, 0, 0.45))' }}>
+                            <svg viewBox="0 0 1200 150" className="w-full h-auto overflow-visible select-none pointer-events-none">
+                                <defs>
+                                    <linearGradient id="name-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#f97316" />
+                                        <stop offset="50%" stopColor="#ffaa66" />
+                                        <stop offset="100%" stopColor="#ffffff" />
+                                    </linearGradient>
+                                </defs>
+                                <text
+                                    ref={svgTextRef}
+                                    x="10"
+                                    y="120"
+                                    className="font-bold uppercase tracking-tight"
+                                    style={{
+                                        fontFamily: '"Michroma", sans-serif',
+                                        fontSize: '110px',
+                                        fill: 'url(#name-gradient)',
+                                        fillOpacity: 0,
+                                        stroke: 'url(#name-gradient)',
+                                        strokeWidth: 0.3,
+                                        strokeDasharray: '2000',
+                                        strokeDashoffset: '2000',
+                                    }}
+                                >
+                                    {Name}
+                                </text>
+                            </svg>
                         </div>
                     </div>
                 </div>

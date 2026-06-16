@@ -127,9 +127,9 @@ const Contact = () => {
                 {/* Header */}
                 <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
                     <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
-                    <h1 className='text-orange-500 text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1'>
+                    <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
                         {"[ SYS.COMM_LINK ]".split("").map((char, index) => (
-                            <span key={index} className="header-char inline-block origin-bottom">
+                            <span key={index} className="header-char inline-block origin-bottom bg-gradient-to-r from-orange-500 via-[#ffaa66] to-white bg-clip-text text-transparent">
                                 {char === " " ? "\u00A0" : char}
                             </span>
                         ))}
