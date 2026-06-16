@@ -23,7 +23,7 @@ const App = () => {
   const { progress } = useProgress();
   const [loadingPhase, setLoadingPhase] = useState('loading');
   const [IsReady, setIsReady] = useState(false);
-  const lenisRef = useRef(null);
+  const [lenis, setLenis] = useState(null);
 
   useEffect(() => {
     if (progress === 100 && loadingPhase === 'loading') {
@@ -61,15 +61,13 @@ const App = () => {
   }, [progress, loadingPhase]);
 
   useEffect(() => {
-    const lenis = lenisRef.current?.lenis;
+    if (!lenis) return;
 
     // Sync GSAP and Lenis to fix Chrome stuttering
-    if (lenis) {
-      lenis.on('scroll', ScrollTrigger.update);
-    }
+    lenis.on('scroll', ScrollTrigger.update);
 
     function update(time) {
-      lenisRef.current?.lenis?.raf(time * 1000);
+      lenis.raf(time * 1000);
     }
 
     gsap.ticker.add(update);
@@ -77,17 +75,19 @@ const App = () => {
 
     return () => {
       gsap.ticker.remove(update);
-      if (lenis) {
-        lenis.off('scroll', ScrollTrigger.update);
-      }
+      lenis.off('scroll', ScrollTrigger.update);
     };
-  }, []);
+  }, [lenis]);
 
   return (
     <>
       <CustomCursor />
       <ReactLenis root
-        ref={lenisRef}
+        ref={(node) => {
+          if (node && node.lenis) {
+            setLenis(node.lenis);
+          }
+        }}
         autoRaf={false}
         options={{
           smoothWheel: true,

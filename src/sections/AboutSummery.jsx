@@ -52,7 +52,7 @@ const AboutSummery = () => {
                     <div className="w-full h-auto text-[clamp(1.5rem,4.5vw,3rem)] md:text-5xl flex flex-col gap-8 opacity-90">
 
                         {/* Row 1 */}
-                        <div id="title-about-1" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0a0a0a]/60 border-y border-orange-500/10 backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                        <div id="title-about-1" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0a0a0a]/90 border-y border-orange-500/10 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
                             <span className="text-orange-500/40 text-xs md:text-sm font-mono tracking-widest">[SYS.LOG_01]</span>
                             <span className="text-orange-500/30">{'<'}</span>
                             <p className="bg-gradient-to-r from-orange-500 via-orange-300 to-white bg-clip-text text-transparent font-extrabold">Game Developer</p>
@@ -62,7 +62,7 @@ const AboutSummery = () => {
                         </div>
 
                         {/* Row 2 */}
-                        <div id="title-about-2" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0d0d0d]/40 border-b border-orange-500/5 backdrop-blur-sm translate-x-16">
+                        <div id="title-about-2" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0d0d0d]/80 border-b border-orange-500/5 translate-x-16">
                             <p className="outlined-text opacity-40 font-normal">System Architecture</p>
                             <span className="text-orange-500/30 text-xl">{'//'}</span>
                             <p className="font-extrabold text-white drop-shadow-[0_0_12px_rgba(255,105,0,0.4)]">Game Designer</p>
@@ -72,7 +72,7 @@ const AboutSummery = () => {
                         </div>
 
                         {/* Row 3 */}
-                        <div id="title-about-3" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0a0a0a]/60 border-y border-orange-500/10 backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.5)] -translate-x-48">
+                        <div id="title-about-3" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0a0a0a]/90 border-y border-orange-500/10 shadow-[0_0_30px_rgba(0,0,0,0.5)] -translate-x-48">
                             <span className="text-orange-500/40 text-xs md:text-sm font-mono tracking-widest">[SYS.LOG_03]</span>
                             <p className="outlined-text opacity-40 font-normal">UI/UX Designer</p>
                             <span className="text-orange-500/30">{'>>'}</span>
@@ -83,7 +83,7 @@ const AboutSummery = () => {
                         </div>
 
                         {/* Row 4 */}
-                        <div id="title-about-4" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0d0d0d]/40 border-b border-orange-500/5 backdrop-blur-sm translate-x-16">
+                        <div id="title-about-4" className="flex items-center justify-center gap-6 md:gap-10 py-5 bg-[#0d0d0d]/80 border-b border-orange-500/5 translate-x-16">
                             <p className="bg-gradient-to-r from-orange-500 to-amber-300 bg-clip-text text-transparent font-extrabold">Electronics Engineer</p>
                             <span className="text-orange-500/30 text-xl">{'::'}</span>
                             <p className="outlined-text opacity-40 font-normal">VLSI Design</p>

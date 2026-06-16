@@ -216,6 +216,9 @@ const ContactSummary = () => {
         gsap.set('.main-text-word', { autoAlpha: 0, y: 36, filter: 'blur(10px)' });
         gsap.set('.cs-cta', { autoAlpha: 0, y: 20 });
         gsap.set('.cs-scan-line', { left: '-4%', autoAlpha: 1 });
+        if (SumRef.current) {
+            gsap.set(SumRef.current, { transformPerspective: 1000 });
+        }
 
         /* Boot sequence timeline */
         const tl = gsap.timeline({
@@ -241,19 +244,20 @@ const ContactSummary = () => {
             /* 8 – CTA */
             .to('.cs-cta', { autoAlpha: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' }, 1.8);
 
-        /* Mouse parallax for Grid and Content */
+        /* Mouse parallax for Grid and Content (Optimized with quickTo) */
+        const xBgTo = gsap.quickTo(bgRef.current, "x", { duration: 1, ease: 'power2.out' });
+        const yBgTo = gsap.quickTo(bgRef.current, "y", { duration: 1, ease: 'power2.out' });
+        const rotXTo = gsap.quickTo(SumRef.current, "rotateX", { duration: 1, ease: 'power2.out' });
+        const rotYTo = gsap.quickTo(SumRef.current, "rotateY", { duration: 1, ease: 'power2.out' });
+
         const onMove = (e) => {
             if (!bgRef.current || !SumRef.current) return;
             const x = (e.clientX / window.innerWidth - 0.5) * 40;
             const y = (e.clientY / window.innerHeight - 0.5) * 40;
-            gsap.to(bgRef.current, { x, y, duration: 1, ease: 'power2.out' });
-            gsap.to(SumRef.current, { 
-                rotateX: -y * 0.5, 
-                rotateY: x * 0.5, 
-                duration: 1, 
-                ease: 'power2.out',
-                transformPerspective: 1000
-            });
+            xBgTo(x);
+            yBgTo(y);
+            rotXTo(-y * 0.5);
+            rotYTo(x * 0.5);
         };
         window.addEventListener('mousemove', onMove);
         return () => window.removeEventListener('mousemove', onMove);

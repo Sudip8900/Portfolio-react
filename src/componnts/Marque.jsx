@@ -103,9 +103,20 @@ const Marque = ({
                         direction *= -1;
                     }
 
-                    gsap.timeline({ defaults: { ease: "none" } })
-                        .to(tl, { timeScale: direction * 3, duration: 0.2, overwrite: true })
-                        .to(tl, { timeScale: baseDirection, duration: 1 }, "+=0.3");
+                    gsap.killTweensOf(tl);
+                    gsap.to(tl, {
+                        timeScale: direction * 3,
+                        duration: 0.2,
+                        overwrite: "auto",
+                        onComplete: () => {
+                            gsap.to(tl, {
+                                timeScale: baseDirection,
+                                duration: 1,
+                                ease: "power1.out",
+                                overwrite: "auto"
+                            });
+                        }
+                    });
                 }
             });
         };
