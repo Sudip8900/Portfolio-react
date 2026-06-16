@@ -128,11 +128,24 @@ const Contact = () => {
                 <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
                     <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
                     <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
-                        {"[ SYS.COMM_LINK ]".split("").map((char, index) => (
-                            <span key={index} className="header-char inline-block origin-bottom bg-gradient-to-r from-orange-500 via-[#ffaa66] to-white bg-clip-text text-transparent">
-                                {char === " " ? "\u00A0" : char}
-                            </span>
-                        ))}
+                        {(() => {
+                            const headerText = "[ SYS.COMM_LINK ]";
+                            return headerText.split("").map((char, index) => (
+                                <span 
+                                    key={index} 
+                                    className="header-char inline-block origin-bottom"
+                                    style={{
+                                        backgroundImage: 'linear-gradient(to right, #f97316, #ffaa66, #ffffff)',
+                                        backgroundSize: `${headerText.length * 100}% 100%`,
+                                        backgroundPosition: `${(index / (headerText.length - 1)) * 100}% 0`,
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                    }}
+                                >
+                                    {char === " " ? "\u00A0" : char}
+                                </span>
+                            ));
+                        })()}
                     </h1>
                     <div className='header-block w-12 h-2 bg-orange-500/50' />
                 </div>
