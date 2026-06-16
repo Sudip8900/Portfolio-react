@@ -368,36 +368,29 @@ const Works = () => {
     /* ================= UI ================= */
 
     return (
-        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 bg-[#050505] overflow-hidden'>
+        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 overflow-hidden'>
 
             <div className='flex items-center gap-4 mb-10 px-5 md:px-10 select-none' ref={headingRef} style={{ perspective: "1000px" }}>
-                <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
+                <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
                 <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
                     {(() => {
                         const headerText = "[ SYS.WORKS_DB ]";
                         return headerText.split("").map((char, index) => (
                             <span 
                                 key={index} 
-                                className="header-char inline-block origin-bottom"
-                                style={{
-                                    backgroundImage: 'linear-gradient(to right, #f97316, #ffaa66, #ffffff)',
-                                    backgroundSize: `${headerText.length * 100}% 100%`,
-                                    backgroundPosition: `${(index / (headerText.length - 1)) * 100}% 0`,
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                }}
+                                className="header-char inline-block origin-bottom text-[#111111]"
                             >
                                 {char === " " ? "\u00A0" : char}
                             </span>
                         ));
                     })()}
                 </h1>
-                <div className='header-block w-12 h-2 bg-orange-500/50' />
+                <div className='header-block w-12 h-2 bg-orange-600/60' />
             </div>
 
             <div
                 ref={subRef}
-                className='hidden lg:flex flex-col text-end mt-5 md:mt-0 px-5 md:px-10 text-xl font-light tracking-widest uppercase text-white/50'
+                className='hidden lg:flex flex-col text-end mt-5 md:mt-0 px-5 md:px-10 text-xl font-light tracking-widest uppercase text-neutral-500'
             >
                 <p>// A curated collection of my creative projects.</p>
                 <p>// Blending 3D design and immersive interactive systems.</p>
@@ -406,7 +399,7 @@ const Works = () => {
 
             <div
                 ref={subRef2}
-                className='text-end m-5 text-[0.7rem] md:text-sm text-white/50 md:hidden flex flex-col tracking-widest uppercase'
+                className='text-end m-5 text-[0.7rem] md:text-sm text-neutral-500 md:hidden flex flex-col tracking-widest uppercase'
             >
                 <p>// Creative projects.</p>
                 <p>// 3D and Unreal Engine.</p>
@@ -418,9 +411,9 @@ const Works = () => {
 
                 {/* Section label */}
                 <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[10px] font-mono tracking-[0.35em] text-orange-500/50 uppercase">[ SYS.STAT_OVERVIEW ]</span>
-                    <div className="flex-1 h-px bg-orange-500/15" />
-                    <span className="text-[10px] font-mono text-orange-500/30 animate-pulse">● LIVE</span>
+                    <span className="text-[10px] font-mono tracking-[0.35em] text-orange-600/70 uppercase font-bold">[ SYS.STAT_OVERVIEW ]</span>
+                    <div className="flex-1 h-px bg-[#cfccb8]" />
+                    <span className="text-[10px] font-mono text-orange-600/50 animate-pulse">● LIVE</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
@@ -433,23 +426,23 @@ const Works = () => {
                     ].map(({ label, sub, icon, idx }) => (
                         <div
                             key={idx}
-                            className="relative border border-orange-500/20 bg-[#0a0a0a] p-4 md:p-6 group hover:border-orange-500/55 transition-all duration-300 overflow-hidden cursor-default"
+                            className="relative border border-[#cfccb8] bg-white p-4 md:p-6 group hover:border-[#111111] transition-all duration-300 overflow-hidden cursor-default shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111]"
                         >
                             {/* Corner brackets */}
-                            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/50 group-hover:border-orange-500 transition-colors duration-300" />
-                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/50 group-hover:border-orange-500 transition-colors duration-300" />
+                            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300" />
+                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300" />
                             {/* Hover glow */}
-                            <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/5 transition-all duration-300 pointer-events-none" />
+                            <div className="absolute inset-0 bg-orange-600/0 group-hover:bg-orange-600/5 transition-all duration-300 pointer-events-none" />
                             {/* Scan line on hover */}
-                            <div className="absolute left-0 top-0 h-full w-[2px] bg-orange-500 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                            <div className="absolute left-0 top-0 h-full w-[2px] bg-orange-600 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
 
                             <div className="relative z-10 flex flex-col gap-2">
                                 {/* Label + icon row */}
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[9px] md:text-[11px] font-mono tracking-[0.2em] text-orange-500/55 uppercase">{label}</span>
+                                    <span className="text-[9px] md:text-[11px] font-mono tracking-[0.2em] text-orange-600 font-semibold uppercase">{label}</span>
                                     <Icon
                                         icon={icon}
-                                        className="text-orange-500 group-hover:text-orange-500/80 transition-colors duration-300 bg-orange-300 p-1 rounded-full"
+                                        className="text-orange-600 bg-orange-100 p-1 rounded-full"
                                         width={32} height={32}
                                     />
                                 </div>
@@ -457,16 +450,16 @@ const Works = () => {
                                 {/* Animated counter */}
                                 <span
                                     ref={el => countRefs.current[idx] = el}
-                                    className="text-4xl md:text-5xl font-bold tabular-nums text-white drop-shadow-[0_0_14px_rgba(255,105,0,0.35)] group-hover:drop-shadow-[0_0_22px_rgba(255,105,0,0.7)] transition-all duration-300"
+                                    className="text-4xl md:text-5xl font-bold tabular-nums text-[#111111] transition-all duration-300"
                                 >
                                     {String(counts[idx]).padStart(2, '0')}
                                 </span>
 
                                 {/* Divider */}
-                                <div className="w-full h-px bg-orange-500/12 group-hover:bg-orange-500/40 transition-colors duration-300" />
+                                <div className="w-full h-px bg-[#cfccb8] group-hover:bg-[#111111] transition-colors duration-300" />
 
                                 {/* Sub label */}
-                                <span className="text-[9px] font-mono tracking-widest text-orange-500/30 uppercase">{sub}</span>
+                                <span className="text-[9px] font-mono tracking-widest text-neutral-500 font-semibold uppercase">{sub}</span>
                             </div>
                         </div>
                     ))}
@@ -481,12 +474,12 @@ const Works = () => {
             >
 
                 {/* Blender */}
-                <div className='lg:col-span-5 h-[550px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                <div className='lg:col-span-5 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
                     {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
                     <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-6 uppercase tracking-widest flex items-center justify-center gap-2'>
+                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-6 uppercase tracking-widest flex items-center justify-center gap-2'>
                             <Icon icon="mdi:cube-outline" width={24} height={24} /> [ DB.BLENDER ]
                         </h1>
 
@@ -499,25 +492,25 @@ const Works = () => {
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <InteractiveCard>
-                                        <div className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'>
+                                        <div className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'>
                                             {/* Hover Scanning Line */}
-                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
-                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
                                                 {project.name}
                                             </h2>
                                             <Magnetic>
                                                 <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
                                                     <a href={project.link} target="_blank" rel="noopener noreferrer">
-                                                        <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                        <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-600' width="24" height="24" />
                                                     </a>
                                                 </div>
                                             </Magnetic>
                                         </div>
 
                                         {/* Mobile Preview Image fallback */}
-                                        <div className='relative flex px-5 md:hidden h-auto py-5 bg-white/5 mb-5 mt-2 transition-colors duration-500 border border-orange-500/10'>
-                                            <img src={project.image} alt={project.name} className="w-full transition-all duration-500 border border-orange-500/20 object-cover" />
+                                        <div className='relative flex px-5 md:hidden h-auto py-5 bg-[#f4f2ee] mb-5 mt-2 transition-colors duration-500 border border-[#cfccb8]'>
+                                            <img src={project.image} alt={project.name} className="w-full transition-all duration-500 border border-[#cfccb8] object-cover" />
                                         </div>
                                     </InteractiveCard>
                                 </div>
@@ -527,16 +520,16 @@ const Works = () => {
                 </div>
 
                 {/* Unreal */}
-                <div className='lg:col-span-7 h-[550px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                <div className='lg:col-span-7 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
                     {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
                     <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
+                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
                             <Icon icon="mdi:gamepad-variant-outline" width={24} height={24} /> [ DB.UNREAL ]
                         </h1>
 
-                        <p className='mb-6 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Currently working on a sci-fi action game. Demo previews below.</p>
+                        <p className='mb-6 text-neutral-500 text-xs md:text-sm tracking-widest uppercase text-center'>// Currently working on a sci-fi action game. Demo previews below.</p>
 
                         <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
                             {UnrealProjects.map((project, index) => (
@@ -551,17 +544,17 @@ const Works = () => {
                                             href={project.Link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                            className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'
                                         >
                                             {/* Hover Scanning Line */}
-                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
-                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
                                                 {project.name}
                                             </h2>
                                             <Magnetic>
                                                 <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                    <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                    <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-600' width="24" height="24" />
                                                 </div>
                                             </Magnetic>
                                         </a>
@@ -573,16 +566,16 @@ const Works = () => {
                 </div>
 
                 {/* Coding Projects */}
-                <div className='lg:col-span-7 h-[450px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                <div className='lg:col-span-7 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
                     {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
                     <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
+                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
                             <Icon icon="mdi:code-braces" width={24} height={24} /> [ DB.CODING ]
                         </h1>
 
-                        <p className='mb-4 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Software & Script developments.</p>
+                        <p className='mb-4 text-neutral-500 text-xs md:text-sm tracking-widest uppercase text-center'>// Software & Script developments.</p>
 
                         {/* Dynamic Category Tabs */}
                         <div className="flex flex-wrap justify-center gap-5 mb-6">
@@ -591,8 +584,8 @@ const Works = () => {
                                     key={category}
                                     onClick={() => setSelectedCategory(category)}
                                     className={`px-3 py-1 text-[15px] tracking-widest uppercase border transition-all duration-300 cursor-pointer ${selectedCategory === category
-                                        ? "border-orange-500 bg-orange-500/10 text-orange-500 shadow-[0_0_10px_rgba(255,105,0,0.2)]"
-                                        : "border-orange-500/20 bg-transparent text-white/40 hover:text-white hover:border-orange-500/50"
+                                        ? "border-orange-600 bg-orange-600/10 text-orange-600 font-bold"
+                                        : "border-[#cfccb8] bg-transparent text-neutral-500 hover:text-[#111111] hover:border-[#111111]"
                                         }`}
                                 >
                                     {category}
@@ -617,17 +610,17 @@ const Works = () => {
                                                     href={project.Link}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                                    className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'
                                                 >
                                                     {/* Hover Scanning Line */}
-                                                    <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                                                    <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
-                                                    <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                                    <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
                                                         {project.name}
                                                     </h2>
                                                     <Magnetic>
                                                         <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                            <Icon icon="mdi:github" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                            <Icon icon="mdi:github" className='text-orange-600' width="24" height="24" />
                                                         </div>
                                                     </Magnetic>
                                                 </a>
@@ -641,16 +634,16 @@ const Works = () => {
                 </div>
 
                 {/* VLSI */}
-                <div className='lg:col-span-5 h-[450px] bg-[#0a0a0a]/80 border border-orange-500/20 p-5 flex flex-col relative'>
+                <div className='lg:col-span-5 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
                     {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/30" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/30" />
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
                     <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-500 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
+                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
                             <Icon icon="mdi:chip" width={24} height={24} /> [ DB.VLSI ]
                         </h1>
 
-                        <p className='mb-6 text-white/50 text-xs md:text-sm tracking-widest uppercase text-center'>// Tools & Circuit designs.</p>
+                        <p className='mb-6 text-neutral-500 text-xs md:text-sm tracking-widest uppercase text-center'>// Tools & Circuit designs.</p>
 
                         {VLSIProjects.length > 0 ? (
                             <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
@@ -666,17 +659,17 @@ const Works = () => {
                                                 href={project.Link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className='flex justify-between items-center px-4 md:px-6 py-4 bg-white/5 border border-orange-500/10 cursor-pointer group hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 relative overflow-hidden'
+                                                className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'
                                             >
                                                 {/* Hover Scanning Line */}
-                                                <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                                                <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
 
-                                                <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-white/80 group-hover:text-white transition drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]' style={{ transform: "translateZ(20px)" }}>
+                                                <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
                                                     {project.name}
                                                 </h2>
                                                 <Magnetic>
                                                     <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                        <Icon icon="mdi:github" className='text-orange-500/50 group-hover:text-orange-500 transition-colors' width="24" height="24" />
+                                                        <Icon icon="mdi:github" className='text-orange-600' width="24" height="24" />
                                                     </div>
                                                 </Magnetic>
                                             </a>
@@ -685,14 +678,14 @@ const Works = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-orange-500/20 bg-orange-500/5 p-6 rounded-lg relative overflow-hidden group">
-                                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-500/5 to-transparent h-1/2 w-full animate-[pulse_2s_infinite]" />
+                            <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#cfccb8] bg-[#f4f2ee] p-6 rounded-lg relative overflow-hidden group">
+                                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-600/5 to-transparent h-1/2 w-full animate-[pulse_2s_infinite]" />
                                 <div className="relative mb-4">
-                                    <div className="absolute inset-[-8px] border border-orange-500/20 rounded-full animate-ping duration-1000" />
-                                    <div className="w-16 h-16 rounded-full border-2 border-orange-500/30 flex items-center justify-center bg-black/80 relative z-10">
+                                    <div className="absolute inset-[-8px] border border-[#cfccb8]/40 rounded-full animate-ping duration-1000" />
+                                    <div className="w-16 h-16 rounded-full border-2 border-[#cfccb8] flex items-center justify-center bg-white relative z-10">
                                         <svg
                                             viewBox="0 0 24 24"
-                                            className="w-9 h-9 stroke-orange-500 fill-none animate-[spin_12s_linear_infinite]"
+                                            className="w-9 h-9 stroke-orange-600 fill-none animate-[spin_12s_linear_infinite]"
                                             strokeWidth="1.5"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
@@ -704,16 +697,16 @@ const Works = () => {
                                     </div>
                                 </div>
                                 <div className="text-center relative z-10 flex flex-col gap-1">
-                                    <h3 className="text-orange-500 text-sm font-bold tracking-[0.2em] uppercase animate-pulse">
+                                    <h3 className="text-orange-600 text-sm font-bold tracking-[0.2em] uppercase animate-pulse">
                                         [ DB.VLSI_WIP ]
                                     </h3>
-                                    <p className="text-[10px] text-white/50 tracking-wider uppercase">
+                                    <p className="text-[10px] text-neutral-500 tracking-wider uppercase font-semibold">
                                         // Circuit designs compiling
                                     </p>
                                     <div className="flex items-center justify-center gap-1.5 mt-2">
-                                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-bounce delay-0" />
-                                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-bounce delay-150" />
-                                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-bounce delay-300" />
+                                        <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-bounce delay-0" />
+                                        <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-bounce delay-150" />
+                                        <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-bounce delay-300" />
                                     </div>
                                 </div>
                             </div>
@@ -726,29 +719,27 @@ const Works = () => {
             {createPortal(
                 <div
                     ref={previewRef}
-                    className='fixed top-0 left-0 z-[100000] overflow-hidden border border-orange-500/50 pointer-events-none md:block hidden opacity-0 bg-black/90 backdrop-blur-md shadow-[0_0_50px_rgba(255,105,0,0.15)]'
-                    style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%)" }}
+                    className='fixed top-0 left-0 z-[100000] overflow-hidden border-2 border-[#111111] pointer-events-none md:block hidden opacity-0 bg-[#eae8e4] shadow-[8px_8px_0px_#111111]'
                 >
                     {/* HUD Overlay Elements for Preview */}
-                    <div className='absolute top-2 left-2 text-orange-500 text-[10px] tracking-widest uppercase z-50'>[VIEWPORT ACTIVE]</div>
-                    <div className='absolute bottom-2 left-2 text-orange-500 text-[10px] tracking-widest uppercase z-50'>[ RENDERING PREVIEW ]</div>
-                    <div className='absolute top-0 left-0 w-4 h-4 border-t border-l border-orange-500 z-50' />
-                    <div className='absolute bottom-0 right-0 w-4 h-4 border-b border-r border-orange-500 z-50' />
+                    <div className='absolute top-2 left-2 text-[#111111] font-mono text-[9px] tracking-widest uppercase z-50 font-bold'>[VIEWPORT ACTIVE]</div>
+                    <div className='absolute bottom-2 left-2 text-[#111111] font-mono text-[9px] tracking-widest uppercase z-50 font-bold'>[ RENDERING PREVIEW ]</div>
+                    <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#111111] z-50' />
+                    <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#111111] z-50' />
 
                     {
                         currentPreview && currentPreview.type === "blender" && (
-                            <div className="w-[840px] h-[560px] overflow-hidden relative p-8">
+                            <div className="w-[840px] h-[560px] overflow-hidden relative p-8 bg-[#f4f2ee]">
                                 <img
                                     src={BlenderProjects[currentPreview.index].image}
                                     alt="Preview"
-                                    className='object-cover w-full h-full border border-orange-500/30'
+                                    className='object-cover w-full h-full border border-[#cfccb8]'
                                 />
                                 <div
                                     ref={DesRef}
-                                    className='absolute bottom-10 left-10 right-10 bg-[#0a0a0a]/90 backdrop-blur-sm border border-orange-500/50 text-white p-5 text-[1rem] tracking-widest uppercase font-light shadow-[0_0_20px_rgba(255,105,0,0.2)]'
-                                    style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                    className='absolute bottom-10 left-10 right-10 bg-white border border-[#111111] text-[#111111] p-5 text-[1rem] tracking-widest uppercase font-light shadow-[4px_4px_0px_#111111]'
                                 >
-                                    <span className="text-orange-500 font-bold mr-2">{'>'}</span> {BlenderProjects[currentPreview.index].description}
+                                    <span className="text-orange-600 font-bold mr-2">{'>'}</span> {BlenderProjects[currentPreview.index].description}
                                 </div>
                             </div>
                         )
@@ -758,8 +749,8 @@ const Works = () => {
                         currentPreview && currentPreview.type === "coding" && (() => {
                             const project = CodingProjects[currentPreview.index];
                             return (
-                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6">
-                                    <div className="relative w-[700px] h-full border border-orange-500/30 overflow-hidden">
+                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6 bg-[#f4f2ee]">
+                                    <div className="relative w-[700px] h-full border border-[#cfccb8] overflow-hidden">
                                         <img
                                             src={project.image}
                                             alt="Preview"
@@ -769,17 +760,16 @@ const Works = () => {
 
                                     <div
                                         ref={DesRef}
-                                        className="relative flex-1 h-full border border-orange-500/30 bg-[#0a0a0a]/90 backdrop-blur-md p-6 flex flex-col shadow-[inset_0_0_20px_rgba(255,105,0,0.05)]"
-                                        style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col shadow-[4px_4px_0px_#111111]"
                                     >
-                                        <div className="text-orange-500 text-[10px] tracking-widest uppercase mb-4 border-b border-orange-500/20 pb-2">
+                                        <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 font-mono font-bold">
                                             [ SYS.LOG_DATA ]
                                         </div>
-                                        <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(255,105,0,0.5)]">
+                                        <h3 className="text-xl font-bold text-[#111111] mb-4 uppercase tracking-widest">
                                             {project.name}
                                         </h3>
-                                        <div ref={scrollTextRef} className="text-sm text-justify text-white/70 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                                            <span className="text-orange-500 mr-2 font-bold">{'>'}</span> {project.description}
+                                        <div ref={scrollTextRef} className="text-sm text-justify text-neutral-600 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                                            <span className="text-orange-600 mr-2 font-bold">{'>'}</span> {project.description}
                                         </div>
                                     </div>
                                 </div>
@@ -792,13 +782,13 @@ const Works = () => {
                             const project = UnrealProjects[currentPreview.index];
                             const videoId = project.Link ? project.Link.split('/').pop().split('?')[0] : '';
                             return (
-                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6">
-                                    <div className="relative w-[700px] h-full border border-orange-500/30 overflow-hidden">
+                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6 bg-[#f4f2ee]">
+                                    <div className="relative w-[700px] h-full border border-[#cfccb8] overflow-hidden">
                                         {videoLoading && (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]/90 backdrop-blur-sm z-10">
+                                            <div className="absolute inset-0 flex items-center justify-center bg-white/95 backdrop-blur-sm z-10">
                                                 <div className="flex flex-col items-center gap-4">
-                                                    <div className="w-12 h-12 border border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
-                                                    <span className="text-orange-500 text-xs tracking-widest uppercase animate-pulse">[ INITIATING STREAM ]</span>
+                                                    <div className="w-12 h-12 border-2 border-[#cfccb8] border-t-orange-600 rounded-full animate-spin"></div>
+                                                    <span className="text-orange-600 text-xs tracking-widest uppercase animate-pulse font-mono font-bold">[ INITIATING STREAM ]</span>
                                                 </div>
                                             </div>
                                         )}
@@ -813,17 +803,16 @@ const Works = () => {
 
                                     <div
                                         ref={DesRef}
-                                        className="relative flex-1 h-full border border-orange-500/30 bg-[#0a0a0a]/90 backdrop-blur-md p-6 flex flex-col shadow-[inset_0_0_20px_rgba(255,105,0,0.05)]"
-                                        style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col shadow-[4px_4px_0px_#111111]"
                                     >
-                                        <div className="text-orange-500 text-[10px] tracking-widest uppercase mb-4 border-b border-orange-500/20 pb-2">
+                                        <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 font-mono font-bold">
                                             [ SYS.LOG_DATA ]
                                         </div>
-                                        <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(255,105,0,0.5)]">
+                                        <h3 className="text-xl font-bold text-[#111111] mb-4 uppercase tracking-widest">
                                             {project.name}
                                         </h3>
-                                        <div ref={scrollTextRef} className="text-sm text-justify text-white/70 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                                            <span className="text-orange-500 mr-2 font-bold">{'>'}</span> {project.description}
+                                        <div ref={scrollTextRef} className="text-sm text-justify text-neutral-600 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                                            <span className="text-orange-600 mr-2 font-bold">{'>'}</span> {project.description}
                                         </div>
                                     </div>
                                 </div>
@@ -835,21 +824,20 @@ const Works = () => {
                         currentPreview && currentPreview.type === "vlsi" && (() => {
                             const project = VLSIProjects[currentPreview.index];
                             return (
-                                <div className="relative overflow-hidden w-[500px] h-[350px] flex p-6">
+                                <div className="relative overflow-hidden w-[500px] h-[350px] flex p-6 bg-[#f4f2ee]">
                                     <div
                                         ref={DesRef}
-                                        className="relative flex-1 h-full border border-orange-500/30 bg-[#0a0a0a]/90 backdrop-blur-md p-6 flex flex-col shadow-[inset_0_0_20px_rgba(255,105,0,0.05)]"
-                                        style={{ clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%)" }}
+                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col shadow-[4px_4px_0px_#111111]"
                                     >
-                                        <div className="text-orange-500 text-[10px] tracking-widest uppercase mb-4 border-b border-orange-500/20 pb-2 flex justify-between">
+                                        <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 flex justify-between font-mono font-bold">
                                             <span>[ SYS.LOG_DATA ]</span>
                                             <Icon icon="mdi:chip" width={16} />
                                         </div>
-                                        <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-widest drop-shadow-[0_0_8px_rgba(255,105,0,0.5)]">
+                                        <h3 className="text-xl font-bold text-[#111111] mb-4 uppercase tracking-widest">
                                             {project.name}
                                         </h3>
-                                        <div ref={scrollTextRef} className="text-sm text-justify text-white/70 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                                            <span className="text-orange-500 mr-2 font-bold">{'>'}</span> {project.description}
+                                        <div ref={scrollTextRef} className="text-sm text-justify text-neutral-600 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                                            <span className="text-orange-600 mr-2 font-bold">{'>'}</span> {project.description}
                                         </div>
                                     </div>
                                 </div>

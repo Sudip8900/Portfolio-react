@@ -1,34 +1,15 @@
-import { gsap } from 'gsap';
-import React, { use, useEffect, useState } from 'react'
-import { useRef } from 'react'
-import { socials } from '../constants';
-import { useGSAP } from '@gsap/react';
-import { Link, Events, scrollSpy } from 'react-scroll';
-import { useLenis } from 'lenis/react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, scrollSpy } from 'react-scroll';
 import Magnetic from '../componnts/Magnetic.jsx';
 import { Icon } from '@iconify/react';
-
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 
 const Navbar = ({ IsReady }) => {
-    const navRef = useRef(null);
-    const navref2 = useRef(null);
-    const pillRef = useRef(null);
-    const linksContainerRef = useRef(null);
-    const linkRef = useRef([]);
-    const linkRef2 = useRef([]);
-    const contactRef = useRef(null);
-    const toplineRef = useRef(null);
-    const bottomlineRef = useRef(null);
-    const tl = useRef(null);
+    const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const icontl = useRef(null);
-    const titleRef = useRef(null);
-    const BurgerRef = useRef(null);
+    const mobileMenuRef = useRef(null);
 
-
-    // Smooth sliding indicator state
-    const indicatorRef = useRef(null);
-    const [activeIndex, setActiveIndex] = useState(0);
     const sectionsList = ['home', 'about', 'works', 'experience', 'contact'];
 
     const sectionIcons = {
@@ -39,298 +20,198 @@ const Navbar = ({ IsReady }) => {
         contact: 'carbon:email'
     };
 
-    useGSAP(() => {
-        // Initial state setups to prevent FOUC
-        gsap.set(navref2.current, { opacity: 0 });
-        gsap.set(pillRef.current, { scaleX: 0, scaleY: 0.05, opacity: 0, transformOrigin: "center center" });
-        gsap.set([titleRef.current, BurgerRef.current], { y: -50, opacity: 0 });
-        gsap.set(linkRef2.current, { opacity: 0, y: -10 });
-        gsap.set(indicatorRef.current, { opacity: 0, scaleX: 0 });
-
-        gsap.set(navRef.current, { xPercent: 100 });
-        gsap.set([linkRef.current, contactRef.current], {
-            autoAlpha: 0,
-            x: -20,
-        });
-
-        tl.current = gsap.timeline({ paused: true }).to(
-            navRef.current, {
-            xPercent: 0,
-            duration: 0.8,
-            ease: "power3.out"
-        }).to(linkRef.current, {
-            autoAlpha: 1,
-            x: 0,
-            duration: 0.5,
-            stagger: 0.05,
-            ease: "power3.out"
-        }, "<0.2").to(contactRef.current, {
-            autoAlpha: 1,
-            x: 0,
-            duration: 0.5,
-            ease: "power3.out"
-        }, "<0.3");
-
-        icontl.current = gsap.timeline({ paused: true }).to(toplineRef.current, {
-            rotate: 45,
-            y: 3.3,
-            duration: 0.3,
-            ease: "power3.out"
-        }).to(bottomlineRef.current, {
-            rotate: -45,
-            y: -3.3,
-            duration: 0.3,
-            ease: "power3.out"
-        }, "<");
-    }, []);
-
-    useGSAP(() => {
-        if (!IsReady) return;
-
-        const entryTl = gsap.timeline();
-
-        // 1. Show wrapper
-        entryTl.set(navref2.current, { opacity: 1 });
-
-        // 2. Holographic Pill opens horizontally, then snaps open vertically
-        entryTl.to(pillRef.current, {
-            opacity: 1,
-            scaleX: 1,
-            duration: 0.45,
-            ease: "power4.inOut"
-        })
-        .to(pillRef.current, {
-            scaleY: 1,
-            duration: 0.4,
-            ease: "back.out(1.6)"
-        })
-        .fromTo(pillRef.current, 
-            { filter: "brightness(1.5) contrast(1.2)" },
-            { filter: "brightness(1) contrast(1)", duration: 0.3, ease: "power2.out" },
-            "-=0.4"
-        );
-
-        // 3. Scanline sweep
-        entryTl.fromTo(".nav-scanline",
-            { left: "-30%", opacity: 1 },
-            { left: "100%", opacity: 0, duration: 0.8, ease: "power2.out" },
-            "-=0.5"
-        );
-
-        // 4. Logo Glitch/Flicker Reveal
-        entryTl.fromTo(".branding-logo", 
-            { opacity: 0, x: -8 }, 
-            { opacity: 1, x: 0, duration: 0.15 }, 
-            "-=0.6"
-        )
-        .to(".branding-logo", { opacity: 0.3, x: 2, duration: 0.05 })
-        .to(".branding-logo", { opacity: 1, x: 0, duration: 0.05 })
-        .to(".branding-logo", { opacity: 0.5, x: -3, duration: 0.08 })
-        .to(".branding-logo", { opacity: 1, x: 0, duration: 0.1 });
-
-        // 5. Navigation Links reveal
-        entryTl.fromTo(linkRef2.current,
-            { y: -15, opacity: 0, scale: 0.8 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.5, stagger: 0.06, ease: "back.out(1.8)" },
-            "-=0.4"
-        );
-
-        // 6. Sliding indicator snaps in
-        entryTl.fromTo(indicatorRef.current,
-            { scaleX: 0, opacity: 0 },
-            { scaleX: 1, opacity: 1, duration: 0.4, ease: "power3.out" },
-            "-=0.2"
-        );
-
-        // 7. Mobile header logo and burger button reveal
-        entryTl.to([titleRef.current, BurgerRef.current], {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "back.out(1.5)",
-        }, "entry-=0.7");
-    }, [IsReady]);
-
-    const toggleMenue = () => {
-        if (!isOpen) {
-            icontl.current.play();
-            tl.current.play();
-        } else {
-            icontl.current.reverse();
-            tl.current.reverse();
-        }
-        setIsOpen(!isOpen);
-    };
-
-    const lenis = useLenis();
-
     useEffect(() => {
-        // Update active link on page load
-        scrollSpy.update();
-
-        // Also update after window load (important for refresh cases)
-        window.addEventListener("load", scrollSpy.update);
-
-        return () => {
-            window.removeEventListener("load", scrollSpy.update);
-        };
-    }, []);
-
-    // Animate the smooth sliding indicator
-    useEffect(() => {
-        const updateIndicator = () => {
-            if (indicatorRef.current && linkRef2.current[activeIndex]) {
-                const activeEl = linkRef2.current[activeIndex];
-                gsap.to(indicatorRef.current, {
-                    x: activeEl.offsetLeft,
-                    width: activeEl.offsetWidth,
-                    duration: 0.5,
-                    ease: "power3.out",
-                });
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
             }
         };
 
-        // Initial update
-        updateIndicator();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        scrollSpy.update();
 
-        // Observe the container for any late layout shifts (e.g., icons/fonts loading)
-        let observer;
-        if (linksContainerRef.current) {
-            observer = new ResizeObserver(() => {
-                updateIndicator();
-            });
-            observer.observe(linksContainerRef.current);
-        }
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-        // Fallbacks for fonts loading
-        document.fonts?.ready.then(updateIndicator);
-        window.addEventListener('resize', updateIndicator);
-
-        // Extra timeout as a failsafe for iconify icons
-        const timeoutId = setTimeout(updateIndicator, 500);
-
-        return () => {
-            if (observer) observer.disconnect();
-            window.removeEventListener('resize', updateIndicator);
-            clearTimeout(timeoutId);
-        };
-    }, [activeIndex]);
-
-    const handleSetActive = (to) => {
-        const index = sectionsList.indexOf(to);
-        if (index !== -1) setActiveIndex(index);
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
     };
+
+    // FOUC prevention
+    useGSAP(() => {
+        gsap.set(".nav-logo-anim", { y: -30, opacity: 0 });
+        gsap.set(".nav-link-anim", { y: -30, opacity: 0 });
+    }, []);
+
+    // Entrance Animation on Load Complete
+    useGSAP(() => {
+        if (!IsReady) return;
+
+        const tl = gsap.timeline();
+        tl.to(".nav-logo-anim", {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            ease: "power2.out"
+        })
+        .to(".nav-link-anim", {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.05,
+            ease: "power2.out"
+        }, "-=0.3");
+    }, [IsReady]);
+
+    // Stagger links inside mobile menu when it opens
+    useGSAP(() => {
+        if (isOpen) {
+            gsap.fromTo(".mob-nav-link", 
+                { opacity: 0, x: -20 },
+                { opacity: 1, x: 0, duration: 0.4, stagger: 0.08, ease: "power2.out", delay: 0.15 }
+            );
+        }
+    }, [isOpen]);
 
     return (
         <>
-            <div ref={navref2} className="hidden md:flex fixed top-4 left-4 right-4 z-50 items-center justify-center gap-4 pointer-events-none">
+            {/* Desktop Navbar - Floating Pill Shape */}
+            <nav className={`hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[56px] items-center justify-between px-8 z-50 border rounded-full transition-all duration-500 ${
+                scrolled 
+                    ? 'bg-[#f4f2ee]/95 backdrop-blur-md border-[#111111] text-[#111111] shadow-[4px_4px_0px_#cfccb8]' 
+                    : 'bg-[#eae8e4]/85 backdrop-blur-md border-[#cfccb8] text-[#111111] shadow-[0_8px_32px_rgba(0,0,0,0.05)]'
+            }`}>
+                
+                {/* Logo */}
+                <div className="nav-logo-anim flex items-center gap-2 select-none">
+                    <span className="w-2 h-2 rounded-full animate-pulse shadow-lg bg-orange-600 shadow-orange-600/50" />
+                    <span 
+                        className="text-xs font-black tracking-[0.4em] uppercase" 
+                        style={{ fontFamily: '"Michroma", sans-serif' }}
+                    >
+                        SUDIP.DEV
+                    </span>
+                </div>
 
-                {/* Holographic Glass Pill Navbar */}
-                <nav
-                    ref={pillRef}
-                    className="flex items-center justify-between px-6 py-2 bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 w-full max-w-5xl relative pointer-events-auto shadow-[0_8px_32px_rgba(255,105,0,0.1),inset_0_1px_1px_rgba(255,105,0,0.1)] group rounded-full transition-all duration-500 hover:border-orange-500/40 overflow-hidden"
+                {/* Nav Links */}
+                <div className="flex gap-x-1 items-center h-full">
+                    {sectionsList.map((section) => (
+                        <Magnetic key={section}>
+                            <div className="nav-link-anim relative px-3 py-1.5 cursor-pointer flex items-center justify-center h-full">
+                                <Link
+                                    spy={true}
+                                    to={section}
+                                    smooth={true}
+                                    duration={400}
+                                    offset={-50}
+                                    activeClass="!text-orange-500 font-extrabold after:scale-x-100"
+                                    className={`relative tracking-widest text-[10px] font-bold uppercase cursor-pointer py-1 transition-all duration-300 flex items-center gap-1.5 text-[#111111]/70 hover:text-[#111111] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-orange-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300`}
+                                    style={{ fontFamily: '"Michroma", sans-serif' }}
+                                >
+                                    <Icon icon={sectionIcons[section]} className="text-[1.25em] opacity-80" />
+                                    {section}
+                                </Link>
+                            </div>
+                        </Magnetic>
+                    ))}
+                </div>
+
+            </nav>
+
+            {/* Mobile Header Bar - Floating Pill Shape */}
+            <div className={`md:hidden fixed top-4 left-4 right-4 h-[54px] flex items-center justify-between px-5 z-50 border rounded-full transition-all duration-500 ${
+                scrolled 
+                    ? 'bg-[#f4f2ee]/95 backdrop-blur-md border-[#111111] text-[#111111] shadow-[4px_4px_0px_#cfccb8]' 
+                    : 'bg-[#eae8e4]/85 backdrop-blur-md border-[#cfccb8] text-[#111111] shadow-[0_8px_32px_rgba(0,0,0,0.05)]'
+            }`}>
+                <div className="nav-logo-anim flex items-center gap-2 select-none">
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-600 animate-pulse shadow-[0_0_8px_rgba(255,105,0,0.8)]" />
+                    <span className="text-[10px] font-black tracking-[0.35em] uppercase" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                        SUDIP.DEV
+                    </span>
+                </div>
+
+                {/* Burger Menu Trigger */}
+                <button 
+                    onClick={toggleMenu}
+                    className={`nav-logo-anim flex flex-col items-center justify-center gap-1.5 w-9 h-9 border rounded-full transition-all cursor-pointer ${
+                        scrolled 
+                            ? 'border-[#111111] hover:border-[#111111] bg-[#f4f2ee]/50' 
+                            : 'border-[#cfccb8] hover:border-[#111111] bg-[#eae8e4]/50'
+                    }`}
                 >
-                    {/* Glowing Accent */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0 rounded-full" />
-
-                    {/* Boot scanline overlay */}
-                    <div className="nav-scanline absolute inset-0 bg-gradient-to-r from-transparent via-orange-500/20 to-transparent w-1/3 h-full pointer-events-none z-0 opacity-0" />
-
-                    {/* Branding */}
-                    <div className="relative z-10 flex items-center gap-4 pl-4 branding-logo">
-                        <div className="text-[0.75rem] font-bold tracking-widest uppercase text-orange-50 drop-shadow-[0_0_8px_rgba(255,105,0,0.3)] flex items-center gap-3">
-                            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(255,105,0,0.8)]"></span>
-                            SUDIP.DEV
-                        </div>
-                    </div>
-
-                    {/* Navigation Links */}
-                    <div ref={linksContainerRef} className="flex text-[0.8rem] gap-x-2 font-medium tracking-[0.2em] relative z-10 py-1.5">
-                        {/* Dynamic Glass Indicator */}
-                        <div
-                            ref={indicatorRef}
-                            className="absolute top-0 left-0 h-full border border-orange-500/40 bg-orange-500/10 pointer-events-none shadow-[0_0_15px_rgba(255,105,0,0.2)] z-0 rounded-full backdrop-blur-md"
-                        />
-
-                        {sectionsList.map((section, index) => (
-                            <Magnetic key={index}>
-                                <div className="inline-block relative px-5 py-2 z-10 cursor-pointer" ref={(el) => (linkRef2.current[index] = el)}>
-                                    <Link
-                                        spy={true}
-                                        activeClass='!text-orange-400 drop-shadow-[0_0_10px_rgba(255,105,0,0.8)]'
-                                        className="transition-all duration-300 tracking-widest text-white/40 hover:text-orange-400 uppercase inline-flex items-center gap-2"
-                                        to={section}
-                                        smooth
-                                        duration={200}
-                                        offset={-100}
-                                        onSetActive={handleSetActive}
-                                    >
-                                        <Icon icon={sectionIcons[section]} className="text-[1.2em] opacity-80" />
-                                        {section}
-                                    </Link>
-                                </div>
-                            </Magnetic>
-                        ))}
-                    </div>
-                </nav>
+                    <span className={`block w-4 h-[1.5px] origin-center transition-all bg-[#111111] ${
+                        isOpen 
+                            ? 'rotate-45 translate-y-[4.5px]' 
+                            : ''
+                    }`} />
+                    <span className={`block w-4 h-[1.5px] origin-center transition-all bg-[#111111] ${
+                        isOpen 
+                            ? '-rotate-45 -translate-y-[4.5px]' 
+                            : ''
+                    }`} />
+                </button>
             </div>
 
-            {/* Mobile Slide-Out Menu */}
-            <nav ref={navRef} className='fixed top-0 right-0 z-50 w-full h-full flex flex-col justify-between px-6 uppercase bg-[#050505]/90 backdrop-blur-2xl border-l border-orange-500/20 text-white/90 pt-28 pb-10 gap-y-8 md:hidden shadow-[-20px_0_50px_rgba(255,105,0,0.1)] overflow-y-auto'>
-                {/* Decorative Elements */}
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-orange-500/40 to-transparent" />
+            {/* Mobile Menu Drawer Overlay */}
+            <div 
+                ref={mobileMenuRef}
+                className={`fixed top-0 right-0 z-45 w-full h-full flex flex-col justify-between px-6 uppercase bg-[#eae8e4]/95 backdrop-blur-2xl border-l border-[#cfccb8] text-[#111111] pt-24 pb-10 gap-y-8 md:hidden transition-transform duration-500 ease-out shadow-[-20px_0_50px_rgba(0,0,0,0.1)] overflow-y-auto ${
+                    isOpen ? 'translate-x-0' : 'translate-x-full'
+                }`}
+            >
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-[#cfccb8] to-transparent" />
 
-                <div className='flex flex-col text-2xl sm:text-3xl gap-y-6 sm:gap-y-8 font-medium tracking-widest relative z-10'>
-                    <div className="text-orange-500/60 text-[10px] tracking-[0.3em] mb-4 border-b border-orange-500/20 pb-2 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(255,105,0,0.8)]"></span>
+                <div className="flex flex-col text-xl gap-y-5 font-bold tracking-widest relative z-10 mt-6" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                    <div className="text-orange-600 text-[10px] tracking-[0.3em] mb-4 border-b border-[#cfccb8] pb-2 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-orange-600 animate-pulse"></span>
                         DIRECTORY_ACCESS
                     </div>
 
                     {sectionsList.map((section, index) => (
-                        <div key={index} ref={(el) => (linkRef.current[index] = el)} className="group border-l-2 border-transparent hover:border-orange-500/50 pl-4 transition-all">
-                            <Link onClick={toggleMenue} className='flex items-center transition-all duration-300 cursor-pointer text-white/40 hover:text-orange-400 hover:drop-shadow-[0_0_10px_rgba(255,105,0,0.5)]' to={`${section}`} smooth offset={0} duration={200}>
-                                <Icon icon={sectionIcons[section]} className="mr-4 text-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                        <div key={index} className="mob-nav-link group border-l-2 border-transparent hover:border-orange-600 pl-4 transition-all">
+                            <Link 
+                                onClick={toggleMenu} 
+                                className="flex items-center transition-all duration-300 cursor-pointer text-neutral-500 hover:text-orange-600" 
+                                to={section} 
+                                smooth 
+                                offset={-50} 
+                                duration={400}
+                            >
+                                <Icon icon={sectionIcons[section]} className="mr-4 text-xl opacity-60 group-hover:opacity-100 transition-opacity" />
                                 {section}
                             </Link>
                         </div>
                     ))}
                 </div>
 
-                <div ref={contactRef} className='flex flex-col gap-8 relative z-10 mt-auto border-t border-orange-500/20 pt-8'>
+                <div className="flex flex-col gap-6 relative z-10 mt-auto border-t border-[#cfccb8] pt-6 font-mono text-xs">
                     <div>
-                        <p className='text-orange-500/60 tracking-[0.3em] text-[10px] mb-3'>CONTACT</p>
-                        <p className='text-sm text-white/60 hover:text-orange-400 transition-colors cursor-pointer'>iamsudippan@gmail.com</p>
+                        <p className="text-orange-600 tracking-[0.3em] text-[10px] mb-2">CONTACT</p>
+                        <p className="text-neutral-700 hover:text-orange-600 transition-colors cursor-pointer">iamsudippan@gmail.com</p>
                     </div>
-                    <div className='flex flex-col'>
-                        <p className='text-orange-500/60 tracking-[0.3em] text-[10px] mb-3'>SOCIALS</p>
-                        <div className='flex flex-wrap gap-4'>
-                            {socials.map((social, index) => (
-                                <a key={index} href={social.href} target='_blank' className='text-xs text-white/60 hover:text-orange-400 hover:bg-orange-500/10 border border-orange-500/30 rounded-full px-4 py-1.5 transition-all hover:shadow-[0_0_10px_rgba(255,105,0,0.2)]'>
-                                    {social.name}
-                                </a>
-                            ))}
+                    <div>
+                        <p className="text-orange-600 tracking-[0.3em] text-[10px] mb-2">CONNECT</p>
+                        <div className="flex flex-wrap gap-4">
+                            <a href="https://github.com/Sudip8900" target="_blank" rel="noreferrer" className="text-[11px] text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-4 py-1.5 transition-all">GITHUB</a>
+                            <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target="_blank" rel="noreferrer" className="text-[11px] text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-4 py-1.5 transition-all">LINKEDIN</a>
+                            <a href="https://www.instagram.com/sudip_pan00/" target="_blank" rel="noreferrer" className="text-[11px] text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-4 py-1.5 transition-all">INSTAGRAM</a>
                         </div>
                     </div>
                 </div>
-            </nav>
-
-            {/* Mobile Header Elements */}
-            <div>
-                {/* Mobile Sci-Fi Logo */}
-                <div ref={titleRef} className='text-[12px] sm:text-sm font-medium tracking-widest uppercase text-orange-50 fixed top-4 left-4 md:hidden bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 shadow-[0_8px_32px_rgba(255,105,0,0.15),inset_0_1px_1px_rgba(255,105,0,0.1)] rounded-full px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 z-40'>
-                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(255,105,0,0.8)]"></span>
-                    <h1>SUDIP.DEV</h1>
-                </div>
-
-                {/* Mobile Toggle Button */}
-                <div ref={BurgerRef} className='fixed z-[60] flex flex-col items-center justify-center gap-1 sm:gap-1.5 transition-all duration-500 bg-[#050505]/60 backdrop-blur-[24px] border border-orange-500/20 shadow-[0_8px_32px_rgba(255,105,0,0.15),inset_0_1px_1px_rgba(255,105,0,0.1)] rounded-full cursor-pointer w-10 h-10 sm:w-12 sm:h-12 top-4 sm:top-5 right-4 sm:right-5 md:hidden hover:border-orange-500/50 hover:bg-orange-500/10' onClick={toggleMenue}>
-                    <span ref={toplineRef} className='block w-5 h-[1.5px] bg-orange-400 origin-center transition-all drop-shadow-[0_0_5px_rgba(255,105,0,0.8)]'></span>
-                    <span ref={bottomlineRef} className='block w-5 h-[1.5px] bg-orange-400 origin-center transition-all drop-shadow-[0_0_5px_rgba(255,105,0,0.8)]'></span>
-                </div>
             </div>
-        </>
-    )
-}
 
-export default Navbar
+            {/* Backdrop for mobile overlay */}
+            {isOpen && (
+                <div 
+                    onClick={toggleMenu}
+                    className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px] transition-opacity duration-300 md:hidden"
+                />
+            )}
+        </>
+    );
+};
+
+export default Navbar;

@@ -5,10 +5,40 @@ import * as THREE from 'three';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-export function Helmet({ IsReady, ...props }) {
+export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
   const shapeContainer = useRef(null);
   const mouseRotateRef = useRef(null);
   const { nodes, materials } = useGLTF('/Model/sci-fi_helmet (1K).glb');
+
+  // Dedicated wireframe material for wireframeOnly mode
+  const wireframeMaterialOnly = useRef(
+    new THREE.MeshBasicMaterial({
+      color: new THREE.Color('#ea580c'),
+      wireframe: true,
+      transparent: true,
+      opacity: 0.20,
+      depthWrite: true,
+    })
+  ).current;
+
+  // Solid background material to block back-facing wireframe lines
+  const solidBackgroundMaterial = useRef(
+    new THREE.MeshBasicMaterial({
+      color: new THREE.Color('#eae8e4'), // Matches the section background
+      depthWrite: true,
+    })
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      if (wireframeMaterialOnly) {
+        wireframeMaterialOnly.dispose();
+      }
+      if (solidBackgroundMaterial) {
+        solidBackgroundMaterial.dispose();
+      }
+    };
+  }, [wireframeMaterialOnly, solidBackgroundMaterial]);
 
   // Single world-space clipping plane for the scan reveal.
   // Normal (0,-1,0) clips everything where y > constant.
@@ -20,7 +50,7 @@ export function Helmet({ IsReady, ...props }) {
   // polygonOffset pushes it slightly in front of the solid mesh to prevent z-fighting.
   const wireframeMaterial = useRef(
     new THREE.MeshBasicMaterial({
-      color: new THREE.Color('#ff6a00'),
+      color: new THREE.Color('#888888'),
       wireframe: true,
       transparent: true,
       opacity: 0,          // starts invisible; will be set by GSAP
@@ -33,15 +63,49 @@ export function Helmet({ IsReady, ...props }) {
   ).current;
 
   // Set initial material states for transition
-  if (materials.helmet) {
+  if (materials.helmet && !wireframeOnly) {
     materials.helmet.transparent = true;
     if (!IsReady) {
       materials.helmet.opacity = 0;
     }
   }
 
-  // Clone original meshes to render wireframes overlapping them
+  // Apply solid background and clone wireframe on top in wireframeOnly mode
   useEffect(() => {
+    if (!wireframeOnly) return;
+    if (!mouseRotateRef.current) return;
+
+    const meshesToClone = [];
+    mouseRotateRef.current.traverse((child) => {
+      if (child.isMesh) {
+        // Set main mesh material to solid background
+        child.material = solidBackgroundMaterial;
+        meshesToClone.push(child);
+      }
+    });
+
+    const createdWireframeMeshes = [];
+    meshesToClone.forEach((mesh) => {
+      const wireframeMesh = new THREE.Mesh(mesh.geometry, wireframeMaterialOnly);
+      wireframeMesh.position.copy(mesh.position);
+      wireframeMesh.rotation.copy(mesh.rotation);
+      wireframeMesh.scale.copy(mesh.scale);
+      mesh.parent.add(wireframeMesh);
+      createdWireframeMeshes.push(wireframeMesh);
+    });
+
+    return () => {
+      createdWireframeMeshes.forEach((wm) => {
+        if (wm.parent) {
+          wm.parent.remove(wm);
+        }
+      });
+    };
+  }, [wireframeOnly, wireframeMaterialOnly, solidBackgroundMaterial, nodes, materials]);
+
+  // Clone original meshes to render wireframes overlapping them (standard mode only)
+  useEffect(() => {
+    if (wireframeOnly) return;
     if (!mouseRotateRef.current) return;
 
     const meshesToClone = [];
@@ -69,10 +133,11 @@ export function Helmet({ IsReady, ...props }) {
       });
       wireframeMaterial.dispose();
     };
-  }, [materials.helmet, wireframeMaterial]);
+  }, [materials.helmet, wireframeMaterial, wireframeOnly]);
 
-  // Transition: wireframe scans in → solid fades in beneath → wireframe settles as a subtle overlay
+  // Transition: wireframe scans in → solid fades in beneath → wireframe settles as a subtle overlay (standard mode only)
   useGSAP(() => {
+    if (wireframeOnly) return;
     if (!IsReady) return;
 
     const tl = gsap.timeline();
@@ -110,20 +175,30 @@ export function Helmet({ IsReady, ...props }) {
       duration: 2,
       ease: "power2.inOut",
     }, "<");
-  }, { dependencies: [IsReady] });
+  }, { dependencies: [IsReady, wireframeOnly] });
 
-  // Capture global mouse independently of Canvas overlay blocking
+  // Capture global mouse independently of Canvas overlay blocking (standard mode only)
   const mouse = useRef({ x: 0, y: 0 });
   useEffect(() => {
+    if (wireframeOnly) return;
     const onMouseMove = (e) => {
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
     window.addEventListener('mousemove', onMouseMove);
     return () => window.removeEventListener('mousemove', onMouseMove);
-  }, []);
+  }, [wireframeOnly]);
 
   useFrame((state, delta) => {
+    if (wireframeOnly) {
+      if (mouseRotateRef.current) {
+        // Slowly rotate clockwise (negative direction)
+        mouseRotateRef.current.rotation.y -= delta * 0.35;
+      }
+      return;
+    }
+
+    if (!IsReady) return;
 
     if (mouseRotateRef.current) {
       // Calculate target rotation based on normalized mouse coordinates

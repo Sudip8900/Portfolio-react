@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import AutoType from '../componnts/autotype.jsx';
-import AnimatedTextSlide from '../componnts/animatedTextSlide.jsx';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { Canvas } from '@react-three/fiber';
@@ -12,37 +11,56 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from 'react-scroll';
 import Magnetic from '../componnts/Magnetic.jsx';
 import { Icon } from '@iconify/react';
+import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects } from '../constants';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const hero = ({ IsReady }) => {
-    const contextRef = useRef(null);
-    const headerRef = useRef(null);
-    const svgTextRef = useRef(null);
-    const AboutText = "> SYSTEM_USER: ";
-    const Name = "SUDIP PAN";
-    const ImageRef = useRef(null);
-    const isMobile = useMediaQuery({ maxWidth: 853 });
-    const SocialRef = useRef(null);
-    const hireRef = useRef(null);
-    const bannerRef = useRef(null);
-    const [showSocial, setShowSocial] = useState(true);
+const Hero = ({ IsReady }) => {
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    const [activeCarousel, setActiveCarousel] = useState(0);
+    const [isBtnHovered, setIsBtnHovered] = useState(false);
 
-    useGSAP(() => {
-        // Initial setup for FOUC prevention (runs once on mount)
-        gsap.set(ImageRef.current, { scale: 1.3, opacity: 0 });
-        gsap.set(contextRef.current, { y: "10vh", opacity: 0 });
-        gsap.set(headerRef.current.children, { y: 60, opacity: 0 });
-        gsap.set(bannerRef.current, { scaleY: 0, opacity: 0, transformOrigin: "center top" });
-        gsap.set(".hero-socials-wrapper", { x: 80, opacity: 0 });
-        gsap.set(hireRef.current, { y: 50, opacity: 0 });
-        if (svgTextRef.current) {
-            gsap.set(svgTextRef.current, { 
-                strokeDashoffset: 2000, 
-                fillOpacity: 0, 
-                strokeOpacity: 1 
-            });
+    const projectImages = [
+        "/Images/perfume bottle.jpg",
+        "/Images/cartoony house.jpg",
+        "/Images/fantasy bottle.jpg",
+        "/Images/bulb.jpg",
+        "/Images/rifle.jpg",
+        "/Images/speaker.jpg",
+        "/Images/karambit.jpg",
+        "/Images/katana.jpg"
+    ];
+
+    const totalProjectsCount = BlenderProjects.length + UnrealProjects.length + CodingProjects.length + VLSIProjects.length;
+
+    // Carousel items for the right column
+    const carouselItems = [
+        {
+            id: 0,
+            title: "GAME DEV",
+            desc: "Custom controllers, pathfinding AI, and procedural systems in Unreal & C++.",
+            icon: "carbon:game-console"
+        },
+        {
+            id: 1,
+            title: "GAME DESIGN",
+            desc: "Immersive layouts, puzzle design, player pacing, and mechanics synergy.",
+            icon: "carbon:cube"
+        },
+        {
+            id: 2,
+            title: "ELECTRONICS",
+            desc: "Microcontroller coding, circuit design, and embedded systems.",
+            icon: "carbon:chip"
         }
+    ];
+
+    // GSAP Entrance Animations
+    useGSAP(() => {
+        // Initial state
+        gsap.set(".grid-cell", { opacity: 0, y: 30 });
+        gsap.set(".bg-logo-text", { scale: 0.85, opacity: 0 });
+        gsap.set(".scroll-circle-btn", { scale: 0, opacity: 0 });
     }, []);
 
     useGSAP(() => {
@@ -50,217 +68,294 @@ const hero = ({ IsReady }) => {
 
         const tl = gsap.timeline();
 
-        // 1. Background Image fades & zooms out to normal
-        tl.to(ImageRef.current, {
-            scale: 1,
-            opacity: 0.3,
-            duration: 2.5,
-            ease: "power3.out",
+        // Stagger grid cells in
+        tl.to(".grid-cell", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.08,
+            ease: "power3.out"
         });
 
-        // 2. Context & Header text staggers
-        tl.to(contextRef.current, {
-            y: 0,
+        // Background large letters fade & scale
+        tl.to(".bg-logo-text", {
+            scale: 1,
             opacity: 1,
-            duration: 1.2,
-            ease: "power4.out"
-        }, "<0.3")
-            .to(headerRef.current.children, {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                stagger: 0.15,
-                ease: "power4.out"
-            }, "<0.15");
+            duration: 1.5,
+            ease: "power2.out"
+        }, "<0.3");
 
-        if (svgTextRef.current) {
-            tl.to(svgTextRef.current, {
-                strokeDashoffset: 0,
-                duration: 3.5,
-                ease: "power2.out",
-            }, "<0.05")
-                .to(svgTextRef.current, {
-                    fillOpacity: 1,
-                    strokeOpacity: 0,
-                    duration: 0.4,
-                    ease: "power1.inOut",
-                }, "-=0.4");
-        }
-
-        // 4. AutoType banner hologram opens vertically
-        tl.to(bannerRef.current, {
-            scaleY: 1,
+        // Floating scroll button scale up
+        tl.to(".scroll-circle-btn", {
+            scale: 1,
             opacity: 1,
             duration: 0.8,
-            ease: "back.out(1.5)"
-        }, "-=0.6");
-
-        // 5. Social icons slide in from right
-        tl.to(".hero-socials-wrapper", {
-            x: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power3.out"
-        }, "-=0.7");
-
-        // 6. Hire button pops up
-        tl.to(hireRef.current, {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "bounce.out"
-        }, "-=0.5");
+            ease: "back.out(1.7)"
+        }, "-=0.8");
 
     }, [IsReady]);
 
-    useEffect(() => {
-        let lastScrollY = window.scrollY;
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-            setShowSocial(currentScrollY <= lastScrollY || currentScrollY < 200);
-            lastScrollY = currentScrollY;
-        };
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    const handleNextCarousel = () => {
+        gsap.timeline()
+            .to(".carousel-content", {
+                opacity: 0, y: -10, duration: 0.2, onComplete: () => {
+                    setActiveCarousel((prev) => (prev + 1) % carouselItems.length);
+                }
+            })
+            .to(".carousel-content", { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" });
+    };
+
+    const handlePrevCarousel = () => {
+        gsap.timeline()
+            .to(".carousel-content", {
+                opacity: 0, y: 10, duration: 0.2, onComplete: () => {
+                    setActiveCarousel((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+                }
+            })
+            .to(".carousel-content", { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" });
+    };
 
     return (
-        <section id="home" className="flex flex-col justify-end min-h-screen relative bg-[#050505] overflow-hidden text-white">
+        <section id="home" className="relative w-full min-h-screen bg-[#eae8e4] text-[#111111] font-sans overflow-hidden border-b border-[#cfccb8] noise-bg">
 
-            {/* Background Image & Grid Overlay */}
-            <figure className='absolute inset-0 z-0 pointer-events-none' style={{ width: "100%", height: "100vh" }}>
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,105,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,105,0,0.03)_1px,transparent_1px)] bg-[size:50px_50px] z-10" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500/5 via-black/80 to-black z-10" />
-                <img ref={ImageRef}
-                    src="/Images/Background.jpg"
-                    alt="background"
-                    className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
-                />
+            {/* Grid Container */}
+            <div className="w-full min-h-screen grid grid-cols-1 md:grid-cols-4 select-none">
 
-                <Canvas shadows gl={{ localClippingEnabled: true }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="canvas-wrapper z-20 absolute inset-0">
-                    <ambientLight intensity={1.5} />
-                    <Environment resolution={256}>
-                        <group rotation={[-Math.PI / 3, 4, 1]}>
-                            <Lightformer form={"circle"} intensity={5} color="#ff6a00" position={[0, 5, -9]} scale={10} />
-                            <Lightformer form={"circle"} intensity={3} color="#ffffff" position={[0, 3, 1]} scale={10} />
-                            <Lightformer form={"circle"} intensity={4} color="#ff6a00" position={[-5, -1, -1]} scale={10} />
-                            <Lightformer form={"circle"} intensity={2} color="#ffffff" position={[10, 1, 0]} scale={16} />
-                        </group>
-                    </Environment>
-                    <SciFiGrid IsReady={IsReady} />
-                    <Float speed={0.5}>
-                        <Helmet IsReady={IsReady} position={isMobile ? [0, -2.3, 0] : [1.5, -3.6, 0.5]} shadows scale={isMobile ? 0.7 : 1.1} />
-                    </Float>
-                </Canvas>
-            </figure>
+                {/* Column 1 (Left) */}
+                <div className="flex flex-col border-b md:border-b-0 md:border-r border-[#cfccb8] justify-between h-full z-10 order-2 md:order-1">
 
-            <div ref={contextRef} className="relative z-30 pointer-events-none w-full">
-                <div style={{ clipPath: "polygon(0 0, 100% 0%, 100% 100%, 0% 100%)" }}>
-                    <div ref={headerRef} className='flex flex-col justify-center gap-4 md:gap-10 pt-24 md:pt-16 pb-10'>
-                        <div className="flex items-center gap-2 md:gap-4 ml-4 md:ml-10">
-                            <div className='w-6 md:w-12 h-1 bg-orange-500 animate-pulse' />
-                            <AnimatedTextSlide text={AboutText} className='text-sm sm:text-xl md:text-2xl tracking-widest uppercase text-orange-500' />
-                        </div>
-                        <div className="ml-4 md:ml-10 w-[95%] sm:w-[90%] max-w-6xl overflow-visible" style={{ filter: 'drop-shadow(0 0 25px rgba(255, 106, 0, 0.45))' }}>
-                            <svg viewBox="0 0 1200 150" className="w-full h-auto overflow-visible select-none pointer-events-none">
-                                <defs>
-                                    <linearGradient id="name-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#f97316" />
-                                        <stop offset="50%" stopColor="#ffaa66" />
-                                        <stop offset="100%" stopColor="#ffffff" />
-                                    </linearGradient>
-                                </defs>
-                                <text
-                                    ref={svgTextRef}
-                                    x="10"
-                                    y="120"
-                                    className="font-bold uppercase tracking-tight"
-                                    style={{
-                                        fontFamily: '"Michroma", sans-serif',
-                                        fontSize: '110px',
-                                        fill: 'url(#name-gradient)',
-                                        fillOpacity: 0,
-                                        stroke: 'url(#name-gradient)',
-                                        strokeWidth: 0.3,
-                                        strokeDasharray: '2000',
-                                        strokeDashoffset: '2000',
-                                    }}
-                                >
-                                    {Name}
-                                </text>
-                            </svg>
+                    {/* Box 1.1: Title Info */}
+                    <div className="grid-cell border-b border-[#cfccb8] p-6 md:p-8 flex flex-col justify-center flex-grow min-h-[160px] md:min-h-[240px] lg:min-h-[280px] lg:pt-24 md:pt-20 pt-8">
+                        <div className="flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center gap-4 md:gap-6 w-full">
+                            <h1 className="text-[13px] sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-extrabold tracking-tight text-[#111111] leading-tight shrink-0" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                                SUDIP PAN<br />PORTFOLIO
+                            </h1>
+
+                            {/* Divider line: vertical on mobile, horizontal on desktop */}
+                            <div className="h-10 md:h-[1.5px] w-[1.5px] md:w-20 bg-orange-600/60 shrink-0" />
+
+                            {/* AutoType Component integration */}
+                            <div className="flex-grow md:flex-grow-0 min-h-[50px] md:min-h-[90px] md:w-full flex items-center md:items-start" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                                <AutoType
+                                    subTitle="I am a passionate"
+                                    text={["Game Developer", "Game Designer", "Level Designer", "Unreal Engine Developer", "Electronics Engineer"]}
+                                    Ntextcolor="text-[#111111]/70 tracking-wider font-semibold"
+                                    AnimTextcolor="text-orange-600 font-extrabold block mt-1 md:mt-2"
+                                    NtextSize="text-[10px] sm:text-xs md:text-sm"
+                                    AnimTextSize="text-[13px] sm:text-base md:text-lg lg:text-xl xl:text-2xl"
+                                />
+                            </div>
                         </div>
                     </div>
+
+                    {/* Box 1.2: Metrics */}
+                    <div className="grid-cell border-b border-[#cfccb8] p-6 md:p-8 flex items-center md:items-start lg:items-center justify-between md:flex-col lg:flex-row gap-4 min-h-[100px] md:min-h-[130px] lg:min-h-[140px]">
+                        <div className="flex flex-col">
+                            <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#111111] leading-none" style={{ fontFamily: '"Michroma", sans-serif' }}>{totalProjectsCount}</span>
+                        </div>
+                        <span className="text-[10px] md:text-xs text-neutral-500 tracking-wider text-right md:text-left lg:text-right max-w-[160px] md:max-w-none lg:max-w-[200px] leading-relaxed font-semibold" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                            COMPLETED GAMES & HARDWARE PROJECTS
+                        </span>
+                    </div>
+
+                    {/* Box 1.3: Call to Action (Step into...) */}
+                    <div className="grid-cell p-6 md:p-8 flex flex-col justify-end min-h-[150px] md:min-h-[180px] lg:min-h-[200px] relative">
+                        <span className="absolute top-6 right-6 text-neutral-400 font-light text-sm md:text-base">+</span>
+                        <span className="absolute bottom-6 left-6 text-neutral-400 font-light text-sm md:text-base">+</span>
+                        <h3 className="text-xs md:text-sm lg:text-base font-bold tracking-widest leading-relaxed text-[#111111] uppercase max-w-[220px] md:max-w-none lg:max-w-[300px]" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                            Step into the future of interactive art
+                        </h3>
+                    </div>
+
                 </div>
 
-                <div ref={bannerRef} className='relative transition-colors duration-500 mt-5'>
-                    <div className='absolute inset-x-0 border-t border-t-orange-500/30' />
-                    <div className='py-8 px-6 md:py-12 md:px-10 bg-[#0a0a0a]/80 backdrop-blur-sm transition-colors duration-500 border-b border-orange-500/10'>
-                        <div className='text-start md:text-end max-w-7xl ml-auto'>
-                            <AutoType
-                                subTitle={"I am a passionate "}
-                                text={["Game Developer", "Game Designer", "Level Designer", "Unreal Engine Developer", "Electronics Engineer"]}
-                                Ntextcolor="text-white/60 tracking-widest uppercase"
-                                AnimTextcolor="text-orange-500 font-bold uppercase tracking-widest"
-                                NtextSize="text-[clamp(0.7rem,2.5vw,1.25rem)]"
-                                AnimTextSize="text-[clamp(1rem,4vw,2.25rem)]"
-                            />
+                {/* Column 2 (Center) - Spans 2 cols on tablet/desktop */}
+                <div className="col-span-1 md:col-span-2 border-b md:border-b-0 md:border-r border-[#cfccb8] flex flex-col justify-between h-[80vh] md:h-full relative md:min-h-screen z-20 order-1 md:order-2 pt-20 md:pt-0">
+
+                    {/* 3D Helmet Viewport - spans the full height */}
+                    <div className="grid-cell flex-grow relative flex items-center justify-center overflow-hidden h-full">
+
+                        {/* Massive background text */}
+                        <div
+                            className="bg-logo-text absolute select-none flex items-center justify-center font-black leading-none text-black opacity-[0.05] pointer-events-none z-0 w-full"
+                            style={{
+                                fontSize: isMobile ? "70vw" : "min(36vw, 34rem)",
+                                fontFamily: '"Michroma", sans-serif',
+                                gap: isMobile ? "3vw" : "1.5vw"
+                            }}
+                        >
+                            <span
+                                className="transform -translate-y-[12%] select-none"
+                                style={{ WebkitTextStroke: isMobile ? "1.5vw currentColor" : "0.8vw currentColor" }}
+                            >
+                                S
+                            </span>
+                            <span
+                                className="transform translate-y-[12%] select-none"
+                                style={{ WebkitTextStroke: isMobile ? "1.5vw currentColor" : "0.8vw currentColor" }}
+                            >
+                                P
+                            </span>
+                        </div>
+
+                        {/* Subtle atmospheric glow behind the helmet */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] md:w-[70%] md:h-[70%] rounded-full bg-[radial-gradient(circle,_rgba(255,106,0,0.08)_0%,_rgba(207,204,184,0.2)_45%,_transparent_75%)] blur-3xl pointer-events-none z-0 animate-pulse-slow" />
+
+                        {/* Interactive Canvas */}
+                        <div className="absolute inset-0 w-full h-full z-10 pointer-events-auto">
+                            <Canvas shadows gl={{ localClippingEnabled: true }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="w-full h-full">
+                                <ambientLight intensity={1.5} />
+                                <Environment resolution={256}>
+                                    <group rotation={[-Math.PI / 3, 4, 1]}>
+                                        <Lightformer form="circle" intensity={5} color="#ff6a00" position={[0, 5, -9]} scale={10} />
+                                        <Lightformer form="circle" intensity={3} color="#ffffff" position={[0, 3, 1]} scale={10} />
+                                        <Lightformer form="circle" intensity={4} color="#ff6a00" position={[-5, -1, -1]} scale={10} />
+                                        <Lightformer form="circle" intensity={2} color="#ffffff" position={[10, 1, 0]} scale={16} />
+                                    </group>
+                                </Environment>
+                                <SciFiGrid IsReady={IsReady} />
+                                <Helmet IsReady={IsReady} position={isMobile ? [0, -2.1, 0] : [0, -2.9, 0.5]} shadows scale={isMobile ? 0.6 : 0.82} />
+                            </Canvas>
+                        </div>
+
+                        {/* Circular View Button (overlapping the canvas bottom) */}
+                        <div 
+                            className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 pointer-events-auto flex items-center justify-center"
+                            onMouseEnter={() => setIsBtnHovered(true)}
+                            onMouseLeave={() => setIsBtnHovered(false)}
+                        >
+                            {/* Orbiting Images Ring */}
+                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
+                                <div className="absolute left-1/2 top-1/2 w-0 h-0 animate-orbit-ring">
+                                    {projectImages.map((img, i) => {
+                                        const angle = i * (360 / projectImages.length);
+                                        return (
+                                            <div 
+                                                key={i}
+                                                className="absolute left-1/2 top-1/2 pointer-events-auto"
+                                                style={{
+                                                    transform: `translate(-50%, -50%) rotate(${angle}deg) translate(${isBtnHovered ? (isMobile ? '105px' : '135px') : '0px'}) rotate(-${angle}deg) scale(${isBtnHovered ? 1 : 0})`,
+                                                    opacity: isBtnHovered ? 1 : 0,
+                                                    transition: `transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.04}s, opacity 0.5s ease ${i * 0.04}s`
+                                                }}
+                                            >
+                                                {/* Counter-rotating wrapper to keep image upright */}
+                                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-[#111111] bg-white overflow-hidden shadow-[3px_3px_0px_#cfccb8] animate-counter-orbit">
+                                                    <img 
+                                                        src={img} 
+                                                        alt="Project thumbnail" 
+                                                        className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-300 hover:scale-125 cursor-pointer pointer-events-auto" 
+                                                    />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <Link to="works" smooth={true} duration={600} offset={-50}>
+                                <button className="scroll-circle-btn w-32 h-32 md:w-36 md:h-36 rounded-full bg-[#eae8e4]/90 hover:bg-[#111111] hover:text-[#eae8e4] text-[#111111] font-extrabold text-xs md:text-sm tracking-[0.2em] uppercase border border-[#111111]/25 hover:border-[#111111] backdrop-blur-md transition-all duration-500 flex items-center justify-center shadow-lg cursor-pointer transform hover:scale-105 active:scale-95 z-10 relative" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                                    View Works
+                                </button>
+                            </Link>
+                        </div>
+
+                        {/* Branding Mark */}
+                        <div className="absolute bottom-6 left-6 text-xs font-mono text-neutral-400 tracking-widest z-20">
+                            ® portfolio.ver.2026
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Social Icons wrapper for entrance anim */}
-            <div className="hero-socials-wrapper absolute mb-auto top-1/2 -translate-y-1/2 right-2 md:right-8 mx-auto h-auto w-auto z-40 pointer-events-auto">
-                <div ref={SocialRef} style={showSocial ? { transform: "translateX(0)", opacity: "1", transition: "all 0.4s" } : { transform: "translateX(50px)", opacity: "0", transition: "all 0.4s" }} className='flex flex-col align-middle gap-y-4 md:gap-y-6 p-2'>
-                    <div className="flex flex-col items-center gap-3 md:gap-4 border-r border-orange-500/30 pr-2 md:pr-4 scale-90 md:scale-100 origin-right">
-                        <Magnetic>
-                            <a href="https://www.instagram.com/sudip_pan00/" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                                <Icon icon="mdi:instagram" width="24" height="24" />
-                            </a>
-                        </Magnetic>
-                        <Magnetic>
-                            <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                                <Icon icon="mdi:linkedin" width="24" height="24" />
-                            </a>
-                        </Magnetic>
-                        <Magnetic>
-                            <a href="https://github.com/Sudip8900" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                                <Icon icon="mdi:github" width="24" height="24" />
-                            </a>
-                        </Magnetic>
-                        <Magnetic>
-                            <a href="https://www.facebook.com/sudip.pan.792/" target='_blank' className='w-10 h-10 border border-orange-500/20 bg-[#0a0a0a]/80 flex items-center justify-center text-white/50 hover:text-orange-500 hover:border-orange-500 transition-all duration-300'>
-                                <Icon icon="mdi:facebook" width="24" height="24" />
-                            </a>
-                        </Magnetic>
+                </div>
+
+                {/* Column 3 (Right) */}
+                <div className="flex flex-col justify-between h-full z-10 order-3">
+
+                    {/* Box 3.0: Wireframe rotating helmet (Large displays only) */}
+                    <div className="hidden lg:flex grid-cell border-b border-[#cfccb8] p-6 justify-center items-center h-[340px] relative overflow-hidden pointer-events-auto bg-[#f4f2ee]/40">
+                        {/* Subtle atmospheric gradient behind */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-[radial-gradient(circle,_rgba(255,106,0,0.06)_0%,_rgba(207,204,184,0.15)_45%,_transparent_75%)] blur-2xl pointer-events-none z-0" />
+
+                        <div className="absolute inset-0 w-full h-full z-10">
+                            <Canvas shadows gl={{ localClippingEnabled: true }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="w-full h-full">
+                                <ambientLight intensity={1.5} />
+                                <Environment resolution={256}>
+                                    <group rotation={[-Math.PI / 3, 4, 1]}>
+                                        <Lightformer form="circle" intensity={5} color="#ff6a00" position={[0, 5, -9]} scale={10} />
+                                        <Lightformer form="circle" intensity={3} color="#ffffff" position={[0, 3, 1]} scale={10} />
+                                    </group>
+                                </Environment>
+                                <Helmet IsReady={IsReady} wireframeOnly={true} position={[0, -3.5, 0.5]} scale={1.05} />
+                            </Canvas>
+                        </div>
                     </div>
 
-                    <div className='relative z-50 md:hidden mt-4'>
-                        <Link to="contact" smooth={true} duration={600} offset={-50}>
-                            <button className='w-10 h-10 border border-orange-500/50 bg-[#0a0a0a]/80 flex items-center justify-center text-orange-500'>
-                                <Icon icon="mdi:email-outline" width="20" height="20" />
+                    {/* Box 3.1: Mini Carousel (Skill Showcase) */}
+                    <div className="grid-cell border-b border-[#cfccb8] p-6 md:p-8 flex flex-col items-center justify-center gap-4 md:gap-6 flex-grow min-h-[280px] md:min-h-[320px] lg:min-h-[350px] lg:pt-24 md:pt-20 pt-16 pointer-events-auto">
+                        <div className="flex items-center justify-between w-full gap-4">
+                            <button
+                                onClick={handlePrevCarousel}
+                                className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border border-[#cfccb8] flex items-center justify-center text-neutral-600 hover:text-black hover:border-black transition-all cursor-pointer text-sm md:text-base lg:text-xl font-bold"
+                            >
+                                ←
                             </button>
-                        </Link>
+
+                            <div className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full border border-[#cfccb8] bg-white/50 flex items-center justify-center shadow-inner relative overflow-hidden transition-transform duration-300 hover:scale-105">
+                                <div className="carousel-content flex items-center justify-center text-[#111111] text-3xl md:text-4xl">
+                                    <Icon icon={carouselItems[activeCarousel].icon} />
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleNextCarousel}
+                                className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border border-[#cfccb8] flex items-center justify-center text-neutral-600 hover:text-black hover:border-black transition-all cursor-pointer text-sm md:text-base lg:text-xl font-bold"
+                            >
+                                →
+                            </button>
+                        </div>
+
+                        <div className="carousel-content text-center max-w-[220px] md:max-w-[260px]">
+                            <h4 className="text-[10px] md:text-xs lg:text-base font-bold tracking-[0.25em] text-[#111111] uppercase" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                                {carouselItems[activeCarousel].title}
+                            </h4>
+                            <p className="text-[10px] md:text-xs text-neutral-500 leading-relaxed mt-2" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                                {carouselItems[activeCarousel].desc}
+                            </p>
+                        </div>
                     </div>
+
+                    {/* Box 3.2: Social Links Row */}
+                    <div className="grid-cell border-b border-[#cfccb8] py-4 md:py-5 px-6 md:px-8 flex justify-center gap-4 md:gap-6 items-center min-h-[60px] md:min-h-[70px] pointer-events-auto">
+                        <a href="https://github.com/Sudip8900" target="_blank" rel="noreferrer" className="w-8 h-8 md:w-9 md:h-9 lg:w-11 lg:h-11 rounded-full border border-[#cfccb8]/60 bg-white/30 flex items-center justify-center text-neutral-600 hover:text-orange-600 hover:border-orange-500 transition-all">
+                            <Icon icon="mdi:github" width="18" md:width="20" lg:width="22" height="18" md:height="20" lg:height="22" />
+                        </a>
+                        <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target="_blank" rel="noreferrer" className="w-8 h-8 md:w-9 md:h-9 lg:w-11 lg:h-11 rounded-full border border-[#cfccb8]/60 bg-white/30 flex items-center justify-center text-neutral-600 hover:text-orange-600 hover:border-orange-500 transition-all">
+                            <Icon icon="mdi:linkedin" width="18" md:width="20" lg:width="22" height="18" md:height="20" lg:height="22" />
+                        </a>
+                        <a href="https://www.instagram.com/sudip_pan00/" target="_blank" rel="noreferrer" className="w-8 h-8 md:w-9 md:h-9 lg:w-11 lg:h-11 rounded-full border border-[#cfccb8]/60 bg-white/30 flex items-center justify-center text-neutral-600 hover:text-orange-600 hover:border-orange-500 transition-all">
+                            <Icon icon="mdi:instagram" width="18" md:width="20" lg:width="22" height="18" md:height="20" lg:height="22" />
+                        </a>
+                        <a href="https://www.facebook.com/sudip.pan.792/" target="_blank" rel="noreferrer" className="w-8 h-8 md:w-9 md:h-9 lg:w-11 lg:h-11 rounded-full border border-[#cfccb8]/60 bg-white/30 flex items-center justify-center text-neutral-600 hover:text-orange-600 hover:border-orange-500 transition-all">
+                            <Icon icon="mdi:facebook" width="18" md:width="20" lg:width="22" height="18" md:height="20" lg:height="22" />
+                        </a>
+                    </div>
+
+                    {/* Box 3.3: Description Block */}
+                    <div className="grid-cell p-6 md:p-8 flex flex-col justify-center gap-3 md:gap-4 min-h-[150px] md:min-h-[180px] lg:min-h-[200px]">
+                        <h4 className="text-[10px] md:text-xs lg:text-sm font-bold tracking-wider text-[#111111] uppercase" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                            Immersive Virtual Worlds
+                        </h4>
+                        <p className="text-[10px] md:text-xs text-neutral-500 leading-relaxed font-sans" style={{ fontFamily: '"Michroma", sans-serif' }}>
+                            Showcasing high-fidelity mechanics, systems architecture, and digital experiences crafted in Unreal Engine.
+                        </p>
+                    </div>
+
                 </div>
+
             </div>
 
-            {/* Hire Button - Sci-Fi style */}
-            <div ref={hireRef} className='hidden md:flex absolute bottom-10 left-10 z-40 pointer-events-auto'>
-                <Magnetic>
-                    <div className="inline-block relative">
-                        <Link to="contact" smooth={true} duration={600} offset={-50} className='block w-full h-full'>
-                            <button className='bg-[#0a0a0a]/80 text-lg text-orange-500 border border-orange-500/30 border-l-4 border-l-orange-500 cursor-pointer transition-all duration-300 hover:bg-orange-500 hover:text-black px-8 py-4 tracking-widest uppercase flex items-center gap-3 group'>
-                                Get In Touch
-                                <span className="text-orange-500 group-hover:text-black transition-colors font-bold">{'>'}</span>
-                            </button>
-                        </Link>
-                    </div>
-                </Magnetic>
-            </div>
         </section>
-    )
-}
+    );
+};
 
-export default hero;
+export default Hero;

@@ -51,29 +51,29 @@ const Radar = () => (
             {[0, 8, 16, 24].map((inset) => (
                 <div
                     key={inset}
-                    className="absolute border border-orange-500/15 rounded-full hover:border-orange-500/40 transition-colors duration-300"
+                    className="absolute border border-[#cfccb8] rounded-full hover:border-[#111111] transition-colors duration-300"
                     style={{ inset }}
                 />
             ))}
             {/* Crosshairs */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-full h-px bg-orange-500/10" />
+                <div className="w-full h-px bg-[#cfccb8]/50" />
             </div>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="h-full w-px bg-orange-500/10" />
+                <div className="h-full w-px bg-[#cfccb8]/50" />
             </div>
             {/* Sweep arm */}
             <div className="absolute inset-0 origin-center cs-radar-arm">
-                <div className="w-1/2 h-px absolute top-1/2 right-0 bg-gradient-to-r from-orange-500/90 to-transparent shadow-[0_0_6px_rgba(255,105,0,0.8)]" />
+                <div className="w-1/2 h-px absolute top-1/2 right-0 bg-gradient-to-r from-orange-600 to-transparent" />
             </div>
             {/* Sweep glow cone */}
             <div className="absolute inset-0 rounded-full cs-radar-sweep" />
             {/* Blip */}
             <div
-                className="absolute w-1.5 h-1.5 bg-orange-400 rounded-full shadow-[0_0_6px_rgba(255,105,0,1)] cs-radar-blip"
+                className="absolute w-1.5 h-1.5 bg-orange-600 rounded-full cs-radar-blip"
                 style={{ top: '30%', left: '65%' }}
             />
-            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] font-mono text-orange-500/40 tracking-widest whitespace-nowrap">
+            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] font-mono text-neutral-500 tracking-widest whitespace-nowrap font-bold">
                 <DecryptedText text="TRACKING" />
             </span>
         </div>
@@ -83,15 +83,15 @@ const Radar = () => (
 /* ─── Telemetry Row ──────────────────────────────────────── */
 const TelLeft = ({ label, val }) => (
     <div className="flex flex-col gap-0.5 telemetry-left group cursor-default">
-        <span className="text-orange-500/80 group-hover:text-orange-400 transition-colors duration-200"><DecryptedText text={label} /></span>
-        <span className="text-orange-500/40 group-hover:text-orange-500/70 transition-colors duration-200"><DecryptedText text={val} /></span>
+        <span className="text-[#111111]/80 group-hover:text-orange-600 transition-colors duration-200"><DecryptedText text={label} /></span>
+        <span className="text-neutral-400 group-hover:text-neutral-600 transition-colors duration-200"><DecryptedText text={val} /></span>
     </div>
 );
 
 const TelRight = ({ label, val, pulse }) => (
     <div className="flex flex-col gap-0.5 telemetry-right group cursor-default text-right">
-        <span className="text-orange-500/40 group-hover:text-orange-500/60 transition-colors duration-200"><DecryptedText text={label} /></span>
-        <span className={`text-orange-500/80 group-hover:text-orange-400 transition-colors duration-200 ${pulse ? 'animate-pulse text-green-400/70' : ''}`}>
+        <span className="text-neutral-400 group-hover:text-neutral-600 transition-colors duration-200"><DecryptedText text={label} /></span>
+        <span className={`text-[#111111]/80 group-hover:text-orange-600 transition-colors duration-200 ${pulse ? 'animate-pulse text-orange-600 font-bold' : ''}`}>
             <DecryptedText text={val} />
         </span>
     </div>
@@ -128,7 +128,7 @@ const ContactSummary = () => {
             vx: (Math.random() - 0.5) * 0.4,
             vy: (Math.random() - 0.5) * 0.4,
             r: Math.random() * 1.5 + 0.5,
-            baseAlpha: Math.random() * 0.3 + 0.1,
+            baseAlpha: Math.random() * 0.2 + 0.1,
             phase: Math.random() * Math.PI * 2,
         }));
 
@@ -170,14 +170,14 @@ const ContactSummary = () => {
                     ctx.beginPath();
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(mouse.x, mouse.y);
-                    ctx.strokeStyle = `rgba(255,105,0,${0.2 - dist/900})`;
+                    ctx.strokeStyle = `rgba(17,17,17,${0.15 - dist/900})`;
                     ctx.stroke();
-                    alpha = 0.8;
+                    alpha = 0.6;
                 }
 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255,105,0,${alpha})`;
+                ctx.fillStyle = `rgba(17,17,17,${alpha})`;
                 ctx.fill();
             });
             animId = requestAnimationFrame(animate);
@@ -266,13 +266,13 @@ const ContactSummary = () => {
     return (
         <section
             ref={contactSumRef}
-            className="flex flex-col items-center justify-between min-h-screen gap-12 mt-16 bg-black overflow-hidden relative"
+            className="flex flex-col items-center justify-between min-h-screen gap-12 mt-16 bg-[#eae8e4] overflow-hidden relative z-10"
         >
             {/* ── Top Marquee ── */}
             <Marque
                 items={marqueItems}
-                className="border-y border-orange-500/20 bg-[#050505] relative z-20 shadow-[0_0_20px_rgba(255,105,0,0.1)]"
-                iconClassname="text-orange-500/50"
+                className="border-y-2 border-[#111111] bg-white relative z-20"
+                iconClassname="text-[#111111]/40"
                 iconName="carbon:data-1"
             />
 
@@ -287,18 +287,10 @@ const ContactSummary = () => {
                     ref={bgRef}
                     className="cs-bg-grid absolute inset-[-50px] pointer-events-none z-[0]"
                     style={{
-                        backgroundImage: 'linear-gradient(rgba(255,105,0,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,105,0,0.08) 1px,transparent 1px)',
+                        backgroundImage: 'linear-gradient(rgba(17,17,17,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(17,17,17,0.03) 1px,transparent 1px)',
                         backgroundSize: '50px 50px',
                         maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%,#000 50%,transparent 100%)',
                         WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%,#000 50%,transparent 100%)',
-                    }}
-                />
-
-                {/* CRT scanline overlay */}
-                <div
-                    className="absolute inset-0 pointer-events-none z-[2] opacity-30 mix-blend-overlay"
-                    style={{
-                        background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.6) 2px, rgba(0,0,0,0.6) 4px)',
                     }}
                 />
 
@@ -306,11 +298,9 @@ const ContactSummary = () => {
                 <div
                     className="cs-scan-line absolute top-0 bottom-0 z-30 pointer-events-none"
                     style={{
-                        width: '4px',
+                        width: '3px',
                         left: '-4%',
-                        background: 'linear-gradient(to bottom, transparent 0%, rgba(255,105,0,1) 40%, #fff 50%, rgba(255,105,0,1) 60%, transparent 100%)',
-                        boxShadow: '0 0 25px 5px rgba(255,105,0,0.8), 0 0 50px 10px rgba(255,105,0,0.4)',
-                        filter: 'blur(0.5px)',
+                        background: 'linear-gradient(to bottom, transparent 0%, #111111 40%, #ea580c 50%, #111111 60%, transparent 100%)',
                     }}
                 />
 
@@ -318,7 +308,7 @@ const ContactSummary = () => {
                 <Radar />
 
                 {/* Left Telemetry */}
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] hidden md:flex flex-col gap-4 font-mono tracking-widest z-10">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] hidden md:flex flex-col gap-4 font-mono tracking-widest z-10 font-bold">
                     <TelLeft label="SYS.ON" val="0x8F2A" />
                     <TelLeft label="NET.OK" val="PING 12ms" />
                     <TelLeft label="FRQ.89" val="1024 GB/s" />
@@ -326,7 +316,7 @@ const ContactSummary = () => {
                 </div>
 
                 {/* Right Telemetry */}
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] hidden md:flex flex-col gap-4 font-mono tracking-widest z-10">
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] hidden md:flex flex-col gap-4 font-mono tracking-widest z-10 font-bold">
                     <TelRight label="{DATA.SYNC}" val="ACTIVE" />
                     <TelRight label="{UPLINK}" val="SECURE" />
                     <TelRight label="{STATUS}" val="STABLE" pulse />
@@ -340,54 +330,54 @@ const ContactSummary = () => {
                     style={{ transformStyle: 'preserve-3d' }}
                 >
                     {/* Corner brackets */}
-                    <div className="absolute left-0 top-0 w-8 h-8 border-l-2 border-t-2 border-orange-500/60 tech-bracket transition-transform duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2" />
-                    <div className="absolute right-0 top-0 w-8 h-8 border-r-2 border-t-2 border-orange-500/60 tech-bracket transition-transform duration-300 group-hover:translate-x-2 group-hover:-translate-y-2" />
-                    <div className="absolute left-0 bottom-0 w-8 h-8 border-l-2 border-b-2 border-orange-500/60 tech-bracket transition-transform duration-300 group-hover:-translate-x-2 group-hover:translate-y-2" />
-                    <div className="absolute right-0 bottom-0 w-8 h-8 border-r-2 border-b-2 border-orange-500/60 tech-bracket transition-transform duration-300 group-hover:translate-x-2 group-hover:translate-y-2" />
+                    <div className="absolute left-0 top-0 w-8 h-8 border-l-2 border-t-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2" />
+                    <div className="absolute right-0 top-0 w-8 h-8 border-r-2 border-t-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:translate-x-2 group-hover:-translate-y-2" />
+                    <div className="absolute left-0 bottom-0 w-8 h-8 border-l-2 border-b-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:-translate-x-2 group-hover:translate-y-2" />
+                    <div className="absolute right-0 bottom-0 w-8 h-8 border-r-2 border-b-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:translate-x-2 group-hover:translate-y-2" />
 
                     {/* Bracket coords (decorative) */}
-                    <span className="absolute top-1 left-10 text-[8px] font-mono text-orange-500/30 hidden md:block transition-all duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2"><DecryptedText text="X:00 Y:00" /></span>
-                    <span className="absolute top-1 right-10 text-[8px] font-mono text-orange-500/30 hidden md:block transition-all duration-300 group-hover:translate-x-2 group-hover:-translate-y-2"><DecryptedText text="X:FF Y:FF" /></span>
+                    <span className="absolute top-1 left-10 text-[8px] font-mono text-neutral-400 hidden md:block transition-all duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2 font-bold"><DecryptedText text="X:00 Y:00" /></span>
+                    <span className="absolute top-1 right-10 text-[8px] font-mono text-neutral-400 hidden md:block transition-all duration-300 group-hover:translate-x-2 group-hover:-translate-y-2 font-bold"><DecryptedText text="X:FF Y:FF" /></span>
 
                     {/* INCOMING TRANSMISSION label */}
-                    <div className="incoming-label absolute -top-4 left-1/2 -translate-x-1/2 text-orange-500 text-[10px] md:text-xs tracking-[0.3em] uppercase flex items-center gap-3 whitespace-nowrap bg-black/60 px-5 py-1.5 border border-orange-500/30 backdrop-blur-md shadow-[0_0_15px_rgba(255,105,0,0.15)] rounded-sm" style={{ transform: 'translateZ(30px)' }}>
-                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,1)]" />
+                    <div className="incoming-label absolute -top-4 left-1/2 -translate-x-1/2 text-[#111111] text-[10px] md:text-xs tracking-[0.3em] uppercase flex items-center gap-3 whitespace-nowrap bg-white px-5 py-1.5 border-2 border-[#111111] shadow-[4px_4px_0px_#111111] rounded-none" style={{ transform: 'translateZ(30px)' }}>
+                        <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
                         <DecryptedText text="[ INCOMING TRANSMISSION ]" />
-                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,1)]" />
+                        <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
                     </div>
 
                     {/* Main text */}
-                    <p className="uppercase tracking-widest leading-tight drop-shadow-[0_0_18px_rgba(255,105,0,0.45)]" style={{ transform: 'translateZ(50px)' }}>
-                        <span className="text-white/30 font-mono text-sm mr-2 main-text-word inline-block">{'>'}</span>
-                        <DecryptedText text="LET'S" className="main-text-word inline-block" />
+                    <p className="uppercase tracking-widest leading-tight text-[#111111]" style={{ transform: 'translateZ(50px)' }}>
+                        <span className="text-neutral-400 font-mono text-sm mr-2 main-text-word inline-block font-bold">{'>'}</span>
+                        <DecryptedText text="LET'S" className="main-text-word inline-block font-bold" />
                         <br />
                         <span className="main-text-word inline-block mt-2">
                             <Magnetic>
-                                <span className="cs-glitch-word font-bold text-orange-500 inline-block cursor-pointer transition-all duration-300 hover:text-white hover:scale-105 hover:drop-shadow-[0_0_24px_rgba(255,255,255,0.9)]">
+                                <span className="cs-glitch-word font-bold text-orange-600 inline-block cursor-pointer transition-all duration-300 hover:text-[#111111] hover:scale-105">
                                     CONNECT
                                 </span>
                             </Magnetic>
                         </span>
                         <br />
-                        <span className="text-white/30 text-sm mx-2 main-text-word inline-block">&amp;</span>
+                        <span className="text-neutral-400 text-sm mx-2 main-text-word inline-block font-bold">&amp;</span>
                         <span className="main-text-word inline-block mt-2">
                             <Magnetic>
-                                <DecryptedText text="CREATE" className="italic text-white inline-block cursor-pointer transition-all duration-300 hover:text-orange-500 hover:scale-105 hover:drop-shadow-[0_0_22px_rgba(255,105,0,0.9)]" />
+                                <DecryptedText text="CREATE" className="italic text-[#111111] font-bold inline-block cursor-pointer transition-all duration-300 hover:text-orange-600 hover:scale-105" />
                             </Magnetic>
                         </span>{' '}
-                        <DecryptedText text="SOMETHING" className="main-text-word inline-block ml-1" />
+                        <DecryptedText text="SOMETHING" className="main-text-word inline-block ml-1 font-bold" />
                         <br />
                         <span className="main-text-word inline-block mt-2">
                             <Magnetic>
-                                <DecryptedText text="AMAZING" className="border-b-2 border-orange-500 text-white inline-block cursor-pointer transition-all duration-300 hover:text-orange-500 hover:border-white hover:scale-105 hover:drop-shadow-[0_0_22px_rgba(255,105,0,0.9)]" />
+                                <DecryptedText text="AMAZING" className="border-b-2 border-[#111111] text-[#111111] inline-block cursor-pointer transition-all duration-300 hover:text-orange-600 hover:border-orange-600 hover:scale-105" />
                             </Magnetic>
                         </span>{' '}
                         <span className="main-text-word inline-block">
                             <Magnetic>
-                                <DecryptedText text="TOGETHER" className="text-orange-500 inline-block cursor-pointer transition-all duration-300 hover:text-white hover:scale-105 hover:drop-shadow-[0_0_24px_rgba(255,255,255,0.9)]" />
+                                <DecryptedText text="TOGETHER" className="text-orange-600 inline-block cursor-pointer transition-all duration-300 hover:text-[#111111] hover:scale-105" />
                             </Magnetic>
                         </span>
-                        <span className="main-text-word animate-pulse text-orange-500 font-mono ml-2 inline-block">_</span>
+                        <span className="main-text-word animate-pulse text-orange-600 font-mono ml-2 inline-block">_</span>
                     </p>
 
                     {/* CTA button */}
@@ -396,19 +386,14 @@ const ContactSummary = () => {
                             <button
                                 id="contact-summary-cta"
                                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="cs-cta-btn relative group px-10 py-4 font-mono text-sm tracking-[0.35em] uppercase border border-orange-500/60 text-orange-500 overflow-hidden hover:text-black transition-colors duration-300 focus:outline-none shadow-[0_0_20px_rgba(255,105,0,0.1)] hover:shadow-[0_0_30px_rgba(255,105,0,0.4)]"
+                                className="cs-cta-btn relative group px-10 py-4 font-mono text-sm tracking-[0.35em] uppercase border-2 border-[#111111] bg-white text-[#111111] overflow-hidden transition-all duration-300 shadow-[6px_6px_0px_#111111] hover:shadow-[2px_2px_0px_#111111] hover:translate-x-[4px] hover:translate-y-[4px] focus:outline-none"
                             >
                                 {/* Fill sweep */}
-                                <span className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none" />
-                                {/* Corner accents */}
-                                <span className="absolute top-0 left-0 w-2 h-2 border-t border-l border-orange-400 group-hover:border-black transition-colors duration-300" />
-                                <span className="absolute top-0 right-0 w-2 h-2 border-t border-r border-orange-400 group-hover:border-black transition-colors duration-300" />
-                                <span className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-orange-400 group-hover:border-black transition-colors duration-300" />
-                                <span className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-orange-400 group-hover:border-black transition-colors duration-300" />
-                                <span className="relative z-10 flex items-center gap-3 font-semibold">
-                                    <span className="w-1.5 h-1.5 bg-current rounded-full animate-pulse group-hover:shadow-[0_0_8px_rgba(0,0,0,0.5)]" />
+                                <span className="absolute inset-0 bg-[#111111] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none" />
+                                <span className="relative z-10 flex items-center gap-3 font-semibold group-hover:text-white transition-colors duration-300">
+                                    <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-pulse" />
                                     <DecryptedText text="INITIATE CONTACT" />
-                                    <span className="w-1.5 h-1.5 bg-current rounded-full animate-pulse group-hover:shadow-[0_0_8px_rgba(0,0,0,0.5)]" />
+                                    <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-pulse" />
                                 </span>
                             </button>
                         </Magnetic>
@@ -420,8 +405,8 @@ const ContactSummary = () => {
             <Marque
                 items={marqueItems2}
                 reverse
-                className="text-white bg-[#050505] border-y border-orange-500/20 relative z-20 shadow-[0_0_20px_rgba(255,105,0,0.1)]"
-                iconClassname="text-orange-500/50"
+                className="text-[#111111] bg-white border-y-2 border-[#111111] relative z-20"
+                iconClassname="text-[#111111]/40"
                 iconName="carbon:code"
             />
         </section>

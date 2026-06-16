@@ -2,7 +2,7 @@
 
 body {
   font-family: "Michroma", sans-serif;
-  @apply bg-[#050505] text-white;
+  @apply bg-[#eae8e4] text-[#111111] relative min-h-screen;
 }
 
 /* Hide scrollbar for Chrome, Edge, Safari */
@@ -39,6 +39,11 @@ body {
 .outlined-text {
   color: transparent;              /* makes inside transparent */
   -webkit-text-stroke: 0.5px #ff6900; /* outline thickness + color */
+}
+
+.outlined-text-dark {
+  color: transparent;
+  -webkit-text-stroke: 0.5px #111111;
 }
 
 @keyframes dropLine {
@@ -124,3 +129,51 @@ body {
   50%  { transform: translateX( 3px) skewX( 2deg); }
   100% { transform: translateX(-3px) skewX(-2deg); }
 }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.035;
+  z-index: 999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+@keyframes glowBreathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
+  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1.2; }
+}
+
+.animate-pulse-slow {
+  animation: glowBreathe 9s ease-in-out infinite;
+}
+
+/* ── View Works Orbiting Ring ── */
+@keyframes orbitRing {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.animate-orbit-ring {
+  animation: orbitRing 25s linear infinite;
+}
+
+@keyframes counterOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-counter-orbit {
+  animation: counterOrbit 25s linear infinite;
+}

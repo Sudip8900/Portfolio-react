@@ -13,6 +13,7 @@ const Experience = () => {
     const [previewPdf, setPreviewPdf] = useState(null);
     const headingRef = useRef(null);
     const lineRef = useRef(null);
+    
     useGSAP(() => {
         // Simple, robust, isolated scroll triggers for every element
         const elements = gsap.utils.toArray('.gsap-fade-in');
@@ -86,36 +87,29 @@ const Experience = () => {
     }, []);
 
     return (
-        <section id="experience" className='min-h-screen pb-20 bg-black text-white relative'>
+        <section id="experience" className='min-h-screen pb-20 bg-[#eae8e4] text-[#111111] relative z-10'>
             {/* Background Grid Pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,105,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,105,0,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.02)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full">
 
                 {/* Header Section */}
                 <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
-                    <div className='header-block w-12 h-2 bg-orange-500/50' />
+                    <div className='header-block w-12 h-2 bg-orange-600' />
                     <h1 className='text-xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
                         {(() => {
                             const headerText = "[ SYS.EXPERIENCE_LOGS ]";
                             return headerText.split("").map((char, index) => (
                                 <span 
                                     key={index} 
-                                    className="header-char inline-block origin-bottom"
-                                    style={{
-                                        backgroundImage: 'linear-gradient(to right, #f97316, #ffaa66, #ffffff)',
-                                        backgroundSize: `${headerText.length * 100}% 100%`,
-                                        backgroundPosition: `${(index / (headerText.length - 1)) * 100}% 0`,
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                    }}
+                                    className="header-char inline-block origin-bottom text-[#111111]"
                                 >
                                     {char === " " ? "\u00A0" : char}
                                 </span>
                             ));
                         })()}
                     </h1>
-                    <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
+                    <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
                 </div>
 
                 <div className='flex flex-col xl:flex-row gap-10 lg:gap-20 perspective-[2000px]'>
@@ -123,9 +117,9 @@ const Experience = () => {
                     {/* Left Side: Data Logs Timeline */}
                     <div className="w-full xl:w-2/3 relative gsap-line-grow-trigger">
 
-                        {/* Vertical glowing line */}
-                        <div className="absolute left-4 md:left-[42px] top-0 w-[2px] bg-orange-500/20 h-full">
-                            <div className="w-full bg-orange-500 gsap-line-grow shadow-[0_0_10px_rgba(255,105,0,0.8)]" />
+                        {/* Vertical line */}
+                        <div className="absolute left-4 md:left-[42px] top-0 w-[2px] bg-[#cfccb8] h-full">
+                            <div className="w-full bg-[#111111] gsap-line-grow" />
                         </div>
 
                         <div className="flex flex-col gap-12">
@@ -134,30 +128,30 @@ const Experience = () => {
 
                                     {/* Timeline Node */}
                                     <div className="relative mt-6 z-10 md:ml-5">
-                                        <div className="w-8 h-8 md:w-12 md:h-12 bg-black border-2 border-orange-500 flex items-center justify-center rotate-45 shadow-[0_0_15px_rgba(255,105,0,0.4)]">
-                                            <div className="w-2 h-2 md:w-3 md:h-3 bg-orange-500" />
+                                        <div className="w-8 h-8 md:w-12 md:h-12 bg-white border-2 border-[#111111] flex items-center justify-center rotate-45 shadow-[4px_4px_0px_#cfccb8]">
+                                            <div className="w-2 h-2 md:w-3 md:h-3 bg-orange-600 animate-pulse" />
                                         </div>
                                     </div>
 
                                     {/* Experience Card */}
                                     <InteractiveCard className="flex-1">
-                                        <div className="bg-[#0a0a0a]/90 border border-orange-500/20 p-4 sm:p-6 md:p-8 relative group hover:border-orange-500/50 transition-colors duration-500">
+                                        <div className="bg-white border border-[#cfccb8] p-4 sm:p-6 md:p-8 relative group hover:border-[#111111] shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111] transition-all duration-300">
 
                                             {/* Decorative Corners */}
-                                            <div className='absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500 z-10 transition-all duration-300 group-hover:-top-1 group-hover:-left-1' />
-                                            <div className='absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500 z-10 transition-all duration-300 group-hover:-bottom-1 group-hover:-right-1' />
+                                            <div className='absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
+                                            <div className='absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
 
                                             {/* Header */}
                                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4" style={{ transform: "translateZ(30px)" }}>
                                                 <div>
-                                                    <h3 className="text-xl md:text-2xl font-bold text-orange-500 tracking-widest uppercase drop-shadow-[0_0_5px_rgba(255,105,0,0.3)]">
+                                                    <h3 className="text-xl md:text-2xl font-bold text-orange-600 tracking-widest uppercase">
                                                         {exp.role}
                                                     </h3>
-                                                    <p className="text-white font-bold uppercase tracking-widest mt-1 text-sm md:text-base">{exp.company}</p>
+                                                    <p className="text-[#111111] font-bold uppercase tracking-widest mt-1 text-sm md:text-base">{exp.company}</p>
                                                 </div>
 
                                                 {/* Duration Badge */}
-                                                <div className="bg-orange-500/10 border border-orange-500/30 px-3 py-1 text-orange-500/80 text-xs tracking-widest uppercase">
+                                                <div className="bg-orange-600/10 border border-orange-600/30 px-3 py-1 text-orange-600 text-xs tracking-widest uppercase font-bold">
                                                     {exp.duration}
                                                 </div>
                                             </div>
@@ -166,9 +160,9 @@ const Experience = () => {
                                             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start" style={{ transform: "translateZ(20px)" }}>
 
                                                 {/* Icon / Image */}
-                                                <div className="w-16 h-16 shrink-0 bg-white/5 border border-orange-500/20 flex items-center justify-center p-2">
+                                                <div className="w-16 h-16 shrink-0 bg-[#f4f2ee] border border-[#cfccb8] flex items-center justify-center p-2">
                                                     {exp.icon ? (
-                                                        <Icon icon={exp.icon} width="40" height="40" className="text-white/60 group-hover:text-white transition-colors" />
+                                                        <Icon icon={exp.icon} width="40" height="40" className="text-neutral-600 group-hover:text-orange-600 transition-colors" />
                                                     ) : (
                                                         <img
                                                             src={exp.image}
@@ -179,8 +173,8 @@ const Experience = () => {
                                                 </div>
 
                                                 {/* Description */}
-                                                <p className="text-white/60 text-sm leading-relaxed tracking-wide">
-                                                    <span className="text-orange-500 mr-2">{'>'}</span>
+                                                <p className="text-neutral-600 text-sm leading-relaxed tracking-wide">
+                                                    <span className="text-orange-600 mr-2 font-bold">{'>'}</span>
                                                     {exp.description}
                                                 </p>
 
@@ -196,50 +190,43 @@ const Experience = () => {
                     {/* Right Side: Credentials / CV */}
                     <div className='w-full xl:w-1/3 h-fit relative xl:sticky top-32 gsap-fade-in'>
                         <InteractiveCard>
-                            <div className='p-6 md:p-8 bg-[#050505] border border-orange-500/30 flex flex-col justify-center items-center relative overflow-hidden group'>
-
-                                {/* Background glow */}
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,105,0,0.1)_0%,transparent_70%)] pointer-events-none" />
+                            <div className='p-6 md:p-8 bg-white border border-[#cfccb8] flex flex-col justify-center items-center relative overflow-hidden group hover:border-[#111111] shadow-[6px_6px_0px_#cfccb8] hover:shadow-[6px_6px_0px_#111111] transition-all duration-300'>
 
                                 {/* HUD Decorative Elements */}
-                                <div className='absolute top-4 left-4 text-orange-500/50 text-[10px] tracking-widest uppercase'>[ SECURITY.CLEARANCE.REQUIRED ]</div>
-                                <div className='absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-orange-500/50' />
-                                <div className='absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-orange-500/50' />
+                                <div className='absolute top-4 left-4 text-neutral-500 font-mono text-[9px] tracking-widest uppercase font-bold'>[ SECURITY.CLEARANCE.REQUIRED ]</div>
+                                <div className='absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
+                                <div className='absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
 
-                                <div className="absolute top-0 left-0 w-full h-[1px] bg-orange-500/50 animate-[dropLine_4s_linear_infinite]" />
+                                <Icon icon="carbon:fingerprint-recognition" width="60" height="60" className="text-[#cfccb8] mt-10 group-hover:text-orange-600 transition-colors duration-500" style={{ transform: "translateZ(20px)" }} />
 
-                                <Icon icon="carbon:fingerprint-recognition" width="60" height="60" className="text-orange-500/30 mt-10 group-hover:text-orange-500 transition-colors duration-500" style={{ transform: "translateZ(20px)" }} />
-
-                                <h1 className='text-orange-500 font-bold text-3xl md:text-5xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(255,105,0,0.3)] mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
+                                <h1 className='text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
                                     CREDENTIALS
                                 </h1>
-                                <p className='text-white/40 text-xs tracking-widest uppercase mt-4 mb-10 text-center' style={{ transform: "translateZ(20px)" }}>
+                                <p className='text-neutral-500 text-xs tracking-widest uppercase mt-4 mb-10 text-center leading-relaxed font-mono font-bold' style={{ transform: "translateZ(20px)" }}>
                                     // Authorized personnel only<br />// Download access data below
                                 </p>
 
                                 <div className="w-full flex flex-col gap-4 relative z-10" style={{ transform: "translateZ(40px)" }}>
                                     <Magnetic>
-                                        <div className='block w-full' onClick={() => setPreviewPdf("/Documets/Resume.pdf")}>
-                                            <button className='flex flex-row items-center justify-between w-full bg-orange-500/5 border border-orange-500/30 text-white p-4 cursor-pointer transition-all duration-300 hover:border-orange-500 hover:bg-orange-500/20 group/btn relative overflow-hidden'>
-                                                <div className="absolute left-0 top-0 w-1 h-full bg-orange-500 scale-y-0 group-hover/btn:scale-y-100 transition-transform origin-top" />
-                                                <div className="flex flex-col items-start pl-2">
-                                                    <span className="text-xs text-orange-500/70 tracking-widest uppercase mb-1">DATA.BLOCK_01</span>
-                                                    <span className="text-sm tracking-widest uppercase relative z-10 group-hover/btn:text-orange-500 transition-colors font-bold">Game Dev Resume</span>
+                                        <div className='block w-full cursor-pointer' onClick={() => setPreviewPdf("/Documets/Resume.pdf")}>
+                                            <button className='flex flex-row items-center justify-between w-full bg-[#f4f2ee] border border-[#cfccb8] text-[#111111] p-4 cursor-pointer hover:border-[#111111] hover:bg-[#eae8e4]/50 group/btn transition-all duration-300 shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111]'>
+                                                <div className="flex flex-col items-start">
+                                                    <span className="text-[9px] font-mono text-orange-600 font-bold tracking-widest uppercase mb-1">DATA.BLOCK_01</span>
+                                                    <span className="text-sm tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">Game Dev Resume</span>
                                                 </div>
-                                                <Icon icon="carbon:document-view" width="24" height="24" className="text-orange-500/50 group-hover/btn:text-orange-500 transition-colors" />
+                                                <Icon icon="carbon:document-view" width="24" height="24" className="text-neutral-500 group-hover/btn:text-orange-600 transition-colors" />
                                             </button>
                                         </div>
                                     </Magnetic>
 
                                     <Magnetic>
-                                        <div className='block w-full' onClick={() => setPreviewPdf("/Documets/Resume2.pdf")}>
-                                            <button className='flex flex-row items-center justify-between w-full bg-orange-500/5 border border-orange-500/30 text-white p-4 cursor-pointer transition-all duration-300 hover:border-orange-500 hover:bg-orange-500/20 group/btn relative overflow-hidden'>
-                                                <div className="absolute left-0 top-0 w-1 h-full bg-orange-500 scale-y-0 group-hover/btn:scale-y-100 transition-transform origin-top" />
-                                                <div className="flex flex-col items-start pl-2">
-                                                    <span className="text-xs text-orange-500/70 tracking-widest uppercase mb-1">DATA.BLOCK_02</span>
-                                                    <span className="text-sm tracking-widest uppercase relative z-10 group-hover/btn:text-orange-500 transition-colors font-bold">Electronics Resume</span>
+                                        <div className='block w-full cursor-pointer' onClick={() => setPreviewPdf("/Documets/Resume2.pdf")}>
+                                            <button className='flex flex-row items-center justify-between w-full bg-[#f4f2ee] border border-[#cfccb8] text-[#111111] p-4 cursor-pointer hover:border-[#111111] hover:bg-[#eae8e4]/50 group/btn transition-all duration-300 shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111]'>
+                                                <div className="flex flex-col items-start">
+                                                    <span className="text-[9px] font-mono text-orange-600 font-bold tracking-widest uppercase mb-1">DATA.BLOCK_02</span>
+                                                    <span className="text-sm tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">Electronics Resume</span>
                                                 </div>
-                                                <Icon icon="carbon:document-view" width="24" height="24" className="text-orange-500/50 group-hover/btn:text-orange-500 transition-colors" />
+                                                <Icon icon="carbon:document-view" width="24" height="24" className="text-neutral-500 group-hover/btn:text-orange-600 transition-colors" />
                                             </button>
                                         </div>
                                     </Magnetic>
@@ -253,34 +240,34 @@ const Experience = () => {
 
             {/* Resume Preview Modal */}
             {previewPdf && (
-                <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#050505]/95 backdrop-blur-md p-4 md:p-10" onClick={() => setPreviewPdf(null)}>
-                    <div className="w-full max-w-5xl h-full max-h-[95vh] md:max-h-[90vh] border border-orange-500/50 bg-[#0a0a0a] flex flex-col relative shadow-[0_0_50px_rgba(255,105,0,0.3)]" onClick={(e) => e.stopPropagation()}>
+                <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#eae8e4]/90 backdrop-blur-md p-4 md:p-10" onClick={() => setPreviewPdf(null)}>
+                    <div className="w-full max-w-5xl h-full max-h-[95vh] md:max-h-[90vh] border-2 border-[#111111] bg-white flex flex-col relative shadow-[8px_8px_0px_#111111]" onClick={(e) => e.stopPropagation()}>
 
                         {/* Header */}
-                        <div className="flex justify-between items-center p-4 border-b border-orange-500/30 bg-[#050505]">
-                            <div className="text-orange-500 uppercase tracking-widest text-sm font-bold flex items-center gap-3">
-                                <span className="w-2 h-2 bg-orange-500 animate-pulse" />
-                                // DOCUMENT.PREVIEW
+                        <div className="flex justify-between items-center p-4 border-b-2 border-[#111111] bg-[#f4f2ee]">
+                            <div className="text-[#111111] uppercase tracking-widest text-sm font-bold flex items-center gap-3 font-mono">
+                                <span className="w-2.5 h-2.5 bg-orange-600 rounded-full animate-pulse" />
+                                [ DOCUMENT.PREVIEW ]
                             </div>
                             <div className="flex gap-4">
-                                <a href={previewPdf} download className="text-[10px] sm:text-xs bg-orange-500 text-black px-2 sm:px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-400 transition-colors flex items-center gap-1 sm:gap-2">
-                                    <Icon icon="carbon:cloud-download" width="16" height="16" />
+                                <a href={previewPdf} download className="text-xs bg-orange-600 text-white border-2 border-[#111111] px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-500 transition-all shadow-[2px_2px_0px_#111111] flex items-center gap-2">
+                                    <Icon icon="carbon:cloud-download" width="16" height="16" /> DOWNLOAD
                                 </a>
-                                <button onClick={() => setPreviewPdf(null)} className="text-[10px] sm:text-xs border border-orange-500/50 text-orange-500 px-2 sm:px-4 py-2 uppercase tracking-widest hover:bg-orange-500/20 transition-colors">
-                                    X
+                                <button onClick={() => setPreviewPdf(null)} className="text-xs border-2 border-[#111111] bg-white text-[#111111] px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-600/10 hover:text-orange-600 transition-all shadow-[2px_2px_0px_#111111]">
+                                    CLOSE
                                 </button>
                             </div>
                         </div>
 
                         {/* PDF Viewer */}
-                        <div className="flex-1 w-full bg-white/5 relative">
+                        <div className="flex-1 w-full bg-[#eae8e4] relative">
                             <iframe src={previewPdf} className="w-full h-full border-none" title="PDF Preview" />
                         </div>
                     </div>
                 </div>
             )}
         </section>
-    )
-}
+    );
+};
 
 export default Experience;

@@ -117,37 +117,27 @@ const Contact = () => {
     }, []);
 
     return (
-        <section id="contact" className="min-h-screen bg-black text-white relative overflow-hidden flex flex-col justify-between">
-
-            {/* Background elements */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500/5 via-black to-black pointer-events-none" />
+        <section id="contact" className="min-h-screen bg-[#eae8e4] text-[#111111] relative overflow-hidden flex flex-col justify-between z-10">
 
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full flex-1">
                 
                 {/* Header */}
                 <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
-                    <div ref={lineRef} className='flex-1 h-[1px] bg-orange-500/20' />
+                    <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
                     <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
                         {(() => {
                             const headerText = "[ SYS.COMM_LINK ]";
                             return headerText.split("").map((char, index) => (
                                 <span 
                                     key={index} 
-                                    className="header-char inline-block origin-bottom"
-                                    style={{
-                                        backgroundImage: 'linear-gradient(to right, #f97316, #ffaa66, #ffffff)',
-                                        backgroundSize: `${headerText.length * 100}% 100%`,
-                                        backgroundPosition: `${(index / (headerText.length - 1)) * 100}% 0`,
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                    }}
+                                    className="header-char inline-block origin-bottom text-[#111111]"
                                 >
                                     {char === " " ? "\u00A0" : char}
                                 </span>
                             ));
                         })()}
                     </h1>
-                    <div className='header-block w-12 h-2 bg-orange-500/50' />
+                    <div className='header-block w-12 h-2 bg-orange-600' />
                 </div>
 
                 <div className='flex flex-col md:flex-row gap-12 lg:gap-20 perspective-[2000px]'>
@@ -155,20 +145,20 @@ const Contact = () => {
                     {/* Left Side: Terminal Form */}
                     <div className='w-full md:w-1/2 flex flex-col gsap-contact-element'>
                         <InteractiveCard>
-                            <div className="bg-[#050505] border border-orange-500/30 p-4 sm:p-6 md:p-10 relative group">
+                            <div className="bg-white border-2 border-[#111111] p-4 sm:p-6 md:p-10 relative group shadow-[6px_6px_0px_#111111]">
                                 
-                                {/* Terminal Styling */}
-                                <div className='absolute top-0 left-0 w-full h-8 bg-orange-500/10 border-b border-orange-500/30 flex items-center px-4'>
+                                {/* Terminal Header */}
+                                <div className='absolute top-0 left-0 w-full h-8 bg-[#f4f2ee] border-b-2 border-[#111111] flex items-center px-4'>
                                     <div className="flex gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                                        <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                                        <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-400" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-500" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-600" />
                                     </div>
-                                    <p className="ml-4 text-orange-500/50 text-[10px] tracking-widest uppercase">bash // root@sudip.dev</p>
+                                    <p className="ml-4 text-neutral-500 text-[9px] tracking-widest uppercase font-mono font-bold">bash // root@sudip.dev</p>
                                 </div>
 
                                 <div className="mt-8 md:mt-10">
-                                    <h2 className='text-orange-500 text-sm tracking-widest uppercase mb-8'>
+                                    <h2 className='text-orange-600 text-sm tracking-widest uppercase mb-8 font-mono font-bold'>
                                         <span className="animate-pulse mr-2">{'>'}</span> 
                                         ./initialize_contact.sh
                                     </h2>
@@ -176,14 +166,14 @@ const Contact = () => {
                                     <form onSubmit={onSubmit} className='flex flex-col gap-6'>
 
                                         <div className='flex flex-col'>
-                                            <label className='text-white/40 text-[10px] tracking-widest uppercase mb-1'>[ ID.NAME ]</label>
+                                            <label className='text-neutral-500 text-[9px] tracking-widest font-mono font-bold uppercase mb-1'>[ ID.NAME ]</label>
                                             <div className="relative group/input">
-                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-orange-500/30 group-hover/input:bg-orange-500 transition-colors" />
-                                                <div className="absolute left-0 bottom-0 w-0 h-[1px] bg-white transition-all duration-500 focus-within:w-full z-10" />
-                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-500">{'>'}</span>
+                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-[#cfccb8] group-hover/input:bg-[#111111] transition-colors" />
+                                                <div className="absolute left-0 bottom-0 w-0 h-[1px] bg-[#111111] transition-all duration-500 focus-within:w-full z-10" />
+                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-600 font-bold">{'>'}</span>
                                                 <input
                                                     type="text"
-                                                    className='w-full bg-transparent h-10 pl-6 text-white placeholder:text-white/20 focus:outline-none transition-all'
+                                                    className='w-full bg-transparent h-10 pl-6 text-[#111111] placeholder:text-neutral-400 focus:outline-none transition-all'
                                                     placeholder='Enter target designation...'
                                                     name='name'
                                                     required
@@ -192,13 +182,13 @@ const Contact = () => {
                                         </div>
 
                                         <div className='flex flex-col'>
-                                            <label className='text-white/40 text-[10px] tracking-widest uppercase mb-1'>[ ID.EMAIL ]</label>
+                                            <label className='text-neutral-500 text-[9px] tracking-widest font-mono font-bold uppercase mb-1'>[ ID.EMAIL ]</label>
                                             <div className="relative group/input">
-                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-orange-500/30 group-hover/input:bg-orange-500 transition-colors" />
-                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-500">{'>'}</span>
+                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-[#cfccb8] group-hover/input:bg-[#111111] transition-colors" />
+                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-600 font-bold">{'>'}</span>
                                                 <input
                                                     type="email"
-                                                    className='w-full bg-transparent h-10 pl-6 text-white placeholder:text-white/20 focus:outline-none transition-all'
+                                                    className='w-full bg-transparent h-10 pl-6 text-[#111111] placeholder:text-neutral-400 focus:outline-none transition-all'
                                                     placeholder='Enter return address...'
                                                     name='email'
                                                     required
@@ -207,13 +197,13 @@ const Contact = () => {
                                         </div>
 
                                         <div className='flex flex-col'>
-                                            <label className='text-white/40 text-[10px] tracking-widest uppercase mb-1'>[ DATA.PAYLOAD ]</label>
-                                            <div className="relative group/input mt-2 border border-orange-500/20 group-hover/input:border-orange-500/50 bg-white/5 p-4">
-                                                <span className="absolute left-4 top-4 text-orange-500">{'>'}</span>
+                                            <label className='text-neutral-500 text-[9px] tracking-widest font-mono font-bold uppercase mb-1'>[ DATA.PAYLOAD ]</label>
+                                            <div className="relative group/input mt-2 border border-[#cfccb8] group-hover/input:border-[#111111] bg-[#f4f2ee]/40 p-4">
+                                                <span className="absolute left-4 top-4 text-orange-600 font-bold">{'>'}</span>
                                                 <textarea
                                                     name="message"
                                                     placeholder='Construct message payload here...'
-                                                    className='w-full bg-transparent h-24 pl-6 text-white placeholder:text-white/20 focus:outline-none transition-all resize-none'
+                                                    className='w-full bg-transparent h-24 pl-6 text-[#111111] placeholder:text-neutral-400 focus:outline-none transition-all resize-none'
                                                     required
                                                 ></textarea>
                                             </div>
@@ -224,10 +214,10 @@ const Contact = () => {
                                                 <button
                                                     type="submit"
                                                     disabled={isTransmitting}
-                                                    className={`w-full relative flex items-center justify-center p-4 border transition-all duration-300 group/btn overflow-hidden ${isTransmitting ? 'border-green-500/50 text-green-500' : 'border-orange-500/50 text-orange-500 hover:text-white'}`}
+                                                    className={`w-full relative flex items-center justify-center p-4 border-2 transition-all duration-300 group/btn overflow-hidden cursor-pointer ${isTransmitting ? 'border-green-600 text-green-600 bg-green-50' : 'border-[#111111] text-[#111111] bg-white hover:text-white shadow-[4px_4px_0px_#111111] hover:shadow-[1px_1px_0px_#111111] hover:translate-x-[3px] hover:translate-y-[3px]'}`}
                                                 >
-                                                    {!isTransmitting && <div className="absolute inset-0 bg-orange-500 transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-500 ease-out z-0" />}
-                                                    <span className="tracking-widest uppercase text-xs relative z-10 font-bold">
+                                                    {!isTransmitting && <div className="absolute inset-0 bg-[#111111] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-500 ease-out z-0" />}
+                                                    <span className="tracking-widest uppercase text-xs relative z-10 font-bold font-mono">
                                                         {result || "EXECUTE TRANSMISSION"}
                                                     </span>
                                                 </button>
@@ -243,7 +233,7 @@ const Contact = () => {
                     {/* Right Side: Modules */}
                     <div className='w-full md:w-1/2 flex flex-col gap-8'>
                         
-                        <div className="text-white/40 tracking-widest uppercase text-xs mb-4 gsap-contact-element flex flex-col gap-2 border-l-2 border-orange-500/30 pl-4">
+                        <div className="text-neutral-500 font-mono font-bold tracking-widest uppercase text-xs mb-4 gsap-contact-element flex flex-col gap-2 border-l-2 border-[#cfccb8] pl-4">
                             <p>// Awaiting external connection</p>
                             <p>// Direct communication channels open</p>
                             <p>// Establish uplink below</p>
@@ -252,24 +242,24 @@ const Contact = () => {
                         {/* Direct Contacts */}
                         <div className="flex flex-col gap-4">
                             <InteractiveCard className="gsap-contact-element">
-                                <a href="mailto:iamsudippan@gmail.com" className="block bg-[#050505] border border-orange-500/20 p-6 relative group hover:border-orange-500/50 transition-colors overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-50 transition-opacity">
-                                        <Icon icon="carbon:email" width="60" height="60" className="text-orange-500" />
+                                <a href="mailto:iamsudippan@gmail.com" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111] overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-2 opacity-15 group-hover:opacity-40 transition-opacity">
+                                        <Icon icon="carbon:email" width="60" height="60" className="text-orange-600" />
                                     </div>
-                                    <h2 className="text-orange-500/50 text-[10px] tracking-widest uppercase mb-2">[ UPLINK.EMAIL ]</h2>
-                                    <p className='text-white tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-500 transition-colors'>
+                                    <h2 className="text-[#111111]/70 font-mono text-[9px] tracking-widest uppercase mb-2 font-bold">[ UPLINK.EMAIL ]</h2>
+                                    <p className='text-[#111111] tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-600 transition-colors'>
                                         iamsudippan@gmail.com
                                     </p>
                                 </a>
                             </InteractiveCard>
 
                             <InteractiveCard className="gsap-contact-element">
-                                <a href="tel:+918900359269" className="block bg-[#050505] border border-orange-500/20 p-6 relative group hover:border-orange-500/50 transition-colors overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-50 transition-opacity">
-                                        <Icon icon="carbon:phone" width="60" height="60" className="text-orange-500" />
+                                <a href="tel:+918900359269" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111] overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-2 opacity-15 group-hover:opacity-40 transition-opacity">
+                                        <Icon icon="carbon:phone" width="60" height="60" className="text-orange-600" />
                                     </div>
-                                    <h2 className="text-orange-500/50 text-[10px] tracking-widest uppercase mb-2">[ UPLINK.PHONE ]</h2>
-                                    <p className='text-white tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-500 transition-colors'>
+                                    <h2 className="text-[#111111]/70 font-mono text-[9px] tracking-widest uppercase mb-2 font-bold">[ UPLINK.PHONE ]</h2>
+                                    <p className='text-[#111111] tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-600 transition-colors'>
                                         +91 8900359269
                                     </p>
                                 </a>
@@ -279,9 +269,9 @@ const Contact = () => {
                         {/* Social Grid */}
                         <div className='mt-8 gsap-contact-element'>
                             <div className="flex items-center gap-4 mb-6">
-                                <div className='w-4 h-[1px] bg-orange-500/50' />
-                                <h2 className="text-orange-500 text-xs tracking-widest uppercase">[ NETWORK.NODES ]</h2>
-                                <div className='flex-1 h-[1px] bg-orange-500/20' />
+                                <div className='w-4 h-[1px] bg-[#cfccb8]' />
+                                <h2 className="text-orange-600 font-mono text-[10px] tracking-widest uppercase font-bold">[ NETWORK.NODES ]</h2>
+                                <div className='flex-1 h-[1px] bg-[#cfccb8]' />
                             </div>
 
                             <div className='grid grid-cols-2 gap-4'>
@@ -292,9 +282,9 @@ const Contact = () => {
                                                 href={social.href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className='flex items-center justify-center bg-white/5 border border-orange-500/20 p-4 hover:bg-orange-500 hover:border-orange-500 transition-all duration-300 group'
+                                                className='flex items-center justify-center bg-white border border-[#cfccb8] hover:bg-[#111111] hover:border-[#111111] p-4 transition-all duration-300 group shadow-[4px_4px_0px_#cfccb8] hover:shadow-[1px_1px_0px_#111111] hover:translate-x-[3px] hover:translate-y-[3px]'
                                             >
-                                                <span className='text-[10px] tracking-widest uppercase text-white/60 group-hover:text-black font-bold group-hover:drop-shadow-none drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]'>
+                                                <span className='text-[10px] tracking-widest uppercase text-neutral-800 group-hover:text-white font-bold transition-colors'>
                                                     {social.name}
                                                 </span>
                                             </a>
@@ -310,12 +300,12 @@ const Contact = () => {
             </div>
 
             {/* Bottom Marquee Footer */}
-            <div className="mt-20 border-t border-orange-500/20 bg-[#050505]">
+            <div className="mt-20 border-t-2 border-[#111111] bg-white">
                 <Marque
                     items={items}
-                    className='text-white'
+                    className='text-[#111111]'
                     iconName='carbon:connection-signal'
-                    iconClassname='text-orange-500'
+                    iconClassname='text-orange-600'
                 />
             </div>
 

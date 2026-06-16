@@ -19,7 +19,7 @@ function AutoType({ subTitle, title, text, Ntextcolor, AnimTextcolor, NtextSize,
 
   return (
     <h2 ref={AutotypeRef} className={`font-bold`}>
-      <span className={`uppercase tracking-[0.5rem] ${NtextSize} ${Ntextcolor}`}>{subTitle}</span> <br />
+      <span className={`uppercase tracking-[0.25rem] md:tracking-[0.5rem] ${NtextSize} ${Ntextcolor}`}>{subTitle}</span> <br />
       <span className={`${TtextSize} ${Ttextcolor} text-${TtextAlign}`}>{title}</span>
       <span className={`${AnimTextcolor} ${AnimTextSize}`}>
         <Typewriter
