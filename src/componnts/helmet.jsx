@@ -5,10 +5,13 @@ import * as THREE from 'three';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
+export function Helmet({ IsReady, wireframeOnly = false, isMobile = false, isExploded = false, ...props }) {
   const shapeContainer = useRef(null);
   const mouseRotateRef = useRef(null);
   const { nodes, materials } = useGLTF('/Model/sci-fi_helmet (1K).glb');
+
+  const explosionFactor = useRef({ value: 0 });
+  const meshesRef = useRef([]);
 
   // Dedicated wireframe material for wireframeOnly mode
   const wireframeMaterialOnly = useRef(
@@ -70,6 +73,42 @@ export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
     }
   }
 
+  // Initialize directions and original positions once when model is loaded/mounted
+  useEffect(() => {
+    if (!mouseRotateRef.current) return;
+
+    const meshes = [];
+    mouseRotateRef.current.traverse((child) => {
+      if (child.isMesh && !child.userData.isWireframe) {
+        if (!child.userData.initialized) {
+          child.userData.originalPosition = child.position.clone();
+          
+          // Compute geometry bounding box
+          child.geometry.computeBoundingBox();
+          const center = new THREE.Vector3();
+          child.geometry.boundingBox.getCenter(center);
+          
+          // Add local position to find center relative to helmet origin
+          center.add(child.position);
+
+          if (center.length() > 0.1) {
+            child.userData.direction = center.clone().normalize();
+          } else {
+            // Fallback direction if centered at origin
+            child.userData.direction = new THREE.Vector3(
+              Math.sin(child.id || Math.random()) * 0.5,
+              Math.cos(child.id || Math.random()) * 0.5,
+              0.5
+            ).normalize();
+          }
+          child.userData.initialized = true;
+        }
+        meshes.push(child);
+      }
+    });
+    meshesRef.current = meshes;
+  }, [nodes, materials, wireframeOnly]);
+
   // Apply solid background and clone wireframe on top in wireframeOnly mode
   useEffect(() => {
     if (!wireframeOnly) return;
@@ -77,7 +116,7 @@ export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
 
     const meshesToClone = [];
     mouseRotateRef.current.traverse((child) => {
-      if (child.isMesh) {
+      if (child.isMesh && !child.userData.isWireframe) {
         // Set main mesh material to solid background
         child.material = solidBackgroundMaterial;
         meshesToClone.push(child);
@@ -87,10 +126,8 @@ export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
     const createdWireframeMeshes = [];
     meshesToClone.forEach((mesh) => {
       const wireframeMesh = new THREE.Mesh(mesh.geometry, wireframeMaterialOnly);
-      wireframeMesh.position.copy(mesh.position);
-      wireframeMesh.rotation.copy(mesh.rotation);
-      wireframeMesh.scale.copy(mesh.scale);
-      mesh.parent.add(wireframeMesh);
+      wireframeMesh.userData.isWireframe = true;
+      mesh.add(wireframeMesh);
       createdWireframeMeshes.push(wireframeMesh);
     });
 
@@ -110,7 +147,7 @@ export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
 
     const meshesToClone = [];
     mouseRotateRef.current.traverse((child) => {
-      if (child.isMesh) {
+      if (child.isMesh && !child.userData.isWireframe) {
         meshesToClone.push(child);
       }
     });
@@ -118,10 +155,8 @@ export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
     const createdWireframeMeshes = [];
     meshesToClone.forEach((mesh) => {
       const wireframeMesh = new THREE.Mesh(mesh.geometry, wireframeMaterial);
-      wireframeMesh.position.copy(mesh.position);
-      wireframeMesh.rotation.copy(mesh.rotation);
-      wireframeMesh.scale.copy(mesh.scale);
-      mesh.parent.add(wireframeMesh);
+      wireframeMesh.userData.isWireframe = true;
+      mesh.add(wireframeMesh);
       createdWireframeMeshes.push(wireframeMesh);
     });
 
@@ -177,37 +212,76 @@ export function Helmet({ IsReady, wireframeOnly = false, ...props }) {
     }, "<");
   }, { dependencies: [IsReady, wireframeOnly] });
 
+  // Disassemble animation triggers for standard interactive model (on hover / click)
+  useGSAP(() => {
+    if (wireframeOnly) return;
+    
+    gsap.to(explosionFactor.current, {
+      value: isExploded ? 1.15 : 0,
+      duration: isExploded ? 1.2 : 1.4,
+      ease: isExploded ? "power2.out" : "power2.inOut",
+      overwrite: "auto"
+    });
+  }, { dependencies: [isExploded, wireframeOnly] });
+
+  // Gentle floating looping disassemble animation for wireframeOnly model (bottom of page)
+  useGSAP(() => {
+    if (!wireframeOnly) return;
+    
+    gsap.to(explosionFactor.current, {
+      value: 0.65,
+      duration: 3.5,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut"
+    });
+  }, { dependencies: [wireframeOnly] });
+
   // Capture global mouse independently of Canvas overlay blocking (standard mode only)
   const mouse = useRef({ x: 0, y: 0 });
   useEffect(() => {
-    if (wireframeOnly) return;
+    if (wireframeOnly || isMobile) return;
     const onMouseMove = (e) => {
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
     window.addEventListener('mousemove', onMouseMove);
     return () => window.removeEventListener('mousemove', onMouseMove);
-  }, [wireframeOnly]);
+  }, [wireframeOnly, isMobile]);
 
   useFrame((state, delta) => {
+    // 1. Handle rotation branches
     if (wireframeOnly) {
       if (mouseRotateRef.current) {
         // Slowly rotate clockwise (negative direction)
         mouseRotateRef.current.rotation.y -= delta * 0.35;
       }
-      return;
+    } else if (IsReady && mouseRotateRef.current) {
+      if (isMobile) {
+        // On mobile, the helmet remains static, facing directly forward towards the user
+        mouseRotateRef.current.rotation.x = THREE.MathUtils.damp(mouseRotateRef.current.rotation.x, 0, 3, delta);
+        mouseRotateRef.current.rotation.y = THREE.MathUtils.damp(mouseRotateRef.current.rotation.y, 0, 3, delta);
+      } else {
+        // Calculate target rotation based on normalized mouse coordinates
+        const targetX = -(mouse.current.y * Math.PI) / 8; // pitch limits
+        const targetY = (mouse.current.x * Math.PI) / 6; // yaw limits
+
+        // Smoothly damp current rotation toward target
+        mouseRotateRef.current.rotation.x = THREE.MathUtils.damp(mouseRotateRef.current.rotation.x, targetX, 3, delta);
+        mouseRotateRef.current.rotation.y = THREE.MathUtils.damp(mouseRotateRef.current.rotation.y, targetY, 3, delta);
+      }
     }
 
-    if (!IsReady) return;
-
-    if (mouseRotateRef.current) {
-      // Calculate target rotation based on normalized mouse coordinates
-      const targetX = -(mouse.current.y * Math.PI) / 8; // pitch limits
-      const targetY = (mouse.current.x * Math.PI) / 6; // yaw limits
-
-      // Smoothly damp current rotation toward target
-      mouseRotateRef.current.rotation.x = THREE.MathUtils.damp(mouseRotateRef.current.rotation.x, targetX, 3, delta);
-      mouseRotateRef.current.rotation.y = THREE.MathUtils.damp(mouseRotateRef.current.rotation.y, targetY, 3, delta);
+    // 2. Apply disassemble explosion offset to all meshes
+    if (mouseRotateRef.current && meshesRef.current.length > 0) {
+      const factor = explosionFactor.current.value;
+      meshesRef.current.forEach((mesh) => {
+        if (mesh.userData.initialized) {
+          // Calculate new position: originalPosition + direction * factor * scaling
+          mesh.position.copy(mesh.userData.originalPosition)
+            .addScaledVector(mesh.userData.direction, factor * 0.45);
+        }
+      });
     }
   });
 

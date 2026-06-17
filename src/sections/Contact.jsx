@@ -64,9 +64,9 @@ const Contact = () => {
     useGSAP(() => {
         // Robust isolated scroll triggers for all contact elements
         const elements = gsap.utils.toArray('.gsap-contact-element');
-        
+
         elements.forEach((el) => {
-            gsap.fromTo(el, 
+            gsap.fromTo(el,
                 { opacity: 0, y: 30 },
                 {
                     opacity: 1,
@@ -75,7 +75,7 @@ const Contact = () => {
                     ease: "power2.out",
                     scrollTrigger: {
                         trigger: el,
-                        start: "top 90%", 
+                        start: "top 90%",
                         toggleActions: "play none none none"
                     }
                 }
@@ -98,20 +98,20 @@ const Contact = () => {
                 transformOrigin: "right center",
                 ease: "power2.out",
             })
-            .from(headingRef.current.querySelectorAll('.header-char'), {
-                duration: 0.6,
-                opacity: 0,
-                y: 30,
-                rotateX: -90,
-                stagger: 0.03,
-                ease: "back.out(1.7)",
-            }, "-=0.2")
-            .from(lineRef.current, {
-                duration: 0.8,
-                scaleX: 0,
-                transformOrigin: "right center",
-                ease: "power3.out",
-            }, "-=0.4");
+                .from(headingRef.current.querySelectorAll('.header-char'), {
+                    duration: 0.6,
+                    opacity: 0,
+                    y: 30,
+                    rotateX: -90,
+                    stagger: 0.03,
+                    ease: "back.out(1.7)",
+                }, "-=0.2")
+                .from(lineRef.current, {
+                    duration: 0.8,
+                    scaleX: 0,
+                    transformOrigin: "right center",
+                    ease: "power3.out",
+                }, "-=0.4");
         }
 
     }, []);
@@ -120,7 +120,7 @@ const Contact = () => {
         <section id="contact" className="min-h-screen bg-[#eae8e4] text-[#111111] relative overflow-hidden flex flex-col justify-between z-10">
 
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full flex-1">
-                
+
                 {/* Header */}
                 <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
                     <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
@@ -128,8 +128,8 @@ const Contact = () => {
                         {(() => {
                             const headerText = "[ SYS.COMM_LINK ]";
                             return headerText.split("").map((char, index) => (
-                                <span 
-                                    key={index} 
+                                <span
+                                    key={index}
                                     className="header-char inline-block origin-bottom text-[#111111]"
                                 >
                                     {char === " " ? "\u00A0" : char}
@@ -146,7 +146,7 @@ const Contact = () => {
                     <div className='w-full md:w-1/2 flex flex-col gsap-contact-element'>
                         <InteractiveCard>
                             <div className="bg-white border-2 border-[#111111] p-4 sm:p-6 md:p-10 relative group shadow-[6px_6px_0px_#111111]">
-                                
+
                                 {/* Terminal Header */}
                                 <div className='absolute top-0 left-0 w-full h-8 bg-[#f4f2ee] border-b-2 border-[#111111] flex items-center px-4'>
                                     <div className="flex gap-2">
@@ -159,7 +159,7 @@ const Contact = () => {
 
                                 <div className="mt-8 md:mt-10">
                                     <h2 className='text-orange-600 text-sm tracking-widest uppercase mb-8 font-mono font-bold'>
-                                        <span className="animate-pulse mr-2">{'>'}</span> 
+                                        <span className="animate-pulse mr-2">{'>'}</span>
                                         ./initialize_contact.sh
                                     </h2>
 
@@ -232,11 +232,11 @@ const Contact = () => {
 
                     {/* Right Side: Modules */}
                     <div className='w-full md:w-1/2 flex flex-col gap-8'>
-                        
-                        <div className="text-neutral-500 font-mono font-bold tracking-widest uppercase text-xs mb-4 gsap-contact-element flex flex-col gap-2 border-l-2 border-[#cfccb8] pl-4">
+
+                        <div className="hidden lg:flex flex-col text-end mt-5 md:mt-0 px-5 md:px-10 text-xl font-light tracking-widest uppercase text-neutral-500">
+                            <p>// Establish uplink below</p>
                             <p>// Awaiting external connection</p>
                             <p>// Direct communication channels open</p>
-                            <p>// Establish uplink below</p>
                         </div>
 
                         {/* Direct Contacts */}

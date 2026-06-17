@@ -19,6 +19,7 @@ const Hero = ({ IsReady }) => {
     const isMobile = useMediaQuery({ maxWidth: 767 });
     const [activeCarousel, setActiveCarousel] = useState(0);
     const [isBtnHovered, setIsBtnHovered] = useState(false);
+    const [isHelmetExploded, setIsHelmetExploded] = useState(false);
 
     const projectImages = [
         "/Images/perfume bottle.jpg",
@@ -198,11 +199,27 @@ const Hero = ({ IsReady }) => {
                             </span>
                         </div>
 
-                        {/* Subtle atmospheric glow behind the helmet */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] md:w-[70%] md:h-[70%] rounded-full bg-[radial-gradient(circle,_rgba(255,106,0,0.08)_0%,_rgba(207,204,184,0.2)_45%,_transparent_75%)] blur-3xl pointer-events-none z-0 animate-pulse-slow" />
+                        {/* Technological Reticle & Glow Background to make the Helmet stand out */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] md:w-[450px] md:h-[450px] rounded-full border border-[#cfccb8]/20 flex items-center justify-center pointer-events-none z-0">
+                            {/* Outer dashed rotating ring */}
+                            <div className="absolute inset-0 rounded-full border border-dashed border-orange-600/20 animate-spin-slow" />
+                            {/* Inner rotating ring */}
+                            <div className="absolute w-[90%] h-[90%] rounded-full border border-double border-[#cfccb8]/15 animate-spin-slow-reverse" />
+                            {/* Technical Grid Crosshairs */}
+                            <div className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-[#cfccb8]/20 to-transparent" />
+                            <div className="absolute h-full w-[1px] bg-gradient-to-b from-transparent via-[#cfccb8]/20 to-transparent" />
+                            {/* Strong Ambient Glow */}
+                            <div className="absolute w-[80%] h-[80%] rounded-full bg-[radial-gradient(circle,_rgba(255,106,0,0.18)_0%,_rgba(207,204,184,0.35)_45%,_transparent_75%)] blur-3xl animate-pulse-slow" />
+                        </div>
 
                         {/* Interactive Canvas */}
-                        <div className="absolute inset-0 w-full h-full z-10 pointer-events-auto">
+                        <div 
+                            className="absolute inset-0 w-full h-full z-10 pointer-events-auto"
+                            style={{ cursor: 'pointer' }}
+                            onMouseEnter={() => !isMobile && setIsHelmetExploded(true)}
+                            onMouseLeave={() => !isMobile && setIsHelmetExploded(false)}
+                            onClick={() => isMobile && setIsHelmetExploded(!isHelmetExploded)}
+                        >
                             <Canvas shadows gl={{ localClippingEnabled: true }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="w-full h-full">
                                 <ambientLight intensity={1.5} />
                                 <Environment resolution={256}>
@@ -214,12 +231,12 @@ const Hero = ({ IsReady }) => {
                                     </group>
                                 </Environment>
                                 <SciFiGrid IsReady={IsReady} />
-                                <Helmet IsReady={IsReady} position={isMobile ? [0, -2.1, 0] : [0, -2.9, 0.5]} shadows scale={isMobile ? 0.6 : 0.82} />
+                                <Helmet IsReady={IsReady} isMobile={isMobile} isExploded={isHelmetExploded} position={isMobile ? [0, -2.9, 0] : [0, -2.9, 0.5]} shadows scale={isMobile ? 0.85 : 0.82} />
                             </Canvas>
                         </div>
 
                         {/* Circular View Button (overlapping the canvas bottom) */}
-                        <div 
+                        <div
                             className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 pointer-events-auto flex items-center justify-center"
                             onMouseEnter={() => setIsBtnHovered(true)}
                             onMouseLeave={() => setIsBtnHovered(false)}
@@ -230,7 +247,7 @@ const Hero = ({ IsReady }) => {
                                     {projectImages.map((img, i) => {
                                         const angle = i * (360 / projectImages.length);
                                         return (
-                                            <div 
+                                            <div
                                                 key={i}
                                                 className="absolute left-1/2 top-1/2 pointer-events-auto"
                                                 style={{
@@ -241,10 +258,10 @@ const Hero = ({ IsReady }) => {
                                             >
                                                 {/* Counter-rotating wrapper to keep image upright */}
                                                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-[#111111] bg-white overflow-hidden shadow-[3px_3px_0px_#cfccb8] animate-counter-orbit">
-                                                    <img 
-                                                        src={img} 
-                                                        alt="Project thumbnail" 
-                                                        className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-300 hover:scale-125 cursor-pointer pointer-events-auto" 
+                                                    <img
+                                                        src={img}
+                                                        alt="Project thumbnail"
+                                                        className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-300 hover:scale-125 cursor-pointer pointer-events-auto"
                                                     />
                                                 </div>
                                             </div>
@@ -258,11 +275,6 @@ const Hero = ({ IsReady }) => {
                                     View Works
                                 </button>
                             </Link>
-                        </div>
-
-                        {/* Branding Mark */}
-                        <div className="absolute bottom-6 left-6 text-xs font-mono text-neutral-400 tracking-widest z-20">
-                            ® portfolio.ver.2026
                         </div>
                     </div>
 
@@ -285,7 +297,7 @@ const Hero = ({ IsReady }) => {
                                         <Lightformer form="circle" intensity={3} color="#ffffff" position={[0, 3, 1]} scale={10} />
                                     </group>
                                 </Environment>
-                                <Helmet IsReady={IsReady} wireframeOnly={true} position={[0, -3.5, 0.5]} scale={1.05} />
+                                <Helmet IsReady={IsReady} wireframeOnly={true} position={[0, -4.0, 0.5]} scale={1.05} />
                             </Canvas>
                         </div>
                     </div>

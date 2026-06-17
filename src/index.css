@@ -176,4 +176,18 @@ body::before {
 
 .animate-counter-orbit {
   animation: counterOrbit 25s linear infinite;
-}
+}
+
+@keyframes techSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: techSpin 45s linear infinite;
+}
+
+.animate-spin-slow-reverse {
+  animation: techSpin 30s linear infinite reverse;
+}
+
