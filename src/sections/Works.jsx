@@ -82,6 +82,22 @@ const Works = () => {
         return "LAUNCH_PROJECT";
     };
 
+    const hoverTimeoutRef = useRef(null);
+
+    const handleProjectHover = (projectInfo) => {
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = setTimeout(() => {
+            setActiveProject(projectInfo);
+        }, 100);
+    };
+
+    // Clean up hover timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        };
+    }, []);
+
     // Default to the first Blender project when loaded
     useEffect(() => {
         if (!activeProject && BlenderProjects.length > 0) {
@@ -415,7 +431,7 @@ const Works = () => {
                                             <div
                                                 key={index}
                                                 className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
-                                                onMouseEnter={() => setActiveProject({ type: 'unreal', ...project })}
+                                                onMouseEnter={() => handleProjectHover({ type: 'unreal', ...project })}
                                             >
                                                 <div className="flex flex-col pl-2">
                                                     <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -462,7 +478,7 @@ const Works = () => {
                                             <div
                                                 key={index}
                                                 className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
-                                                onMouseEnter={() => setActiveProject({ type: 'blender', ...project })}
+                                                onMouseEnter={() => handleProjectHover({ type: 'blender', ...project })}
                                             >
                                                 <div className="flex flex-col pl-2">
                                                     <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -523,7 +539,7 @@ const Works = () => {
                                                 <div
                                                     key={project.id}
                                                     className={`gsap-coding-row pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
-                                                    onMouseEnter={() => setActiveProject({ type: 'coding', ...project })}
+                                                    onMouseEnter={() => handleProjectHover({ type: 'coding', ...project })}
                                                 >
                                                     <div className="flex flex-col pl-2">
                                                         <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -566,7 +582,7 @@ const Works = () => {
                                                     <div
                                                         key={index}
                                                         className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
-                                                        onMouseEnter={() => setActiveProject({ type: 'vlsi', ...project })}
+                                                        onMouseEnter={() => handleProjectHover({ type: 'vlsi', ...project })}
                                                     >
                                                         <div className="flex flex-col pl-2">
                                                             <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">

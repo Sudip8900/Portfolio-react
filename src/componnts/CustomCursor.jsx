@@ -25,6 +25,7 @@ const CustomCursor = () => {
 
         let isHovering = 'none'; // 'none', 'link', 'text'
         let hoveredElement = null;
+        let hoveredRect = null;
         let rippleIndex = 0;
 
         // Initial setup
@@ -53,6 +54,7 @@ const CustomCursor = () => {
                     hoveredElement = isLinkOrBtn;
                     
                     const rect = isLinkOrBtn.getBoundingClientRect();
+                    hoveredRect = rect;
                     gsap.to(cursor, {
                         width: rect.width + 16,
                         height: rect.height + 16,
@@ -68,11 +70,15 @@ const CustomCursor = () => {
                         scale: 0, // hide dot on link to let bounding box shine
                         duration: 0.3
                     });
+                } else {
+                    // Update cached rect when mouse moves within the same link/btn
+                    hoveredRect = isLinkOrBtn.getBoundingClientRect();
                 }
             } else {
                 if (isHovering !== 'none') {
                     isHovering = 'none';
                     hoveredElement = null;
+                    hoveredRect = null;
                     
                     gsap.to(cursor, {
                         width: 40,
@@ -124,16 +130,25 @@ const CustomCursor = () => {
             }
         };
 
+        const onScroll = () => {
+            if (hoveredElement) {
+                hoveredRect = hoveredElement.getBoundingClientRect();
+            }
+        };
+
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mouseup', onMouseUp);
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         const render = () => {
             if (isHovering === 'link' && hoveredElement) {
+                if (!hoveredRect) {
+                    hoveredRect = hoveredElement.getBoundingClientRect();
+                }
                 // Magnetic snap to bounding box center
-                const rect = hoveredElement.getBoundingClientRect();
-                const targetX = rect.left + rect.width / 2;
-                const targetY = rect.top + rect.height / 2;
+                const targetX = hoveredRect.left + hoveredRect.width / 2;
+                const targetY = hoveredRect.top + hoveredRect.height / 2;
                 
                 pX += (targetX - pX) * 0.2;
                 pY += (targetY - pY) * 0.2;
@@ -174,6 +189,7 @@ const CustomCursor = () => {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mousedown', onMouseDown);
             window.removeEventListener('mouseup', onMouseUp);
+            window.removeEventListener('scroll', onScroll);
             cancelAnimationFrame(frameId);
         };
     }, []);

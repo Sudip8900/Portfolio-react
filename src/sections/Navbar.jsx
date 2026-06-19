@@ -9,8 +9,9 @@ const Navbar = ({ IsReady }) => {
     const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [visible, setVisible] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
     const mobileMenuRef = useRef(null);
+    const lastScrollYRef = useRef(0);
+    const isOpenRef = useRef(isOpen);
 
     const sectionsList = ['home', 'about', 'works', 'experience', 'contact'];
 
@@ -22,37 +23,44 @@ const Navbar = ({ IsReady }) => {
         contact: 'carbon:email'
     };
 
+    // Keep isOpenRef in sync with state to avoid re-registering scroll listener
+    useEffect(() => {
+        isOpenRef.current = isOpen;
+    }, [isOpen]);
+
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
+            const lastScrollY = lastScrollYRef.current;
 
-            if (currentScrollY > 50) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
+            const nextScrolled = currentScrollY > 50;
 
             // Determine scroll direction and visibility
+            let nextVisible = true;
             if (currentScrollY <= 50) {
-                setVisible(true);
+                nextVisible = true;
             } else if (currentScrollY > lastScrollY && currentScrollY > 120) {
                 // Scrolling down - hide navbar if menu is closed
-                if (!isOpen) {
-                    setVisible(false);
+                if (!isOpenRef.current) {
+                    nextVisible = false;
                 }
             } else if (currentScrollY < lastScrollY) {
                 // Scrolling up - show navbar
-                setVisible(true);
+                nextVisible = true;
             }
 
-            setLastScrollY(currentScrollY);
+            // Only update states if they actually changed to prevent redundant renders
+            setScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev));
+            setVisible((prev) => (prev !== nextVisible ? nextVisible : prev));
+
+            lastScrollYRef.current = currentScrollY;
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         scrollSpy.update();
 
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [lastScrollY, isOpen]);
+    }, []);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);

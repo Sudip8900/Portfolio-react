@@ -182,10 +182,30 @@ const ContactSummary = () => {
             });
             animId = requestAnimationFrame(animate);
         };
-        animate();
+
+        // Use IntersectionObserver to pause when offscreen
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (!animId) {
+                        animate();
+                    }
+                } else {
+                    if (animId) {
+                        cancelAnimationFrame(animId);
+                        animId = null;
+                    }
+                }
+            });
+        }, { threshold: 0.05 });
+
+        observer.observe(canvas);
 
         return () => { 
-            cancelAnimationFrame(animId); 
+            observer.disconnect();
+            if (animId) {
+                cancelAnimationFrame(animId); 
+            }
             window.removeEventListener('resize', resize); 
             canvas.removeEventListener('mousemove', handleMouseMove);
             canvas.removeEventListener('mouseleave', handleMouseLeave);

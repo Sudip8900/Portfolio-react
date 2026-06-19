@@ -1,42 +1,57 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
+import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const AboutSummery = () => {
+    const containerRef = useRef(null);
+
     useGSAP(() => {
+        if (!containerRef.current) return;
+
+        // Use the static section container as the trigger to prevent layout recalculation overhead (Forced Reflow)
         gsap.to("#title-about-1", {
             xPercent: 20,
             scrollTrigger: {
-                trigger: "#title-about-1",
-                scrub: true,
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
             },
         });
         gsap.to("#title-about-2", {
             xPercent: -30,
             scrollTrigger: {
-                trigger: "#title-about-2",
-                scrub: true,
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
             },
         });
         gsap.to("#title-about-3", {
             xPercent: 100,
             scrollTrigger: {
-                trigger: "#title-about-3",
-                scrub: true,
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
             },
         });
         gsap.to("#title-about-4", {
             xPercent: -100,
             scrollTrigger: {
-                trigger: "#title-about-4",
-                scrub: true,
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
             },
         });
-    });
+    }, { scope: containerRef });
+
     return (
-        <section className="mt-32 overflow-hidden leading-snug text-center mb-42 contact-text-responsive relative">
+        <section ref={containerRef} className="mt-32 overflow-hidden leading-snug text-center mb-42 contact-text-responsive relative">
             {/* Background Decorative Grid Lines */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.015)_1px,transparent_1px)] bg-[size:100%_40px] pointer-events-none z-0" />
             
