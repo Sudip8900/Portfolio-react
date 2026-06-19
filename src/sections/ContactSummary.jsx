@@ -340,7 +340,7 @@ const ContactSummary = () => {
                     <span className="absolute top-1 right-10 text-[8px] font-mono text-neutral-400 hidden md:block transition-all duration-300 group-hover:translate-x-2 group-hover:-translate-y-2 font-bold"><DecryptedText text="X:FF Y:FF" /></span>
 
                     {/* INCOMING TRANSMISSION label */}
-                    <div className="incoming-label absolute -top-4 left-1/2 -translate-x-1/2 text-[#111111] text-[10px] md:text-xs tracking-[0.3em] uppercase flex items-center gap-3 whitespace-nowrap bg-white px-5 py-1.5 border-2 border-[#111111] shadow-[4px_4px_0px_#111111] rounded-none" style={{ transform: 'translateZ(30px)' }}>
+                    <div className="incoming-label absolute -top-4 left-1/2 -translate-x-1/2 text-[#111111] text-[10px] md:text-xs tracking-[0.3em] uppercase flex items-center gap-3 whitespace-nowrap bg-white px-5 py-1.5 border-2 border-[#111111] rounded-none" style={{ transform: 'translateZ(30px)' }}>
                         <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
                         <DecryptedText text="[ INCOMING TRANSMISSION ]" />
                         <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
@@ -386,7 +386,7 @@ const ContactSummary = () => {
                             <button
                                 id="contact-summary-cta"
                                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="cs-cta-btn relative group px-10 py-4 font-mono text-sm tracking-[0.35em] uppercase border-2 border-[#111111] bg-white text-[#111111] overflow-hidden transition-all duration-300 shadow-[6px_6px_0px_#111111] hover:shadow-[2px_2px_0px_#111111] hover:translate-x-[4px] hover:translate-y-[4px] focus:outline-none"
+                                className="cs-cta-btn relative group px-10 py-4 font-mono text-sm tracking-[0.35em] uppercase border-2 border-[#111111] bg-white text-[#111111] overflow-hidden transition-all duration-300 focus:outline-none"
                             >
                                 {/* Fill sweep */}
                                 <span className="absolute inset-0 bg-[#111111] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none" />

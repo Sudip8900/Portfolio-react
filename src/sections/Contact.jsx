@@ -145,7 +145,7 @@ const Contact = () => {
                     {/* Left Side: Terminal Form */}
                     <div className='w-full md:w-1/2 flex flex-col gsap-contact-element'>
                         <InteractiveCard>
-                            <div className="bg-white border-2 border-[#111111] p-4 sm:p-6 md:p-10 relative group shadow-[6px_6px_0px_#111111]">
+                            <div className="bg-white border-2 border-[#111111] p-4 sm:p-6 md:p-10 relative group">
 
                                 {/* Terminal Header */}
                                 <div className='absolute top-0 left-0 w-full h-8 bg-[#f4f2ee] border-b-2 border-[#111111] flex items-center px-4'>
@@ -214,7 +214,7 @@ const Contact = () => {
                                                 <button
                                                     type="submit"
                                                     disabled={isTransmitting}
-                                                    className={`w-full relative flex items-center justify-center p-4 border-2 transition-all duration-300 group/btn overflow-hidden cursor-pointer ${isTransmitting ? 'border-green-600 text-green-600 bg-green-50' : 'border-[#111111] text-[#111111] bg-white hover:text-white shadow-[4px_4px_0px_#111111] hover:shadow-[1px_1px_0px_#111111] hover:translate-x-[3px] hover:translate-y-[3px]'}`}
+                                                    className={`w-full relative flex items-center justify-center p-4 border-2 transition-all duration-300 group/btn overflow-hidden cursor-pointer ${isTransmitting ? 'border-green-600 text-green-600 bg-green-50' : 'border-[#111111] text-[#111111] bg-white hover:text-white'}`}
                                                 >
                                                     {!isTransmitting && <div className="absolute inset-0 bg-[#111111] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-500 ease-out z-0" />}
                                                     <span className="tracking-widest uppercase text-xs relative z-10 font-bold font-mono">
@@ -242,7 +242,7 @@ const Contact = () => {
                         {/* Direct Contacts */}
                         <div className="flex flex-col gap-4">
                             <InteractiveCard className="gsap-contact-element">
-                                <a href="mailto:iamsudippan@gmail.com" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111] overflow-hidden">
+                                <a href="mailto:iamsudippan@gmail.com" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 overflow-hidden">
                                     <div className="absolute top-0 right-0 p-2 opacity-15 group-hover:opacity-40 transition-opacity">
                                         <Icon icon="carbon:email" width="60" height="60" className="text-orange-600" />
                                     </div>
@@ -254,7 +254,7 @@ const Contact = () => {
                             </InteractiveCard>
 
                             <InteractiveCard className="gsap-contact-element">
-                                <a href="tel:+918900359269" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111] overflow-hidden">
+                                <a href="tel:+918900359269" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 overflow-hidden">
                                     <div className="absolute top-0 right-0 p-2 opacity-15 group-hover:opacity-40 transition-opacity">
                                         <Icon icon="carbon:phone" width="60" height="60" className="text-orange-600" />
                                     </div>
@@ -282,7 +282,7 @@ const Contact = () => {
                                                 href={social.href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className='flex items-center justify-center bg-white border border-[#cfccb8] hover:bg-[#111111] hover:border-[#111111] p-4 transition-all duration-300 group shadow-[4px_4px_0px_#cfccb8] hover:shadow-[1px_1px_0px_#111111] hover:translate-x-[3px] hover:translate-y-[3px]'
+                                                className='flex items-center justify-center bg-white border border-[#cfccb8] hover:bg-[#111111] hover:border-[#111111] p-4 transition-all duration-300 group'
                                             >
                                                 <span className='text-[10px] tracking-widest uppercase text-neutral-800 group-hover:text-white font-bold transition-colors'>
                                                     {social.name}

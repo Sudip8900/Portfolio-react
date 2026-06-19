@@ -320,3 +320,37 @@ export const SkillsData = [
         ]
     }
 ];
+
+export const education = [
+    {
+        id: 1,
+        year: "2019",
+        qualification: "CLASS-X",
+        institution: "RAMJIBANPUR BABULAL INST"
+    },
+    {
+        id: 2,
+        year: "2021",
+        qualification: "CLASS-XII",
+        institution: "RAMJIBANPUR BABULAL INST"
+    },
+    {
+        id: 3,
+        year: "2022-26",
+        qualification: "B.TECH (ECE)",
+        institution: "R.K.M GOVT. ENGG. COLLEGE"
+    }
+];
+
+export const resumes = [
+    {
+        id: "DATA.BLOCK_01",
+        label: "Game Dev Resume",
+        path: "/Documets/Resume.pdf"
+    },
+    {
+        id: "DATA.BLOCK_02",
+        label: "Electronics Resume",
+        path: "/Documets/Resume2.pdf"
+    }
+];

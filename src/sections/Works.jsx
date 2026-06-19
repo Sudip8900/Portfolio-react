@@ -426,7 +426,7 @@ const Works = () => {
                     ].map(({ label, sub, icon, idx }) => (
                         <div
                             key={idx}
-                            className="relative border border-[#cfccb8] bg-white p-4 md:p-6 group hover:border-[#111111] transition-all duration-300 overflow-hidden cursor-default shadow-[4px_4px_0px_#cfccb8] hover:shadow-[4px_4px_0px_#111111]"
+                            className="relative border border-[#cfccb8] bg-white p-4 md:p-6 group hover:border-[#111111] transition-all duration-300 overflow-hidden cursor-default"
                         >
                             {/* Corner brackets */}
                             <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300" />
@@ -474,7 +474,7 @@ const Works = () => {
             >
 
                 {/* Blender */}
-                <div className='lg:col-span-5 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
+                <div className='lg:col-span-5 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
                     {/* Decorative Corner Brackets */}
                     <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
@@ -520,7 +520,7 @@ const Works = () => {
                 </div>
 
                 {/* Unreal */}
-                <div className='lg:col-span-7 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
+                <div className='lg:col-span-7 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
                     {/* Decorative Corner Brackets */}
                     <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
@@ -566,7 +566,7 @@ const Works = () => {
                 </div>
 
                 {/* Coding Projects */}
-                <div className='lg:col-span-7 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
+                <div className='lg:col-span-7 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
                     {/* Decorative Corner Brackets */}
                     <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
@@ -634,7 +634,7 @@ const Works = () => {
                 </div>
 
                 {/* VLSI */}
-                <div className='lg:col-span-5 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative shadow-[6px_6px_0px_#cfccb8]'>
+                <div className='lg:col-span-5 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
                     {/* Decorative Corner Brackets */}
                     <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
@@ -719,7 +719,7 @@ const Works = () => {
             {createPortal(
                 <div
                     ref={previewRef}
-                    className='fixed top-0 left-0 z-[100000] overflow-hidden border-2 border-[#111111] pointer-events-none md:block hidden opacity-0 bg-[#eae8e4] shadow-[8px_8px_0px_#111111]'
+                    className='fixed top-0 left-0 z-[100000] overflow-hidden border-2 border-[#111111] pointer-events-none md:block hidden opacity-0 bg-[#eae8e4]'
                 >
                     {/* HUD Overlay Elements for Preview */}
                     <div className='absolute top-2 left-2 text-[#111111] font-mono text-[9px] tracking-widest uppercase z-50 font-bold'>[VIEWPORT ACTIVE]</div>
@@ -737,7 +737,7 @@ const Works = () => {
                                 />
                                 <div
                                     ref={DesRef}
-                                    className='absolute bottom-10 left-10 right-10 bg-white border border-[#111111] text-[#111111] p-5 text-[1rem] tracking-widest uppercase font-light shadow-[4px_4px_0px_#111111]'
+                                    className='absolute bottom-10 left-10 right-10 bg-white border border-[#111111] text-[#111111] p-5 text-[1rem] tracking-widest uppercase font-light'
                                 >
                                     <span className="text-orange-600 font-bold mr-2">{'>'}</span> {BlenderProjects[currentPreview.index].description}
                                 </div>
@@ -760,7 +760,7 @@ const Works = () => {
 
                                     <div
                                         ref={DesRef}
-                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col shadow-[4px_4px_0px_#111111]"
+                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col"
                                     >
                                         <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 font-mono font-bold">
                                             [ SYS.LOG_DATA ]
@@ -803,7 +803,7 @@ const Works = () => {
 
                                     <div
                                         ref={DesRef}
-                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col shadow-[4px_4px_0px_#111111]"
+                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col"
                                     >
                                         <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 font-mono font-bold">
                                             [ SYS.LOG_DATA ]
@@ -827,7 +827,7 @@ const Works = () => {
                                 <div className="relative overflow-hidden w-[500px] h-[350px] flex p-6 bg-[#f4f2ee]">
                                     <div
                                         ref={DesRef}
-                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col shadow-[4px_4px_0px_#111111]"
+                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col"
                                     >
                                         <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 flex justify-between font-mono font-bold">
                                             <span>[ SYS.LOG_DATA ]</span>

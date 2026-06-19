@@ -136,7 +136,7 @@ const Navbar = ({ IsReady }) => {
                             </div>
 
                             {/* Tech Graphic Accent Panel */}
-                            <div className="my-8 relative w-full border border-[#cfccb8] rounded flex flex-col gap-4 p-5 overflow-hidden bg-[#eae8e4]/50 select-none">
+                            <div className="my-8 relative w-full border border-[#cfccb8] flex flex-col gap-4 p-5 overflow-hidden bg-[#eae8e4]/50 select-none">
                                 {/* Dot Matrix Grid background */}
                                 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#111111 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
                                 <div className="flex justify-between items-center w-full relative z-10">
@@ -286,7 +286,7 @@ const Navbar = ({ IsReady }) => {
                     </div>
 
                     {/* Tech Graphic Accent Panel */}
-                    <div className="my-8 relative w-full border border-[#cfccb8] rounded flex flex-col gap-4 p-5 overflow-hidden bg-[#eae8e4]/50 select-none">
+                    <div className="my-8 relative w-full border border-[#cfccb8] flex flex-col gap-4 p-5 overflow-hidden bg-[#eae8e4]/50 select-none">
                         {/* Dot Matrix Grid background */}
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#111111 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
                         <div className="flex justify-between items-center w-full relative z-10">
