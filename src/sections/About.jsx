@@ -10,7 +10,7 @@ const renderConsoleOutput = (tabIndex) => {
     switch (tabIndex) {
         case 0:
             return (
-                <div className="font-mono text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
+                <div className="  text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
                     <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 via-transparent to-transparent pointer-events-none" />
                     <div>
                         <div className="text-orange-600 font-bold border-b border-orange-600/20 pb-2 mb-3.5 flex justify-between text-xs sm:text-sm md:text-base lg:text-lg">
@@ -33,7 +33,7 @@ const renderConsoleOutput = (tabIndex) => {
             );
         case 1:
             return (
-                <div className="font-mono text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
+                <div className="  text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
                     <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 via-transparent to-transparent pointer-events-none" />
                     <div>
                         <div className="text-orange-600 font-bold border-b border-orange-600/20 pb-2 mb-3.5 flex justify-between text-xs sm:text-sm md:text-base lg:text-lg">
@@ -56,7 +56,7 @@ const renderConsoleOutput = (tabIndex) => {
             );
         case 2:
             return (
-                <div className="font-mono text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
+                <div className="  text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
                     <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 via-transparent to-transparent pointer-events-none" />
                     <div>
                         <div className="text-orange-600 font-bold border-b border-orange-600/20 pb-2 mb-3.5 flex justify-between text-xs sm:text-sm md:text-base lg:text-lg">
@@ -145,7 +145,7 @@ const About = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
-                start: "top 75%",
+                start: "top 90%",
             }
         });
 
@@ -194,13 +194,32 @@ const About = () => {
                     stagger: 0.08,
                     ease: "power3.out",
                 },
-                "-=0.4"
             );
         }
+
+        // Parallax scroll animation for background watermark
+        gsap.fromTo(".about-watermark", 
+            { xPercent: 8 },
+            { 
+                xPercent: -8, 
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 0.5,
+                }
+            }
+        );
     }, { scope: sectionRef });
 
     return (
-        <section id="about" ref={sectionRef} className="min-h-screen py-16 bg-[#eae8e4] text-[#111111] w-full">
+        <section id="about" ref={sectionRef} className="min-h-screen py-16 bg-[#eae8e4] text-[#111111] w-full relative overflow-hidden">
+            {/* Background Light Text Watermark */}
+            <div
+                className="about-watermark absolute right-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
+            >
+                ABOUT
+            </div>
             <style dangerouslySetInnerHTML={{
                 __html: `
                 .about-editorial-container {
@@ -280,7 +299,7 @@ const About = () => {
                     <div className="editorial-col editorial-left p-6 flex flex-col justify-between min-h-[500px]">
                         <div className="flex flex-col gap-4">
                             {/* 1. Small eyebrow label */}
-                            <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase font-mono">
+                            <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase  ">
                                 // ID: SP-049 // STATUS: ONLINE
                             </span>
 
@@ -295,7 +314,7 @@ const About = () => {
                             </span>
 
                             {/* 5. Short descriptor */}
-                            <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase font-mono">
+                            <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase  ">
                                 IDENTITY DOSSIER // ECE
                             </span>
 
@@ -312,7 +331,7 @@ const About = () => {
                                 I'm a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, visually engaging games that blend strong design, technical skill, and interactive innovation.
                             </p>
                             {/* Education Data Block */}
-                            <div className="mt-6 flex flex-col gap-4 pt-4 border-t font-mono" style={{ borderColor: 'var(--rule)' }}>
+                            <div className="mt-6 flex flex-col gap-4 pt-4 border-t  " style={{ borderColor: 'var(--rule)' }}>
                                 <span style={{ fontSize: '0.82rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase block font-bold">
                                     // EDU_DATA
                                 </span>
@@ -370,7 +389,7 @@ const About = () => {
                         <div className="p-6 flex flex-col gap-4">
                             {/* Label header + arrow buttons */}
                             <div className="flex justify-between items-center">
-                                <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase font-mono">
+                                <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase  ">
                                     {categoryNames[activeTab]}
                                 </span>
                                 <div className="flex gap-2 text-xs">
@@ -389,7 +408,7 @@ const About = () => {
                             </div>
 
                             {/* Caption below image */}
-                            <span style={{ fontSize: '0.78rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase block font-mono">
+                            <span style={{ fontSize: '0.78rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase block  ">
                                 EXPLORE {SkillsData[activeTab].category}
                             </span>
                         </div>
@@ -420,7 +439,7 @@ const About = () => {
                                         <div
                                             key={idx}
                                             onMouseEnter={() => setHoveredSkill(skill)}
-                                            className={`text-xs md:text-sm font-mono tracking-wider flex justify-between items-center py-1.5 cursor-pointer transition-colors ${hoveredSkill.name === skill.name
+                                            className={`text-xs md:text-sm   tracking-wider flex justify-between items-center py-1.5 cursor-pointer transition-colors ${hoveredSkill.name === skill.name
                                                 ? 'text-orange-600 font-bold'
                                                 : 'text-[#888888] hover:text-orange-600'
                                                 }`}
@@ -434,7 +453,7 @@ const About = () => {
 
                             {/* Live telemetry dump */}
                             {hoveredSkill && (
-                                <div className="mt-4 border-t pt-3 text-xs md:text-sm text-[#888888] font-mono leading-relaxed" style={{ borderColor: 'var(--rule)' }}>
+                                <div className="mt-4 border-t pt-3 text-xs md:text-sm text-[#888888]   leading-relaxed" style={{ borderColor: 'var(--rule)' }}>
                                     <span className="text-orange-600 font-bold block mb-1">// {hoveredSkill.name.toUpperCase()}</span>
                                     <p>{hoveredSkill.desc}</p>
                                 </div>

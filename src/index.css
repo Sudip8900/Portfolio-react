@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Michroma", sans-serif;
+}
+
 body {
   font-family: "Michroma", sans-serif;
   @apply bg-[#eae8e4] text-[#111111] relative min-h-screen;
@@ -189,5 +193,23 @@ body::before {
 
 .animate-spin-slow-reverse {
   animation: techSpin 30s linear infinite reverse;
+}
+
+/* ── Custom Scrollbar for HUD scrollboxes ── */
+.scroll-container::-webkit-scrollbar {
+  display: block !important;
+  width: 6px !important;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background: rgba(17, 17, 17, 0.03) !important;
+  border-left: 1px solid rgba(207, 204, 184, 0.3) !important;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #ea580c !important; /* Tailwind orange-600 */
+  border-radius: 9999px !important;
+}
+.scroll-container {
+  scrollbar-width: thin !important;
+  scrollbar-color: #ea580c rgba(17, 17, 17, 0.03) !important;
 }
 

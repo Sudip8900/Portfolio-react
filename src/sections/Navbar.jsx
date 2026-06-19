@@ -8,6 +8,8 @@ import gsap from 'gsap';
 const Navbar = ({ IsReady }) => {
     const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [visible, setVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
     const mobileMenuRef = useRef(null);
 
     const sectionsList = ['home', 'about', 'works', 'experience', 'contact'];
@@ -22,18 +24,35 @@ const Navbar = ({ IsReady }) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > 50) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
             }
+
+            // Determine scroll direction and visibility
+            if (currentScrollY <= 50) {
+                setVisible(true);
+            } else if (currentScrollY > lastScrollY && currentScrollY > 120) {
+                // Scrolling down - hide navbar if menu is closed
+                if (!isOpen) {
+                    setVisible(false);
+                }
+            } else if (currentScrollY < lastScrollY) {
+                // Scrolling up - show navbar
+                setVisible(true);
+            }
+
+            setLastScrollY(currentScrollY);
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         scrollSpy.update();
 
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [lastScrollY, isOpen]);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -70,11 +89,17 @@ const Navbar = ({ IsReady }) => {
     return (
         <>
             {/* Desktop Navbar - Grid Layout aligned with Section Columns */}
-            <nav className={`hidden md:grid grid-cols-4 fixed top-0 left-0 w-full h-[64px] z-50 border-b transition-all duration-500 ${
-                scrolled 
-                    ? 'bg-[#f4f2ee]/95 backdrop-blur-md border-[#111111]/80 shadow-sm' 
-                    : 'bg-[#eae8e4]/90 backdrop-blur-md border-[#cfccb8] shadow-none'
-            }`}>
+            <nav 
+                className={`hidden md:grid grid-cols-4 fixed top-0 left-0 w-full h-[64px] z-50 border-b transition-all duration-500 ${
+                    scrolled 
+                        ? 'bg-[#f4f2ee]/95 backdrop-blur-md border-[#111111]/80 shadow-sm' 
+                        : 'bg-[#eae8e4]/90 backdrop-blur-md border-[#cfccb8] shadow-none'
+                }`}
+                style={{
+                    transform: (visible || isOpen) ? 'translateY(0)' : 'translateY(-100%)',
+                    transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s, border-color 0.5s, shadow 0.5s'
+                }}
+            >
                 
                 {/* Column 1: Menu Button & Desktop Dropdown (Drops from Menu Button, Same Width, Full Height) */}
                 <div className="nav-grid-cell col-span-1 h-full border-r border-[#cfccb8] transition-colors duration-500 relative">
@@ -216,11 +241,17 @@ const Navbar = ({ IsReady }) => {
             </nav>
 
             {/* Mobile Header Bar - Grid Layout */}
-            <div className={`md:hidden grid grid-cols-12 fixed top-0 left-0 w-full h-[56px] z-50 border-b transition-all duration-500 ${
-                scrolled 
-                    ? 'bg-[#f4f2ee]/95 backdrop-blur-md border-[#111111] shadow-sm' 
-                    : 'bg-[#eae8e4]/90 backdrop-blur-md border-[#cfccb8]'
-            }`}>
+            <div 
+                className={`md:hidden grid grid-cols-12 fixed top-0 left-0 w-full h-[56px] z-50 border-b transition-all duration-500 ${
+                    scrolled 
+                        ? 'bg-[#f4f2ee]/95 backdrop-blur-md border-[#111111] shadow-sm' 
+                        : 'bg-[#eae8e4]/90 backdrop-blur-md border-[#cfccb8]'
+                }`}
+                style={{
+                    transform: (visible || isOpen) ? 'translateY(0)' : 'translateY(-100%)',
+                    transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s, border-color 0.5s'
+                }}
+            >
                 {/* Left side: Menu Trigger & Mobile Dropdown */}
                 <div className="nav-grid-cell col-span-5 h-full border-r border-[#cfccb8] transition-colors duration-500 relative">
                     <button 
@@ -328,6 +359,24 @@ const Navbar = ({ IsReady }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Floating Burger Button when Navbar is Hidden */}
+            <button
+                onClick={toggleMenu}
+                className="fixed top-2.5 left-4 md:left-6 z-[100] w-11 h-11 bg-[#111111] hover:bg-orange-600 text-[#eae8e4] hover:text-[#111111] transition-all duration-300 flex items-center justify-center cursor-pointer border border-[#cfccb8]/20 group shadow-md"
+                style={{
+                    opacity: !visible && !isOpen ? 1 : 0,
+                    pointerEvents: !visible && !isOpen ? 'auto' : 'none',
+                    transform: !visible && !isOpen ? 'scale(1)' : 'scale(0.8)',
+                    transition: 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s'
+                }}
+            >
+                <div className="flex flex-col gap-1 w-5">
+                    <span className="h-[1.5px] w-full bg-current transition-all" />
+                    <span className="h-[1.5px] w-full bg-current transition-all" />
+                    <span className="h-[1.5px] w-full bg-current transition-all" />
+                </div>
+            </button>
 
             {/* Backdrop Overlay for Drawer */}
             {isOpen && (

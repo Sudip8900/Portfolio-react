@@ -9,11 +9,20 @@ import Magnetic from '../componnts/Magnetic.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const roleTagsMap = {
+    1: ["3D Modeling", "Texturing", "Rigging", "Animation"],
+    2: ["UE5 Blueprints", "Gameplay C++", "AI Systems", "Optimization"],
+    3: ["IC Layout", "Schematic Capture", "DRC/LVS Verification", "Cadence Virtuoso"],
+    5: ["Content Creation", "Social Media", "Graphic Design"],
+    6: ["Customer Relations", "Booking Engine", "Sales Strategy"],
+    7: ["Community Projects", "Developer Events", "Teamwork"]
+};
+
 const Experience = () => {
     const [previewPdf, setPreviewPdf] = useState(null);
     const headingRef = useRef(null);
     const lineRef = useRef(null);
-    
+
     useGSAP(() => {
         // Simple, robust, isolated scroll triggers for every element
         const elements = gsap.utils.toArray('.gsap-fade-in');
@@ -28,29 +37,16 @@ const Experience = () => {
                     opacity: 1,
                     y: 0,
                     duration: 0.8,
+                    delay: 0.3,
                     ease: "power3.out",
                     scrollTrigger: {
                         trigger: el,
-                        start: "top 85%", // Triggers when the element enters 85% of the viewport height
+                        start: "top 85%",
                         toggleActions: "play none none none"
                     }
                 }
             );
         });
-
-        // Special animation for the left timeline line
-        gsap.fromTo('.gsap-line-grow',
-            { height: 0 },
-            {
-                height: "100%",
-                duration: 1.5,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: '.gsap-line-grow-trigger',
-                    start: "top 60%"
-                }
-            }
-        );
 
         // Section header reveal animation
         if (headingRef.current) {
@@ -65,29 +61,52 @@ const Experience = () => {
                 duration: 0.5,
                 scaleX: 0,
                 opacity: 0,
+                delay: 0.3,
                 transformOrigin: "left center",
                 ease: "power2.out",
             })
-            .from(headingRef.current.querySelectorAll('.header-char'), {
-                duration: 0.6,
-                opacity: 0,
-                y: 30,
-                rotateX: -90,
-                stagger: 0.03,
-                ease: "back.out(1.7)",
-            }, "-=0.2")
-            .from(lineRef.current, {
-                duration: 0.8,
-                scaleX: 0,
-                transformOrigin: "left center",
-                ease: "power3.out",
-            }, "-=0.4");
+                .from(headingRef.current.querySelectorAll('.header-char'), {
+                    duration: 0.6,
+                    opacity: 0,
+                    y: 30,
+                    rotateX: -90,
+                    stagger: 0.03,
+                    ease: "back.out(1.7)",
+                }, "-=0.2")
+                .from(lineRef.current, {
+                    duration: 0.8,
+                    scaleX: 0,
+                    transformOrigin: "left center",
+                    ease: "power3.out",
+                }, "-=0.4");
         }
+
+        // Parallax scroll animation for background watermark
+        gsap.fromTo(".experience-watermark", 
+            { xPercent: 8 },
+            { 
+                xPercent: -8, 
+                scrollTrigger: {
+                    trigger: "#experience",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 0.5,
+                }
+            }
+        );
 
     }, []);
 
     return (
         <section id="experience" className='min-h-screen pb-20 bg-[#eae8e4] text-[#111111] relative z-10'>
+            {/* Background Light Text Watermark */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                <div
+                    className="experience-watermark absolute right-0 top-10 select-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] tracking-tighter"
+                >
+                    EXPERIENCE
+                </div>
+            </div>
             {/* Background Grid Pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.02)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
@@ -100,8 +119,8 @@ const Experience = () => {
                         {(() => {
                             const headerText = "[ SYS.EXPERIENCE_LOGS ]";
                             return headerText.split("").map((char, index) => (
-                                <span 
-                                    key={index} 
+                                <span
+                                    key={index}
                                     className="header-char inline-block origin-bottom text-[#111111]"
                                 >
                                     {char === " " ? "\u00A0" : char}
@@ -112,117 +131,146 @@ const Experience = () => {
                     <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
                 </div>
 
-                <div className='flex flex-col xl:flex-row gap-10 lg:gap-20 perspective-[2000px]'>
+                <div className='grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-0'>
 
-                    {/* Left Side: Data Logs Timeline */}
-                    <div className="w-full xl:w-2/3 relative gsap-line-grow-trigger">
-
-                        {/* Vertical line */}
-                        <div className="absolute left-4 md:left-[42px] top-0 w-[2px] bg-[#cfccb8] h-full">
-                            <div className="w-full bg-[#111111] gsap-line-grow" />
+                    {/* Column 1: Technical Core (Left) */}
+                    <div className="col-span-1 lg:col-span-3 lg:pr-8 lg:border-r lg:border-[#cfccb8]/60 pb-8 lg:pb-0 gsap-fade-in">
+                        <div className="lg:sticky lg:top-32 h-fit">
+                            <div className="flex items-center gap-2 mb-8 text-[11px] font-bold tracking-[0.2em] text-[#111111]   select-none">
+                                <span className="w-2 h-2 bg-orange-600" />
+                                TECHNICAL CORE
+                            </div>
+                            <div className="flex flex-col gap-10">
+                                <div>
+                                    <h3 className="text-lg font-bold tracking-wider text-[#111111] mb-2 uppercase  ">
+                                        3D Art & Modeling
+                                    </h3>
+                                    <p className="text-neutral-500 text-xs leading-relaxed mb-4">
+                                        Focus on hard-surface modeling, game asset creation, procedural texturing, and rigging for interactive systems.
+                                    </p>
+                                    <div className="flex flex-col gap-1   text-[9px] text-neutral-400 tracking-wider">
+                                        <span>[ BLENDER_CORE ]</span>
+                                        <span>[ PROCEDURAL_TEXTURING ]</span>
+                                        <span>[ RIGGING_&_ANIMATION ]</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold tracking-wider text-[#111111] mb-2 uppercase ">
+                                        Game Systems
+                                    </h3>
+                                    <p className="text-neutral-500 text-xs leading-relaxed mb-4">
+                                        Modular gameplay mechanics, advanced enemy AI systems, camera targeting, and real-time performance optimization.
+                                    </p>
+                                    <div className="flex flex-col gap-1   text-[9px] text-neutral-400 tracking-wider">
+                                        <span>[ UNREAL_ENGINE_5 ]</span>
+                                        <span>[ GAMEPLAY_CPP ]</span>
+                                        <span>[ BLUEPRINT_ARCHITECTURE ]</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold tracking-wider text-[#111111] mb-2 uppercase ">
+                                        VLSI & Hardware
+                                    </h3>
+                                    <p className="text-neutral-500 text-xs leading-relaxed mb-4">
+                                        Analog and digital IC layout, schematic design, simulation, and DRC/LVS circuit validation.
+                                    </p>
+                                    <div className="flex flex-col gap-1   text-[9px] text-neutral-400 tracking-wider">
+                                        <span>[ CADENCE_VIRTUOSO ]</span>
+                                        <span>[ VERILOG_HDL ]</span>
+                                        <span>[ CIRCUIT_VERIFICATION ]</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
+                    {/* Column 2: Professional Log / Experience entries (Middle) */}
+                    <div className="col-span-1 lg:col-span-6 lg:px-10 lg:border-r lg:border-[#cfccb8]/60 pb-8 lg:pb-0">
+                        <div className="flex items-center gap-2 mb-8 text-[11px] font-bold tracking-[0.2em] text-[#111111]   select-none">
+                            <span className="w-2 h-2 bg-orange-600" />
+                            PROFESSIONAL LOG
+                        </div>
                         <div className="flex flex-col gap-12">
-                            {experience.map((exp, index) => (
-                                <div key={exp.id} className="flex gap-4 md:gap-10 relative gsap-fade-in">
-
-                                    {/* Timeline Node */}
-                                    <div className="relative mt-6 z-10 md:ml-5">
-                                        <div className="w-8 h-8 md:w-12 md:h-12 bg-white border-2 border-[#111111] flex items-center justify-center rotate-45">
-                                            <div className="w-2 h-2 md:w-3 md:h-3 bg-orange-600 animate-pulse" />
-                                        </div>
+                            {experience.map((exp) => (
+                                <div key={exp.id} className="gsap-fade-in relative border-b border-[#cfccb8]/30 pb-10 last:border-none last:pb-0">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-[#111111]">
+                                            {exp.role}
+                                        </h3>
+                                        {exp.duration.toLowerCase().includes('present') && (
+                                            <span className="text-[9px]   font-bold border border-[#111111] px-2 py-0.5 tracking-wider uppercase text-[#111111] select-none">
+                                                CURRENT
+                                            </span>
+                                        )}
                                     </div>
 
-                                    {/* Experience Card */}
-                                    <InteractiveCard className="flex-1">
-                                        <div className="bg-white border border-[#cfccb8] p-4 sm:p-6 md:p-8 relative group hover:border-[#111111] transition-all duration-300">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        {exp.icon ? (
+                                            <Icon icon={exp.icon} width="16" height="16" className="text-neutral-600" />
+                                        ) : (
+                                            <img src={exp.image} alt={exp.company} className="w-4 h-4 object-contain" />
+                                        )}
+                                        <span className="text-[11px]   tracking-widest uppercase text-neutral-500 font-bold">
+                                            {exp.company}
+                                        </span>
+                                    </div>
 
-                                            {/* Decorative Corners */}
-                                            <div className='absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
-                                            <div className='absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
+                                    <p className="text-neutral-600 text-sm leading-relaxed mb-6">
+                                        {exp.description}
+                                    </p>
 
-                                            {/* Header */}
-                                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4" style={{ transform: "translateZ(30px)" }}>
-                                                <div>
-                                                    <h3 className="text-xl md:text-2xl font-bold text-orange-600 tracking-widest uppercase">
-                                                        {exp.role}
-                                                    </h3>
-                                                    <p className="text-[#111111] font-bold uppercase tracking-widest mt-1 text-sm md:text-base">{exp.company}</p>
-                                                </div>
-
-                                                {/* Duration Badge */}
-                                                <div className="bg-orange-600/10 border border-orange-600/30 px-3 py-1 text-orange-600 text-xs tracking-widest uppercase font-bold">
-                                                    {exp.duration}
-                                                </div>
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start" style={{ transform: "translateZ(20px)" }}>
-
-                                                {/* Icon / Image */}
-                                                <div className="w-16 h-16 shrink-0 bg-[#f4f2ee] border border-[#cfccb8] flex items-center justify-center p-2">
-                                                    {exp.icon ? (
-                                                        <Icon icon={exp.icon} width="40" height="40" className="text-neutral-600 group-hover:text-orange-600 transition-colors" />
-                                                    ) : (
-                                                        <img
-                                                            src={exp.image}
-                                                            alt={exp.company}
-                                                            className="w-full h-full object-contain transition-all"
-                                                        />
-                                                    )}
-                                                </div>
-
-                                                {/* Description */}
-                                                <p className="text-neutral-600 text-sm leading-relaxed tracking-wide">
-                                                    <span className="text-orange-600 mr-2 font-bold">{'>'}</span>
-                                                    {exp.description}
-                                                </p>
-
-                                            </div>
-
+                                    {roleTagsMap[exp.id] && (
+                                        <div className="flex flex-wrap gap-2">
+                                            {roleTagsMap[exp.id].map((tag, i) => (
+                                                <span key={i} className="text-[9px]   tracking-widest uppercase border border-[#cfccb8] px-3 py-1 text-neutral-500 font-semibold select-none">
+                                                    {tag}
+                                                </span>
+                                            ))}
                                         </div>
-                                    </InteractiveCard>
+                                    )}
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* Right Side: Credentials / CV */}
-                    <div className='w-full xl:w-1/3 h-fit relative xl:sticky top-32 gsap-fade-in'>
-                        <InteractiveCard>
-                            <div className='p-6 md:p-8 bg-white border border-[#cfccb8] flex flex-col justify-center items-center relative overflow-hidden group hover:border-[#111111] transition-all duration-300'>
+                    {/* Column 3: Credentials / CV (Right) */}
+                    <div className="col-span-1 lg:col-span-3 lg:pl-8 gsap-fade-in">
+                        <div className="lg:sticky lg:top-32 h-fit">
+                            <InteractiveCard>
+                                <div className='p-6 md:p-8 bg-white border border-[#cfccb8] flex flex-col justify-center items-center relative overflow-hidden group hover:border-[#111111] transition-all duration-300'>
 
-                                {/* HUD Decorative Elements */}
-                                <div className='absolute top-4 left-4 text-neutral-500 font-mono text-[9px] tracking-widest uppercase font-bold'>[ SECURITY.CLEARANCE.REQUIRED ]</div>
-                                <div className='absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
-                                <div className='absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
+                                    {/* HUD Decorative Elements */}
+                                    <div className='absolute top-4 left-4 text-neutral-500   text-[9px] tracking-widest uppercase font-bold'>[ SECURITY.CLEARANCE.REQUIRED ]</div>
+                                    <div className='absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
+                                    <div className='absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
 
-                                <Icon icon="carbon:fingerprint-recognition" width="60" height="60" className="text-[#cfccb8] mt-10 group-hover:text-orange-600 transition-colors duration-500" style={{ transform: "translateZ(20px)" }} />
+                                    <Icon icon="carbon:fingerprint-recognition" width="60" height="60" className="text-[#cfccb8] mt-10 group-hover:text-orange-600 transition-colors duration-500" style={{ transform: "translateZ(20px)" }} />
 
-                                <h1 className='text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
-                                    CREDENTIALS
-                                </h1>
-                                <p className='text-neutral-500 text-xs tracking-widest uppercase mt-4 mb-10 text-center leading-relaxed font-mono font-bold' style={{ transform: "translateZ(20px)" }}>
-                                    // Authorized personnel only<br />// Download access data below
-                                </p>
+                                    <h1 className='text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
+                                        CREDENTIALS
+                                    </h1>
+                                    <p className='text-neutral-500 text-xs tracking-widest uppercase mt-4 mb-10 text-center leading-relaxed   font-bold' style={{ transform: "translateZ(20px)" }}>
+                                        // Authorized personnel only<br />// Download access data below
+                                    </p>
 
-                                <div className="w-full flex flex-col gap-4 relative z-10" style={{ transform: "translateZ(40px)" }}>
-                                    {resumes.map((resume) => (
-                                        <Magnetic key={resume.id}>
-                                            <div className='block w-full cursor-pointer' onClick={() => setPreviewPdf(resume.path)}>
-                                                <button className='flex flex-row items-center justify-between w-full bg-[#f4f2ee] border border-[#cfccb8] text-[#111111] p-5 md:p-6 cursor-pointer hover:border-[#111111] hover:bg-[#eae8e4]/50 group/btn transition-all duration-300'>
-                                                    <div className="flex flex-col items-start">
-                                                        <span className="text-[11px] md:text-xs font-mono text-orange-600 font-bold tracking-widest uppercase mb-1">{resume.id}</span>
-                                                        <span className="text-sm md:text-base tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">{resume.label}</span>
-                                                    </div>
-                                                    <Icon icon="carbon:document-view" width="28" height="28" className="text-neutral-500 group-hover/btn:text-orange-600 transition-colors" />
-                                                </button>
-                                            </div>
-                                        </Magnetic>
-                                    ))}
+                                    <div className="w-full flex flex-col gap-4 relative z-10" style={{ transform: "translateZ(40px)" }}>
+                                        {resumes.map((resume) => (
+                                            <Magnetic key={resume.id}>
+                                                <div className='block w-full cursor-pointer' onClick={() => setPreviewPdf(resume.path)}>
+                                                    <button className='flex flex-row items-center justify-between w-full bg-[#f4f2ee] border border-[#cfccb8] text-[#111111] p-5 md:p-6 cursor-pointer hover:border-[#111111] hover:bg-[#eae8e4]/50 group/btn transition-all duration-300'>
+                                                        <div className="flex flex-col items-start">
+                                                            <span className="text-[11px] md:text-xs   text-orange-600 font-bold tracking-widest uppercase mb-1">{resume.id}</span>
+                                                            <span className="text-sm md:text-base tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">{resume.label}</span>
+                                                        </div>
+                                                        <Icon icon="carbon:document-view" width="28" height="28" className="text-neutral-500 group-hover/btn:text-orange-600 transition-colors" />
+                                                    </button>
+                                                </div>
+                                            </Magnetic>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </InteractiveCard>
+                            </InteractiveCard>
+                        </div>
                     </div>
 
                 </div>
@@ -235,7 +283,7 @@ const Experience = () => {
 
                         {/* Header */}
                         <div className="flex justify-between items-center p-4 border-b-2 border-[#111111] bg-[#f4f2ee]">
-                            <div className="text-[#111111] uppercase tracking-widest text-sm font-bold flex items-center gap-3 font-mono">
+                            <div className="text-[#111111] uppercase tracking-widest text-sm font-bold flex items-center gap-3  ">
                                 <span className="w-2.5 h-2.5 bg-orange-600 rounded-full animate-pulse" />
                                 [ DOCUMENT.PREVIEW ]
                             </div>

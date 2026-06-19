@@ -62,26 +62,6 @@ const Contact = () => {
     };
 
     useGSAP(() => {
-        // Robust isolated scroll triggers for all contact elements
-        const elements = gsap.utils.toArray('.gsap-contact-element');
-
-        elements.forEach((el) => {
-            gsap.fromTo(el,
-                { opacity: 0, y: 30 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.6,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 90%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
-        });
-
         // Section header reveal animation
         if (headingRef.current) {
             const headerTl = gsap.timeline({
@@ -114,10 +94,105 @@ const Contact = () => {
                 }, "-=0.4");
         }
 
+        // Detailed staggered reveal for contact info and form lines
+        const contactTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#contact',
+                start: "top 90%",
+                toggleActions: "play none none none"
+            }
+        });
+
+        contactTl.fromTo('.gsap-contact-protocol',
+            { opacity: 0, x: -20 },
+            { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }
+        )
+            .fromTo('.gsap-contact-title',
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+                "-=0.2"
+            )
+            .fromTo('.gsap-contact-desc',
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+                "-=0.35"
+            )
+            .fromTo('.gsap-contact-link-item',
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.4, stagger: 0.08, ease: "power2.out" },
+                "-=0.3"
+            )
+            // Draw the vertical divider line
+            .fromTo('.gsap-contact-vertical-line',
+                { scaleY: 0 },
+                { scaleY: 1, duration: 0.6, transformOrigin: "top center", ease: "power3.inOut" },
+                "grid-draw"
+            )
+            // Draw the top horizontal line of form
+            .fromTo('.gsap-contact-top-line',
+                { scaleX: 0 },
+                { scaleX: 1, duration: 0.5, transformOrigin: "left center", ease: "power3.inOut" },
+                "grid-draw+=0.1"
+            )
+            // Draw horizontal divider lines
+            .fromTo('.gsap-contact-horizontal-line',
+                { scaleX: 0 },
+                { scaleX: 1, duration: 0.5, stagger: 0.1, transformOrigin: "left center", ease: "power2.inOut" },
+                "grid-draw+=0.15"
+            )
+            // Draw inner vertical line dividers
+            .fromTo('.gsap-contact-vertical-inner-line',
+                { scaleY: 0 },
+                { scaleY: 1, duration: 0.5, stagger: 0.1, transformOrigin: "top center", ease: "power2.inOut" },
+                "grid-draw+=0.2"
+            )
+            // Fade in fields contents concurrently with grid draw
+            .fromTo('.gsap-contact-field-content',
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.4, stagger: 0.08, ease: "power2.out" },
+                "grid-draw+=0.25"
+            )
+            // Fade in button and footer items
+            .fromTo('.gsap-contact-btn',
+                { opacity: 0, scale: 0.95 },
+                { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.5)" },
+                "-=0.1"
+            )
+            .fromTo('.gsap-contact-footer-item',
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 0.3, stagger: 0.05, ease: "power2.out" },
+                "-=0.2"
+            )
+            .fromTo('.gsap-contact-watermark',
+                { opacity: 0, scale: 0.9 },
+                { opacity: 0.04, scale: 1, duration: 0.8, ease: "power2.out" },
+                "-=0.6"
+            );
+
+        // Parallax scroll animation for background watermark text
+        gsap.fromTo(".contact-watermark-text", 
+            { xPercent: 8 },
+            { 
+                xPercent: -8, 
+                scrollTrigger: {
+                    trigger: "#contact",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 0.5,
+                }
+            }
+        );
+
     }, []);
 
     return (
         <section id="contact" className="min-h-screen bg-[#eae8e4] text-[#111111] relative overflow-hidden flex flex-col justify-between z-10">
+            {/* Background Light Text Watermark */}
+            <div
+                className="contact-watermark-text absolute right-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
+            >
+                CONTACT
+            </div>
 
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full flex-1">
 
@@ -140,160 +215,142 @@ const Contact = () => {
                     <div className='header-block w-12 h-2 bg-orange-600' />
                 </div>
 
-                <div className='flex flex-col md:flex-row gap-12 lg:gap-20 perspective-[2000px]'>
+                <div className='grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-0 relative z-10'>
 
-                    {/* Left Side: Terminal Form */}
-                    <div className='w-full md:w-1/2 flex flex-col gsap-contact-element'>
-                        <InteractiveCard>
-                            <div className="bg-white border-2 border-[#111111] p-4 sm:p-6 md:p-10 relative group">
+                    {/* Left Column: Title and info */}
+                    <div className='col-span-1 lg:col-span-5 flex flex-col justify-between lg:pr-12'>
+                        <div>
+                            <span className="text-[10px]   text-neutral-400 tracking-[0.2em] uppercase block mb-4 gsap-contact-protocol">// +COMMUNICATION PROTOCOL V.01</span>
+                            <h2 className='text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95] text-[#111111] uppercase mb-8 gsap-contact-title'>
+                                GET IN<br />TOUCH
+                            </h2>
+                            <p className="text-neutral-500 text-sm leading-relaxed max-w-md gsap-contact-desc">
+                                For inquiries regarding custom game development, 3D modeling, VLSI simulations, or collaborative work, please utilize the secure transmission channel. Response latency: 24-48 hours.
+                            </p>
+                        </div>
 
-                                {/* Terminal Header */}
-                                <div className='absolute top-0 left-0 w-full h-8 bg-[#f4f2ee] border-b-2 border-[#111111] flex items-center px-4'>
-                                    <div className="flex gap-2">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-400" />
-                                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-500" />
-                                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-600" />
-                                    </div>
-                                    <p className="ml-4 text-neutral-500 text-[9px] tracking-widest uppercase font-mono font-bold">bash // root@sudip.dev</p>
-                                </div>
-
-                                <div className="mt-8 md:mt-10">
-                                    <h2 className='text-orange-600 text-sm tracking-widest uppercase mb-8 font-mono font-bold'>
-                                        <span className="animate-pulse mr-2">{'>'}</span>
-                                        ./initialize_contact.sh
-                                    </h2>
-
-                                    <form onSubmit={onSubmit} className='flex flex-col gap-6'>
-
-                                        <div className='flex flex-col'>
-                                            <label className='text-neutral-500 text-[9px] tracking-widest font-mono font-bold uppercase mb-1'>[ ID.NAME ]</label>
-                                            <div className="relative group/input">
-                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-[#cfccb8] group-hover/input:bg-[#111111] transition-colors" />
-                                                <div className="absolute left-0 bottom-0 w-0 h-[1px] bg-[#111111] transition-all duration-500 focus-within:w-full z-10" />
-                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-600 font-bold">{'>'}</span>
-                                                <input
-                                                    type="text"
-                                                    className='w-full bg-transparent h-10 pl-6 text-[#111111] placeholder:text-neutral-400 focus:outline-none transition-all'
-                                                    placeholder='Enter target designation...'
-                                                    name='name'
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className='flex flex-col'>
-                                            <label className='text-neutral-500 text-[9px] tracking-widest font-mono font-bold uppercase mb-1'>[ ID.EMAIL ]</label>
-                                            <div className="relative group/input">
-                                                <div className="absolute left-0 bottom-0 w-full h-[1px] bg-[#cfccb8] group-hover/input:bg-[#111111] transition-colors" />
-                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-orange-600 font-bold">{'>'}</span>
-                                                <input
-                                                    type="email"
-                                                    className='w-full bg-transparent h-10 pl-6 text-[#111111] placeholder:text-neutral-400 focus:outline-none transition-all'
-                                                    placeholder='Enter return address...'
-                                                    name='email'
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className='flex flex-col'>
-                                            <label className='text-neutral-500 text-[9px] tracking-widest font-mono font-bold uppercase mb-1'>[ DATA.PAYLOAD ]</label>
-                                            <div className="relative group/input mt-2 border border-[#cfccb8] group-hover/input:border-[#111111] bg-[#f4f2ee]/40 p-4">
-                                                <span className="absolute left-4 top-4 text-orange-600 font-bold">{'>'}</span>
-                                                <textarea
-                                                    name="message"
-                                                    placeholder='Construct message payload here...'
-                                                    className='w-full bg-transparent h-24 pl-6 text-[#111111] placeholder:text-neutral-400 focus:outline-none transition-all resize-none'
-                                                    required
-                                                ></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div className='mt-6'>
-                                            <Magnetic>
-                                                <button
-                                                    type="submit"
-                                                    disabled={isTransmitting}
-                                                    className={`w-full relative flex items-center justify-center p-4 border-2 transition-all duration-300 group/btn overflow-hidden cursor-pointer ${isTransmitting ? 'border-green-600 text-green-600 bg-green-50' : 'border-[#111111] text-[#111111] bg-white hover:text-white'}`}
-                                                >
-                                                    {!isTransmitting && <div className="absolute inset-0 bg-[#111111] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-500 ease-out z-0" />}
-                                                    <span className="tracking-widest uppercase text-xs relative z-10 font-bold font-mono">
-                                                        {result || "EXECUTE TRANSMISSION"}
-                                                    </span>
-                                                </button>
-                                            </Magnetic>
-                                        </div>
-
-                                    </form>
+                        {/* Direct Contacts & Socials */}
+                        <div className="mt-12 flex flex-col gap-6">
+                            <div className="gsap-contact-link-item">
+                                <span className="text-[10px]   text-neutral-400 tracking-widest uppercase block mb-1">// DIRECT LINK</span>
+                                <a href="mailto:iamsudippan@gmail.com" className="text-sm font-bold uppercase tracking-wider text-[#111111] hover:text-orange-600 transition-colors">
+                                    iamsudippan@gmail.com
+                                </a>
+                            </div>
+                            <div className="gsap-contact-link-item">
+                                <span className="text-[10px]   text-neutral-400 tracking-widest uppercase block mb-1">// SECURE VOIP</span>
+                                <a href="tel:+918900359269" className="text-sm font-bold uppercase tracking-wider text-[#111111] hover:text-orange-600 transition-colors">
+                                    +91 8900359269
+                                </a>
+                            </div>
+                            <div className="gsap-contact-link-item">
+                                <span className="text-[10px]   text-neutral-400 tracking-widest uppercase block mb-2">// SOCIAL NODES</span>
+                                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                                    {socials.map((social, index) => (
+                                        <a key={index} href={social.href} target="_blank" rel="noopener noreferrer" className="text-xs uppercase font-bold tracking-widest text-[#111111] hover:text-orange-600 transition-colors">
+                                            {social.name}
+                                        </a>
+                                    ))}
                                 </div>
                             </div>
-                        </InteractiveCard>
+                        </div>
                     </div>
 
-                    {/* Right Side: Modules */}
-                    <div className='w-full md:w-1/2 flex flex-col gap-8'>
+                    {/* Right Column: Technical Form */}
+                    <div className='col-span-1 lg:col-span-7 lg:pl-12 flex flex-col justify-between relative'>
+                        {/* Main Vertical Divider Line */}
+                        <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#cfccb8]/60 hidden lg:block gsap-contact-vertical-line" />
 
-                        <div className="hidden lg:flex flex-col text-end mt-5 md:mt-0 px-5 md:px-10 text-xl font-light tracking-widest uppercase text-neutral-500">
-                            <p>// Establish uplink below</p>
-                            <p>// Awaiting external connection</p>
-                            <p>// Direct communication channels open</p>
-                        </div>
+                        <form onSubmit={onSubmit} className="flex flex-col w-full relative z-10">
+                            {/* Top Horizontal Line */}
+                            <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#cfccb8]/60 gsap-contact-top-line" />
 
-                        {/* Direct Contacts */}
-                        <div className="flex flex-col gap-4">
-                            <InteractiveCard className="gsap-contact-element">
-                                <a href="mailto:iamsudippan@gmail.com" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-2 opacity-15 group-hover:opacity-40 transition-opacity">
-                                        <Icon icon="carbon:email" width="60" height="60" className="text-orange-600" />
-                                    </div>
-                                    <h2 className="text-[#111111]/70 font-mono text-[9px] tracking-widest uppercase mb-2 font-bold">[ UPLINK.EMAIL ]</h2>
-                                    <p className='text-[#111111] tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-600 transition-colors'>
-                                        iamsudippan@gmail.com
-                                    </p>
-                                </a>
-                            </InteractiveCard>
-
-                            <InteractiveCard className="gsap-contact-element">
-                                <a href="tel:+918900359269" className="block bg-white border border-[#cfccb8] hover:border-[#111111] p-6 relative group transition-all duration-300 overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-2 opacity-15 group-hover:opacity-40 transition-opacity">
-                                        <Icon icon="carbon:phone" width="60" height="60" className="text-orange-600" />
-                                    </div>
-                                    <h2 className="text-[#111111]/70 font-mono text-[9px] tracking-widest uppercase mb-2 font-bold">[ UPLINK.PHONE ]</h2>
-                                    <p className='text-[#111111] tracking-widest uppercase text-sm md:text-base font-bold group-hover:text-orange-600 transition-colors'>
-                                        +91 8900359269
-                                    </p>
-                                </a>
-                            </InteractiveCard>
-                        </div>
-
-                        {/* Social Grid */}
-                        <div className='mt-8 gsap-contact-element'>
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className='w-4 h-[1px] bg-[#cfccb8]' />
-                                <h2 className="text-orange-600 font-mono text-[10px] tracking-widest uppercase font-bold">[ NETWORK.NODES ]</h2>
-                                <div className='flex-1 h-[1px] bg-[#cfccb8]' />
+                            {/* Input 1: SUBJECT / IDENTITY */}
+                            <div className="grid grid-cols-12 relative">
+                                <div className="col-span-9 py-6 pr-4 gsap-contact-field-content">
+                                    <label className="text-[15px]   tracking-widest text-neutral-800 uppercase mb-2 block select-none">
+                                        SUBJECT / IDENTITY
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        placeholder="NAME / ORGANIZATION"
+                                        className="w-full bg-transparent text-[#111111] placeholder:text-neutral-300   text-xl focus:outline-none uppercase font-bold tracking-wider py-1"
+                                        required
+                                    />
+                                </div>
+                                <div className="col-span-3 relative">
+                                    <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#cfccb8]/60 gsap-contact-vertical-inner-line" />
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#cfccb8]/60 gsap-contact-horizontal-line" />
                             </div>
 
-                            <div className='grid grid-cols-2 gap-4'>
-                                {socials.map((social, index) => (
-                                    <InteractiveCard key={index}>
-                                        <Magnetic>
-                                            <a
-                                                href={social.href}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className='flex items-center justify-center bg-white border border-[#cfccb8] hover:bg-[#111111] hover:border-[#111111] p-4 transition-all duration-300 group'
-                                            >
-                                                <span className='text-[10px] tracking-widest uppercase text-neutral-800 group-hover:text-white font-bold transition-colors'>
-                                                    {social.name}
-                                                </span>
-                                            </a>
-                                        </Magnetic>
-                                    </InteractiveCard>
-                                ))}
+                            {/* Input 2: ENDPOINT */}
+                            <div className="grid grid-cols-12 relative">
+                                <div className="col-span-9 py-6 pr-4 gsap-contact-field-content">
+                                    <label className="text-[15px]   tracking-widest text-neutral-800 uppercase mb-2 block select-none">
+                                        ENDPOINT
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="EMAIL ADDRESS"
+                                        className="w-full bg-transparent text-[#111111] placeholder:text-neutral-300   text-xl focus:outline-none uppercase font-bold tracking-wider py-1"
+                                        required
+                                    />
+                                </div>
+                                <div className="col-span-3 relative">
+                                    <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#cfccb8]/60 gsap-contact-vertical-inner-line" />
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#cfccb8]/60 gsap-contact-horizontal-line" />
                             </div>
-                        </div>
 
+                            {/* Input 3: TRANSMISSION DATA */}
+                            <div className="grid grid-cols-12 relative">
+                                <div className="col-span-9 py-6 pr-4 gsap-contact-field-content">
+                                    <label className="text-[15px]   tracking-widest text-neutral-800 uppercase mb-2 block select-none">
+                                        TRANSMISSION DATA
+                                    </label>
+                                    <textarea
+                                        name="message"
+                                        placeholder="MESSAGE BODY"
+                                        className="w-full bg-transparent text-[#111111] placeholder:text-neutral-300   text-xl focus:outline-none uppercase font-bold tracking-wider h-32 resize-none py-1"
+                                        required
+                                    />
+                                </div>
+                                <div className="col-span-3 relative">
+                                    <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#cfccb8]/60 gsap-contact-vertical-inner-line" />
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#cfccb8]/60 gsap-contact-horizontal-line" />
+                            </div>
+
+                            {/* Footer Row: Button & Schematic Codes */}
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-9 py-8 flex items-center gsap-contact-btn">
+                                    <button
+                                        type="submit"
+                                        disabled={isTransmitting}
+                                        className={`px-8 py-4   text-xs uppercase tracking-widest transition-all duration-300 font-bold ${isTransmitting ? 'bg-orange-600/20 text-orange-600 border border-orange-600/30 cursor-not-allowed' : 'bg-[#111111] text-white hover:bg-orange-600 cursor-pointer'}`}
+                                    >
+                                        {result || "SEND TERMINAL"}
+                                    </button>
+                                </div>
+                                <div className="col-span-3 py-8 flex items-center justify-around   text-[9px] text-[#111111]/40 tracking-widest pl-4 font-bold select-none relative">
+                                    <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#cfccb8]/60 gsap-contact-vertical-inner-line" />
+                                    <span className="gsap-contact-footer-item">TERMINAL</span>
+                                    <span className="gsap-contact-footer-item">ARCHIVE</span>
+                                    <span className="gsap-contact-footer-item">X-01</span>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        {/* Cybernetic Wireframe Background Graphic */}
+                        <img
+                            src="/Images/contact_wireframe.png"
+                            alt="Technical Schematic"
+                            className="absolute bottom-0 right-0 w-80 h-auto opacity-[0.04] pointer-events-none z-0 gsap-contact-watermark"
+                        />
                     </div>
 
                 </div>

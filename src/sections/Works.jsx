@@ -1,6 +1,5 @@
 import { useGSAP } from '@gsap/react';
 import React, { useRef, useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects } from '../constants';
@@ -10,60 +9,8 @@ import InteractiveCard from '../componnts/InteractiveCard.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PREVIEW_DIMENSIONS = {
-    blender: { width: 840, height: 560 },
-    coding: { width: 1050, height: 550 },
-    unreal: { width: 1050, height: 550 },
-    vlsi: { width: 500, height: 350 }
-};
-
-const getOriginAndCoords = (e, type) => {
-    const dims = PREVIEW_DIMENSIONS[type] || { width: 500, height: 350 };
-    const width = dims.width;
-    const height = dims.height;
-
-    let targetX = e.clientX + 24;
-    let targetY = e.clientY + 24;
-
-    const pad = 12;
-
-    let hOrigin = "left";
-    let vOrigin = "top";
-
-    // Keep inside horizontal boundary
-    if (targetX + width > window.innerWidth - pad) {
-        targetX = e.clientX - width - 24;
-        hOrigin = "right";
-    }
-    if (targetX < pad) {
-        targetX = pad;
-        hOrigin = "left";
-    }
-
-    // Keep inside vertical boundary
-    if (targetY + height > window.innerHeight - pad) {
-        targetY = e.clientY - height - 24;
-        vOrigin = "bottom";
-    }
-    if (targetY < pad) {
-        targetY = e.clientY + 24;
-        vOrigin = "top";
-        if (targetY + height > window.innerHeight - pad) {
-            targetY = window.innerHeight - height - pad;
-            vOrigin = "bottom";
-        }
-    }
-
-    return {
-        x: targetX,
-        y: targetY,
-        origin: `${hOrigin} ${vOrigin}`
-    };
-};
-
 const Works = () => {
-
-    const [currentPreview, setCurrentPreview] = useState(null);
+    const [activeProject, setActiveProject] = useState(null);
     const [videoLoading, setVideoLoading] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -74,39 +21,161 @@ const Works = () => {
     const lineRef = useRef(null);
     const subRef = useRef(null);
     const subRef2 = useRef(null);
-    const projectRef = useRef(null);
-    const previewRef = useRef(null);
-    const DesRef = useRef(null);
-    const scrollTextRef = useRef(null);
-
-    const blenderItemsRef = useRef([]);
-    const unrealItemsRef = useRef([]);
-    const codingItemsRef = useRef([]);
-    const vlsiItemsRef = useRef([]);
-    const countRefs = useRef([]);
-
-    const moveX = useRef(null);
-    const moveY = useRef(null);
-    const mouse = useRef({ x: 0, y: 0 });
-    const activeTimeline = useRef(null);
+    const dashboardRef = useRef(null);
+    const countRefs = useRef({});
+    const descriptionContainerRef = useRef(null);
 
     const total = BlenderProjects.length + UnrealProjects.length + CodingProjects.length + VLSIProjects.length;
     const counts = [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length, total];
+    const unrealStatuses = ["v1.0.4", "STABLE", "LIVE", "TESTING", "STABLE"];
 
-    /* ================= GSAP SETUP ================= */
+    const getProjectMetadata = (project) => {
+        if (!project) return { typeStr: "UNKNOWN", dateStr: "N/A" };
+        const name = project.name.toLowerCase();
+        if (project.type === 'blender') {
+            if (name.includes('perfume')) return { typeStr: "GLASS / POLY", dateStr: "2023.11.22" };
+            if (name.includes('house')) return { typeStr: "CARTOON / POLY", dateStr: "2023.11.25" };
+            if (name.includes('rounded') || name.includes('bottle')) return { typeStr: "GLASS / POLY", dateStr: "2023.11.27" };
+            if (name.includes('bulb')) return { typeStr: "REALISTIC / EMISSION", dateStr: "2023.11.29" };
+            if (name.includes('rifle')) return { typeStr: "WEAPON / HARD", dateStr: "2023.12.16" };
+            if (name.includes('speaker')) return { typeStr: "ELECTRONIC / HARD", dateStr: "2023.12.22" };
+            if (name.includes('katana') || name.includes('knife')) return { typeStr: "MELEE / WEAPON", dateStr: "2024.04.10" };
+            return { typeStr: "3D ASSET / POLY", dateStr: "2023.12.20" };
+        }
+        if (project.type === 'unreal') {
+            if (name.includes('combat')) return { typeStr: "BLUEPRINT / COMPONENT", dateStr: "2024.12.20" };
+            if (name.includes('optimization')) return { typeStr: "UE5 / RENDER", dateStr: "2025.01.05" };
+            if (name.includes('enemy')) return { typeStr: "AI / PATHFINDING", dateStr: "2025.01.12" };
+            if (name.includes('target')) return { typeStr: "CAMERA / TRACE", dateStr: "2025.01.20" };
+            return { typeStr: "UE5 / LEVEL DESIGN", dateStr: "2024.12.15" };
+        }
+        if (project.type === 'coding') {
+            if (name.includes('re-plotter') || name.includes('replotter')) return { typeStr: "PYTHON / ANALYSIS", dateStr: "2024.06.10" };
+            if (name.includes('forge')) return { typeStr: "C++ / TERMINAL", dateStr: "2024.08.15" };
+            return { typeStr: "SOFTWARE / SYSTEM", dateStr: "2024.07.01" };
+        }
+        if (project.type === 'vlsi') {
+            return { typeStr: "VLSI / CADENCE", dateStr: "2024.09.01" };
+        }
+        return { typeStr: "PORTFOLIO / OBJ", dateStr: "2024.01.01" };
+    };
 
+    const getProjectIndexTag = (project) => {
+        if (!project) return "N/A";
+        let prefix = "OBJ";
+        let list = [];
+        if (project.type === 'blender') { prefix = "OBJ"; list = BlenderProjects; }
+        else if (project.type === 'unreal') { prefix = "SIM"; list = UnrealProjects; }
+        else if (project.type === 'coding') { prefix = "DEV"; list = CodingProjects; }
+        else if (project.type === 'vlsi') { prefix = "FAB"; list = VLSIProjects; }
+
+        const idx = list.findIndex(p => p.name === project.name);
+        const numStr = String(idx !== -1 ? idx + 1 : 1).padStart(2, '0');
+        return `${prefix}_${numStr}`;
+    };
+
+    const getButtonText = (project) => {
+        if (!project) return "LAUNCH";
+        if (project.type === 'unreal') return "WATCH_GAMEPLAY";
+        if (project.type === 'coding') return "GITHUB_REPO";
+        if (project.type === 'blender') return "VIEW_3D_POST";
+        return "LAUNCH_PROJECT";
+    };
+
+    // Default to the first Blender project when loaded
+    useEffect(() => {
+        if (!activeProject && BlenderProjects.length > 0) {
+            setActiveProject({ type: "blender", ...BlenderProjects[0] });
+        }
+    }, [activeProject]);
+
+    // Track category switch animations for coding list
+    useEffect(() => {
+        gsap.fromTo('.gsap-coding-row',
+            { opacity: 0, x: -10 },
+            { opacity: 1, x: 0, duration: 0.3, stagger: 0.05, ease: "power2.out" }
+        );
+    }, [selectedCategory]);
+
+    // Auto-scroll long description text when it overflows the viewport container
+    useEffect(() => {
+        const el = descriptionContainerRef.current;
+        if (!el) return;
+
+        // Reset scroll position on active project change
+        el.scrollTop = 0;
+
+        let scrollInterval;
+        let isHovered = false;
+        let delayTimeout;
+
+        const startAutoScroll = () => {
+            let checks = 0;
+            delayTimeout = setTimeout(() => {
+                if (!el) return;
+                scrollInterval = setInterval(() => {
+                    if (isHovered) return;
+
+                    const maxScroll = el.scrollHeight - el.clientHeight;
+                    if (maxScroll <= 0) {
+                        checks++;
+                        if (checks > 125) { // Stop checking after 5 seconds of no overflow
+                            clearInterval(scrollInterval);
+                        }
+                        return;
+                    }
+
+                    // Reset checks since it overflows
+                    checks = 0;
+
+                    if (el.scrollTop >= maxScroll - 1) {
+                        clearInterval(scrollInterval);
+                        setTimeout(() => {
+                            if (!el) return;
+                            gsap.to(el, {
+                                scrollTop: 0,
+                                duration: 1.5,
+                                ease: "power2.inOut",
+                                onComplete: () => {
+                                    startAutoScroll();
+                                }
+                            });
+                        }, 3000);
+                    } else {
+                        el.scrollTop += 0.75;
+                    }
+                }, 40);
+            }, 2000);
+        };
+
+        startAutoScroll();
+
+        const handleMouseEnter = () => { isHovered = true; };
+        const handleMouseLeave = () => { isHovered = false; };
+
+        el.addEventListener('mouseenter', handleMouseEnter);
+        el.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            clearTimeout(delayTimeout);
+            if (scrollInterval) clearInterval(scrollInterval);
+            if (el) {
+                el.removeEventListener('mouseenter', handleMouseEnter);
+                el.removeEventListener('mouseleave', handleMouseLeave);
+            }
+        };
+    }, [activeProject]);
+
+    /* ================= GSAP ANIMATIONS ================= */
     useGSAP(() => {
-
-        moveX.current = gsap.quickTo(previewRef.current, "x", { duration: 0.3, ease: "power2.out" });
-        moveY.current = gsap.quickTo(previewRef.current, "y", { duration: 0.3, ease: "power2.out" });
-
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: "#works",
-                start: "top 60%",
+                start: "top 90%",
             }
         });
 
+        // Heading Reveal
         if (headingRef.current) {
             tl.from(headingRef.current.querySelector('.header-block'), {
                 duration: 0.5,
@@ -131,9 +200,9 @@ const Works = () => {
                 }, "-=0.4");
         }
 
+        // Subtitles Reveal
         const isMobile = window.innerWidth < 768;
         const subToAnimate = isMobile ? subRef2.current : subRef.current;
-
         if (subToAnimate) {
             tl.from(subToAnimate.children, {
                 duration: 0.6,
@@ -143,8 +212,9 @@ const Works = () => {
             }, "-=0.3");
         }
 
-        if (projectRef.current) {
-            tl.from(projectRef.current.children, {
+        // Main Dashboard Grow Reveal
+        if (dashboardRef.current) {
+            tl.from(dashboardRef.current, {
                 y: 50,
                 opacity: 0,
                 duration: 0.8,
@@ -152,77 +222,21 @@ const Works = () => {
             }, "-=0.4");
         }
 
-        /* Inner Scroll Animations */
-        blenderItemsRef.current.forEach((item) => {
-            if (!item) return;
-            gsap.from(item, {
-                opacity: 0,
-                x: 50,
-                duration: 0.5,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: item,
-                    scroller: item.closest('.scroll-container'),
-                    start: "top bottom-=10",
-                    toggleActions: "play none none reverse",
-                }
-            });
-        });
-
-        unrealItemsRef.current.forEach((item) => {
-            if (!item) return;
-            gsap.from(item, {
-                opacity: 0,
-                x: 50,
-                duration: 0.5,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: item,
-                    scroller: item.closest('.scroll-container'),
-                    start: "top bottom-=10",
-                    toggleActions: "play none none reverse",
-                }
-            });
-        });
-
-        codingItemsRef.current.forEach((item) => {
-            if (!item) return;
-            gsap.from(item, {
-                opacity: 0,
-                x: 50,
-                duration: 0.5,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: item,
-                    scroller: item.closest('.scroll-container'),
-                    start: "top bottom-=10",
-                    toggleActions: "play none none reverse",
-                }
-            });
-        });
-
-        vlsiItemsRef.current.forEach((item) => {
-            if (!item) return;
-            gsap.from(item, {
-                opacity: 0,
-                x: 50,
-                duration: 0.5,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: item,
-                    scroller: item.closest('.scroll-container'),
-                    start: "top bottom-=10",
-                    toggleActions: "play none none reverse",
-                }
-            });
-        });
-
-        /* ── Counter count-up animation ── */
-        countRefs.current.forEach((el, i) => {
+        // Counters Count-Up
+        const keys = ['blender', 'unreal', 'coding', 'vlsi', 'total'];
+        const values = {
+            blender: BlenderProjects.length,
+            unreal: UnrealProjects.length,
+            coding: CodingProjects.length,
+            vlsi: VLSIProjects.length,
+            total: total
+        };
+        keys.forEach(key => {
+            const el = countRefs.current[key];
             if (!el) return;
             const obj = { val: 0 };
             gsap.to(obj, {
-                val: counts[i],
+                val: values[key],
                 duration: 2,
                 ease: 'power2.out',
                 scrollTrigger: { trigger: el, start: 'top 90%' },
@@ -232,152 +246,40 @@ const Works = () => {
             });
         });
 
-        return () => {
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        };
-
-    }, [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length]);
-
-    /* ================= DESCRIPTION POPUP FIX ================= */
-
-    useEffect(() => {
-        if (!currentPreview || !DesRef.current) return;
-
-        gsap.fromTo(
-            DesRef.current,
+        // Parallax scroll animation for background watermark
+        gsap.fromTo(".works-watermark",
+            { xPercent: 8 },
             {
-                opacity: 0,
-                y: 40,
-                scale: 0.95
-            },
-            {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 0.4,
-                ease: "back.out(1.7)"
+                xPercent: -8,
+                scrollTrigger: {
+                    trigger: "#works",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 0.5,
+                }
             }
         );
 
-        if (scrollTextRef.current) {
-            const el = scrollTextRef.current;
-            gsap.killTweensOf(el);
-            el.scrollTop = 0;
-
-            setTimeout(() => {
-                if (el.scrollHeight > el.clientHeight) {
-                    const maxScroll = el.scrollHeight - el.clientHeight;
-                    const duration = maxScroll / 20;
-
-                    gsap.to(el, {
-                        scrollTop: maxScroll,
-                        duration: duration,
-                        ease: "linear",
-                        delay: 1.5,
-                        yoyo: true,
-                        repeat: -1,
-                        repeatDelay: 1.5
-                    });
-                }
-            }, 50);
-        }
-    }, [currentPreview]);
-
-    /* ================= CATEGORY SWITCH ANIMATION ================= */
-    useEffect(() => {
-        const items = codingItemsRef.current.filter(Boolean);
-        if (items.length > 0) {
-            gsap.fromTo(items,
-                { opacity: 0, x: 20 },
-                { opacity: 1, x: 0, duration: 0.3, stagger: 0.05, ease: "power2.out" }
-            );
-        }
-    }, [selectedCategory]);
-
-    /* ================= MOUSE HANDLERS ================= */
-
-    const handleMouseEnter = (e, type, index) => {
-        if (window.innerWidth < 768) return;
-
-        if (activeTimeline.current) {
-            activeTimeline.current.kill();
-        }
-
-        setCurrentPreview({ type, index });
-
-        if (type === "unreal") {
-            setVideoLoading(true);
-        }
-
-        const { x, y, origin } = getOriginAndCoords(e, type);
-
-        // Position it and scale it to 0 instantly, then zoom it up
-        gsap.set(previewRef.current, {
-            x: x,
-            y: y,
-            transformOrigin: origin,
-            scale: 0,
-            opacity: 0
-        });
-
-        activeTimeline.current = gsap.timeline()
-            .to(previewRef.current, {
-                scale: 1,
-                opacity: 1,
-                duration: 0.25,
-                ease: "back.out(1.2)"
-            });
-    };
-
-    const handleMouseLeave = () => {
-        if (window.innerWidth < 768) return;
-
-        if (activeTimeline.current) {
-            activeTimeline.current.kill();
-        }
-
-        setVideoLoading(false);
-
-        activeTimeline.current = gsap.timeline({
-            onComplete: () => {
-                setCurrentPreview(null);
-            }
-        })
-            .to(previewRef.current, {
-                scale: 0,
-                opacity: 0,
-                duration: 0.2,
-                ease: "power2.in"
-            });
-    };
-
-    const handleMouseMove = (e) => {
-        if (window.innerWidth < 768 || !previewRef.current || !currentPreview) return;
-
-        const { x, y, origin } = getOriginAndCoords(e, currentPreview.type);
-
-        mouse.current.x = x;
-        mouse.current.y = y;
-
-        moveX.current(x);
-        moveY.current(y);
-
-        gsap.set(previewRef.current, { transformOrigin: origin });
-    };
-
-    /* ================= UI ================= */
+    }, [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length]);
 
     return (
-        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 overflow-hidden'>
+        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 overflow-hidden bg-[#eae8e4] text-[#111111]'>
+            {/* Background Light Text Watermark */}
+            <div
+                className="works-watermark absolute right-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
+            >
+                WORKS
+            </div>
 
+            {/* Header (UNCHANGED as requested) */}
             <div className='flex items-center gap-4 mb-10 px-5 md:px-10 select-none' ref={headingRef} style={{ perspective: "1000px" }}>
                 <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
                 <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
                     {(() => {
                         const headerText = "[ SYS.WORKS_DB ]";
                         return headerText.split("").map((char, index) => (
-                            <span 
-                                key={index} 
+                            <span
+                                key={index}
                                 className="header-char inline-block origin-bottom text-[#111111]"
                             >
                                 {char === " " ? "\u00A0" : char}
@@ -406,447 +308,462 @@ const Works = () => {
                 <p>// VLSI design.</p>
             </div>
 
-            {/* ══════════ PROJECT COUNTER BOX ══════════ */}
-            <div className="px-5 md:px-10 mt-10 mb-2">
+            {/* ══════════ PORTFOLIO DASHBOARD CONTAINER ══════════ */}
+            <div className="px-5 md:px-10 mt-10">
+                <div
+                    ref={dashboardRef}
+                    className="grid grid-cols-1 lg:grid-cols-12 gap-0 border border-[#cfccb8] bg-white relative overflow-hidden"
+                >
 
-                {/* Section label */}
-                <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[10px] font-mono tracking-[0.35em] text-orange-600/70 uppercase font-bold">[ SYS.STAT_OVERVIEW ]</span>
-                    <div className="flex-1 h-px bg-[#cfccb8]" />
-                    <span className="text-[10px] font-mono text-orange-600/50 animate-pulse">● LIVE</span>
-                </div>
+                    {/* ================= LEFT COLUMN (Stats + Unreal) ================= */}
+                    <div className="col-span-1 lg:col-span-3 border-b lg:border-b-0 lg:border-r border-[#cfccb8] flex flex-col">
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
-                    {[
-                        { label: 'DB.BLENDER', sub: '3D Models', icon: 'logos:blender', idx: 0 },
-                        { label: 'DB.UNREAL', sub: 'Game Demos', icon: 'devicon:unrealengine', idx: 1 },
-                        { label: 'DB.CODING', sub: 'Coding Projects', icon: 'mdi:code-braces', idx: 2 },
-                        { label: 'DB.VLSI', sub: 'Circuit Designs', icon: 'mdi:chip', idx: 3 },
-                        { label: 'TOTAL.OBJ', sub: 'All Projects', icon: 'mdi:database-outline', idx: 4 },
-                    ].map(({ label, sub, icon, idx }) => (
-                        <div
-                            key={idx}
-                            className="relative border border-[#cfccb8] bg-white p-4 md:p-6 group hover:border-[#111111] transition-all duration-300 overflow-hidden cursor-default"
-                        >
-                            {/* Corner brackets */}
-                            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300" />
-                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300" />
-                            {/* Hover glow */}
-                            <div className="absolute inset-0 bg-orange-600/0 group-hover:bg-orange-600/5 transition-all duration-300 pointer-events-none" />
-                            {/* Scan line on hover */}
-                            <div className="absolute left-0 top-0 h-full w-[2px] bg-orange-600 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                        {/* STATS OVERVIEW PANEL (Top-Left) */}
+                        <div className="lg:h-[600px] border-b border-[#cfccb8] p-10 bg-white select-none flex flex-col justify-between gap-12">
+                            <div className="flex items-center gap-2 text-sm   tracking-[0.25em] text-neutral-400 uppercase font-bold">
+                                <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
+                                SYS.STAT_OVERVIEW
+                            </div>
 
-                            <div className="relative z-10 flex flex-col gap-2">
-                                {/* Label + icon row */}
-                                <div className="flex items-center justify-between">
-                                    <span className="text-[9px] md:text-[11px] font-mono tracking-[0.2em] text-orange-600 font-semibold uppercase">{label}</span>
-                                    <Icon
-                                        icon={icon}
-                                        className="text-orange-600 bg-orange-100 p-1 rounded-full"
-                                        width={32} height={32}
-                                    />
+                            <div className="flex flex-col gap-8">
+                                {/* Blender Stat */}
+                                <div className="flex justify-between items-center">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 text-sm   text-neutral-500 uppercase tracking-widest">
+                                            <span>DB.BLENDER</span>
+                                            <Icon icon="logos:blender" width="18" />
+                                        </div>
+                                        <span className="text-[11px]   text-neutral-400 uppercase tracking-widest font-semibold mt-1">3D ASSETS</span>
+                                    </div>
+                                    <div className="text-6xl font-bold text-[#111111]" ref={el => countRefs.current.blender = el}>
+                                        00
+                                    </div>
                                 </div>
 
-                                {/* Animated counter */}
-                                <span
-                                    ref={el => countRefs.current[idx] = el}
-                                    className="text-4xl md:text-5xl font-bold tabular-nums text-[#111111] transition-all duration-300"
-                                >
-                                    {String(counts[idx]).padStart(2, '0')}
-                                </span>
+                                {/* Unreal Stat */}
+                                <div className="flex justify-between items-center">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 text-sm   text-neutral-500 uppercase tracking-widest">
+                                            <span>DB.UNREAL</span>
+                                            <Icon icon="devicon:unrealengine" width="18" />
+                                        </div>
+                                        <span className="text-[11px]   text-neutral-400 uppercase tracking-widest font-semibold mt-1">ACTIVE BUILDS</span>
+                                    </div>
+                                    <div className="text-6xl font-bold text-[#111111]" ref={el => countRefs.current.unreal = el}>
+                                        00
+                                    </div>
+                                </div>
 
-                                {/* Divider */}
-                                <div className="w-full h-px bg-[#cfccb8] group-hover:bg-[#111111] transition-colors duration-300" />
+                                {/* Coding Stat */}
+                                <div className="flex justify-between items-center">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 text-sm   text-neutral-500 uppercase tracking-widest">
+                                            <span>DB.CODING</span>
+                                            <Icon icon="mdi:code-braces" width="18" className="text-neutral-400" />
+                                        </div>
+                                        <span className="text-[11px]   text-neutral-400 uppercase tracking-widest font-semibold mt-1">SOFT INDEX</span>
+                                    </div>
+                                    <div className="text-6xl font-bold text-[#111111]" ref={el => countRefs.current.coding = el}>
+                                        00
+                                    </div>
+                                </div>
 
-                                {/* Sub label */}
-                                <span className="text-[9px] font-mono tracking-widest text-neutral-500 font-semibold uppercase">{sub}</span>
+                                {/* VLSI Stat */}
+                                <div className="flex justify-between items-center">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 text-sm   text-neutral-500 uppercase tracking-widest">
+                                            <span>DB.VLSI</span>
+                                            <Icon icon="mdi:chip" width="18" className="text-neutral-400" />
+                                        </div>
+                                        <span className="text-[11px]   text-neutral-400 uppercase tracking-widest font-semibold mt-1">FAB INDEX</span>
+                                    </div>
+                                    <div className="text-6xl font-bold text-[#111111]" ref={el => countRefs.current.vlsi = el}>
+                                        00
+                                    </div>
+                                </div>
+
+                                {/* Total Stat */}
+                                <div className="pt-6 border-t border-[#cfccb8]/40 flex justify-between items-center">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 text-sm   text-neutral-500 uppercase tracking-widest">
+                                            <span>TOTAL_DB</span>
+                                            <Icon icon="mdi:database-outline" width="18" className="text-neutral-400" />
+                                        </div>
+                                        <span className="text-[11px]   text-neutral-400 uppercase tracking-widest font-semibold mt-1">PROJECTS INDEX</span>
+                                    </div>
+                                    <div className="text-6xl font-bold text-[#111111]" ref={el => countRefs.current.total = el}>
+                                        00
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    ))}
-                </div>
-            </div>
-            {/* ═══════════════════════════════════════ */}
 
-            <div
-                ref={projectRef}
-                className='grid grid-cols-1 lg:grid-cols-12 gap-6 px-5 md:px-10 mt-10 perspective-[2000px]'
-                onMouseMove={handleMouseMove}
-            >
-
-                {/* Blender */}
-                <div className='lg:col-span-5 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
-                    {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
-                    <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-6 uppercase tracking-widest flex items-center justify-center gap-2'>
-                            <Icon icon="mdi:cube-outline" width={24} height={24} /> [ DB.BLENDER ]
-                        </h1>
-
-                        <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
-                            {BlenderProjects.map((project, index) => (
-                                <div
-                                    key={index}
-                                    ref={el => blenderItemsRef.current[index] = el}
-                                    onMouseEnter={(e) => handleMouseEnter(e, "blender", index)}
-                                    onMouseLeave={handleMouseLeave}
-                                >
-                                    <InteractiveCard>
-                                        <div className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'>
-                                            {/* Hover Scanning Line */}
-                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
-
-                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
-                                                {project.name}
-                                            </h2>
-                                            <Magnetic>
-                                                <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                    <a href={project.link} target="_blank" rel="noopener noreferrer">
-                                                        <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-600' width="24" height="24" />
-                                                    </a>
-                                                </div>
-                                            </Magnetic>
-                                        </div>
-
-                                        {/* Mobile Preview Image fallback */}
-                                        <div className='relative flex px-5 md:hidden h-auto py-5 bg-[#f4f2ee] mb-5 mt-2 transition-colors duration-500 border border-[#cfccb8]'>
-                                            <img src={project.image} alt={project.name} className="w-full transition-all duration-500 border border-[#cfccb8] object-cover" />
-                                        </div>
-                                    </InteractiveCard>
+                        {/* UNREAL DATABASE PANEL (Bottom-Left) */}
+                        <div className="lg:h-[600px] p-10 flex flex-col bg-white overflow-hidden justify-between border-b lg:border-b-0 border-[#cfccb8]">
+                            <div className="flex flex-col h-full overflow-hidden">
+                                <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
+                                    <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                                        UNREAL ARCHIVE
+                                    </h3>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
 
-                {/* Unreal */}
-                <div className='lg:col-span-7 h-[550px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
-                    {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
-                    <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
-                            <Icon icon="mdi:gamepad-variant-outline" width={24} height={24} /> [ DB.UNREAL ]
-                        </h1>
-
-                        <p className='mb-6 text-neutral-500 text-xs md:text-sm tracking-widest uppercase text-center'>// Currently working on a sci-fi action game. Demo previews below.</p>
-
-                        <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
-                            {UnrealProjects.map((project, index) => (
-                                <div
-                                    key={index}
-                                    ref={el => unrealItemsRef.current[index] = el}
-                                    onMouseEnter={(e) => handleMouseEnter(e, "unreal", index)}
-                                    onMouseLeave={handleMouseLeave}
-                                >
-                                    <InteractiveCard>
-                                        <a
-                                            href={project.Link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'
-                                        >
-                                            {/* Hover Scanning Line */}
-                                            <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
-
-                                            <h2 className='lg:text-[24px] text-[20px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
-                                                {project.name}
-                                            </h2>
-                                            <Magnetic>
-                                                <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                    <Icon icon="ion:arrow-up-right-box-outline" className='text-orange-600' width="24" height="24" />
+                                <div className="flex-1 overflow-y-auto pr-2 flex flex-col scrollbar-thin scroll-container">
+                                    {UnrealProjects.map((project, index) => {
+                                        const isActive = activeProject && activeProject.type === 'unreal' && activeProject.name === project.name;
+                                        const tagStr = `SIM_${String(index + 1).padStart(2, '0')}`;
+                                        return (
+                                            <div
+                                                key={index}
+                                                className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
+                                                onMouseEnter={() => setActiveProject({ type: 'unreal', ...project })}
+                                            >
+                                                <div className="flex flex-col pl-2">
+                                                    <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
+                                                        {tagStr}
+                                                    </span>
+                                                    <span className={`text-xs md:text-sm tracking-wider uppercase transition-colors duration-300 ${isActive ? 'text-orange-600' : 'text-[#111111] group-hover:text-orange-600'}`}>
+                                                        {project.name}
+                                                    </span>
                                                 </div>
-                                            </Magnetic>
-                                        </a>
-                                    </InteractiveCard>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Coding Projects */}
-                <div className='lg:col-span-7 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
-                    {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
-                    <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
-                            <Icon icon="mdi:code-braces" width={24} height={24} /> [ DB.CODING ]
-                        </h1>
-
-                        <p className='mb-4 text-neutral-500 text-xs md:text-sm tracking-widest uppercase text-center'>// Software & Script developments.</p>
-
-                        {/* Dynamic Category Tabs */}
-                        <div className="flex flex-wrap justify-center gap-5 mb-6">
-                            {categories.map((category) => (
-                                <button
-                                    key={category}
-                                    onClick={() => setSelectedCategory(category)}
-                                    className={`px-3 py-1 text-[15px] tracking-widest uppercase border transition-all duration-300 cursor-pointer ${selectedCategory === category
-                                        ? "border-orange-600 bg-orange-600/10 text-orange-600 font-bold"
-                                        : "border-[#cfccb8] bg-transparent text-neutral-500 hover:text-[#111111] hover:border-[#111111]"
-                                        }`}
-                                >
-                                    {category}
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
-                            {(() => {
-                                codingItemsRef.current = [];
-                                return filteredCodingProjects.map((project, index) => {
-                                    const originalIndex = CodingProjects.findIndex(p => p.id === project.id);
-                                    return (
-                                        <div
-                                            key={project.id}
-                                            ref={el => codingItemsRef.current[index] = el}
-                                            onMouseEnter={(e) => handleMouseEnter(e, "coding", originalIndex)}
-                                            onMouseLeave={handleMouseLeave}
-                                        >
-                                            <InteractiveCard>
                                                 <a
                                                     href={project.Link}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'
+                                                    className={`pr-2 transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'}`}
                                                 >
-                                                    {/* Hover Scanning Line */}
-                                                    <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
-
-                                                    <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
-                                                        {project.name}
-                                                    </h2>
-                                                    <Magnetic>
-                                                        <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                            <Icon icon="mdi:github" className='text-orange-600' width="24" height="24" />
-                                                        </div>
-                                                    </Magnetic>
+                                                    <Icon icon="ion:arrow-up-right-box-outline" className="text-orange-600" width="16" height="16" />
                                                 </a>
-                                            </InteractiveCard>
-                                        </div>
-                                    );
-                                });
-                            })()}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         </div>
+
                     </div>
-                </div>
 
-                {/* VLSI */}
-                <div className='lg:col-span-5 h-[450px] bg-white border border-[#cfccb8] p-5 flex flex-col relative'>
-                    {/* Decorative Corner Brackets */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]" />
-                    <div className="flex flex-col h-full overflow-hidden">
-                        <h1 className='text-center font-bold text-orange-600 text-[1.5rem] mb-2 uppercase tracking-widest flex items-center justify-center gap-2'>
-                            <Icon icon="mdi:chip" width={24} height={24} /> [ DB.VLSI ]
-                        </h1>
+                    {/* ================= MIDDLE COLUMN (Blender + Coding/VLSI) ================= */}
+                    <div className="col-span-1 lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#cfccb8] flex flex-col">
 
-                        <p className='mb-6 text-neutral-500 text-xs md:text-sm tracking-widest uppercase text-center'>// Tools & Circuit designs.</p>
-
-                        {VLSIProjects.length > 0 ? (
-                            <div className='flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4'>
-                                {VLSIProjects.map((project, index) => (
-                                    <div
-                                        key={index}
-                                        ref={el => vlsiItemsRef.current[index] = el}
-                                        onMouseEnter={(e) => handleMouseEnter(e, "vlsi", index)}
-                                        onMouseLeave={handleMouseLeave}
-                                    >
-                                        <InteractiveCard>
-                                            <a
-                                                href={project.Link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className='flex justify-between items-center px-4 md:px-6 py-4 bg-[#f4f2ee] border border-[#cfccb8] cursor-pointer group hover:border-[#111111] hover:bg-[#eae8e4]/60 transition-all duration-300 relative overflow-hidden'
-                                            >
-                                                {/* Hover Scanning Line */}
-                                                <div className='absolute left-0 top-0 h-full w-[2px] bg-orange-600 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
-
-                                                <h2 className='lg:text-[20px] text-[16px] uppercase tracking-widest text-neutral-800 group-hover:text-[#111111] transition-all' style={{ transform: "translateZ(20px)" }}>
-                                                    {project.name}
-                                                </h2>
-                                                <Magnetic>
-                                                    <div className="inline-block relative" style={{ transform: "translateZ(30px)" }}>
-                                                        <Icon icon="mdi:github" className='text-orange-600' width="24" height="24" />
-                                                    </div>
-                                                </Magnetic>
-                                            </a>
-                                        </InteractiveCard>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#cfccb8] bg-[#f4f2ee] p-6 rounded-lg relative overflow-hidden group">
-                                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-600/5 to-transparent h-1/2 w-full animate-[pulse_2s_infinite]" />
-                                <div className="relative mb-4">
-                                    <div className="absolute inset-[-8px] border border-[#cfccb8]/40 rounded-full animate-ping duration-1000" />
-                                    <div className="w-16 h-16 rounded-full border-2 border-[#cfccb8] flex items-center justify-center bg-white relative z-10">
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            className="w-9 h-9 stroke-orange-600 fill-none animate-[spin_12s_linear_infinite]"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        >
-                                            <rect x="4" y="4" width="16" height="16" rx="2" />
-                                            <rect x="9" y="9" width="6" height="6" />
-                                            <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div className="text-center relative z-10 flex flex-col gap-1">
-                                    <h3 className="text-orange-600 text-sm font-bold tracking-[0.2em] uppercase animate-pulse">
-                                        [ DB.VLSI_WIP ]
+                        {/* BLENDER PROJECTS LIST PANEL (Top-Middle) */}
+                        <div className="lg:h-[600px] border-b border-[#cfccb8] p-10 flex flex-col overflow-hidden bg-white">
+                            <div className="flex flex-col h-full overflow-hidden">
+                                <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
+                                    <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                                        BLENDER ARCHIVE
                                     </h3>
-                                    <p className="text-[10px] text-neutral-500 tracking-wider uppercase font-semibold">
-                                        // Circuit designs compiling
-                                    </p>
-                                    <div className="flex items-center justify-center gap-1.5 mt-2">
-                                        <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-bounce delay-0" />
-                                        <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-bounce delay-150" />
-                                        <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-bounce delay-300" />
-                                    </div>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto pr-2 flex flex-col scrollbar-thin scroll-container">
+                                    {BlenderProjects.map((project, index) => {
+                                        const isActive = activeProject && activeProject.type === 'blender' && activeProject.name === project.name;
+                                        const tagStr = `OBJ_${String(index + 1).padStart(2, '0')}`;
+                                        return (
+                                            <div
+                                                key={index}
+                                                className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
+                                                onMouseEnter={() => setActiveProject({ type: 'blender', ...project })}
+                                            >
+                                                <div className="flex flex-col pl-2">
+                                                    <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
+                                                        {tagStr}
+                                                    </span>
+                                                    <span className={`text-xs md:text-sm tracking-wider uppercase transition-colors duration-300 ${isActive ? 'text-orange-600' : 'text-[#111111] group-hover:text-orange-600'}`}>
+                                                        {project.name}
+                                                    </span>
+                                                </div>
+                                                <a
+                                                    href={project.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={`pr-2 transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'}`}
+                                                >
+                                                    <Icon icon="ion:arrow-up-right-box-outline" className="text-orange-600" width="16" height="16" />
+                                                </a>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
-                        )}
-                    </div>
-                </div>
-            </div >
+                        </div>
 
-            {/* Floating Preview via Portal to escape z-index stacking context */}
-            {createPortal(
-                <div
-                    ref={previewRef}
-                    className='fixed top-0 left-0 z-[100000] overflow-hidden border-2 border-[#111111] pointer-events-none md:block hidden opacity-0 bg-[#eae8e4]'
-                >
-                    {/* HUD Overlay Elements for Preview */}
-                    <div className='absolute top-2 left-2 text-[#111111] font-mono text-[9px] tracking-widest uppercase z-50 font-bold'>[VIEWPORT ACTIVE]</div>
-                    <div className='absolute bottom-2 left-2 text-[#111111] font-mono text-[9px] tracking-widest uppercase z-50 font-bold'>[ RENDERING PREVIEW ]</div>
-                    <div className='absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#111111] z-50' />
-                    <div className='absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#111111] z-50' />
+                        {/* BOTTOM ROW (Coding + VLSI Split Flex Layout) */}
+                        <div className="lg:h-[600px] flex flex-col lg:flex-row gap-0 overflow-hidden bg-white">
 
-                    {
-                        currentPreview && currentPreview.type === "blender" && (
-                            <div className="w-[840px] h-[560px] overflow-hidden relative p-8 bg-[#f4f2ee]">
-                                <img
-                                    src={BlenderProjects[currentPreview.index].image}
-                                    alt="Preview"
-                                    className='object-cover w-full h-full border border-[#cfccb8]'
-                                />
-                                <div
-                                    ref={DesRef}
-                                    className='absolute bottom-10 left-10 right-10 bg-white border border-[#111111] text-[#111111] p-5 text-[1rem] tracking-widest uppercase font-light'
-                                >
-                                    <span className="text-orange-600 font-bold mr-2">{'>'}</span> {BlenderProjects[currentPreview.index].description}
-                                </div>
-                            </div>
-                        )
-                    }
-
-                    {
-                        currentPreview && currentPreview.type === "coding" && (() => {
-                            const project = CodingProjects[currentPreview.index];
-                            return (
-                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6 bg-[#f4f2ee]">
-                                    <div className="relative w-[700px] h-full border border-[#cfccb8] overflow-hidden">
-                                        <img
-                                            src={project.image}
-                                            alt="Preview"
-                                            className='object-cover w-full h-full'
-                                        />
-                                    </div>
-
-                                    <div
-                                        ref={DesRef}
-                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col"
-                                    >
-                                        <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 font-mono font-bold">
-                                            [ SYS.LOG_DATA ]
-                                        </div>
-                                        <h3 className="text-xl font-bold text-[#111111] mb-4 uppercase tracking-widest">
-                                            {project.name}
+                            {/* CODING DATABASE PANEL */}
+                            <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-[#cfccb8] p-10 h-full flex flex-col justify-between overflow-hidden bg-white">
+                                <div className="flex flex-col h-full overflow-hidden">
+                                    <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 select-none">
+                                        <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                                            CODING ARCHIVE
                                         </h3>
-                                        <div ref={scrollTextRef} className="text-sm text-justify text-neutral-600 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                                            <span className="text-orange-600 mr-2 font-bold">{'>'}</span> {project.description}
-                                        </div>
+                                    </div>
+
+                                    {/* Dynamic Category Tabs */}
+                                    <div className="flex gap-2 my-4 select-none">
+                                        {categories.map((category) => (
+                                            <button
+                                                key={category}
+                                                onClick={() => setSelectedCategory(category)}
+                                                className={`px-3 py-1 text-[10px] tracking-widest uppercase border transition-all duration-300 cursor-pointer ${selectedCategory === category
+                                                    ? "border-orange-600 bg-orange-600/10 text-orange-600 font-bold"
+                                                    : "border-[#cfccb8] bg-transparent text-neutral-400 hover:text-[#111111] hover:border-[#111111]"
+                                                    }`}
+                                            >
+                                                {category}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex-1 overflow-y-auto pr-2 flex flex-col scrollbar-thin scroll-container">
+                                        {filteredCodingProjects.map((project, index) => {
+                                            const isActive = activeProject && activeProject.type === 'coding' && activeProject.name === project.name;
+                                            const tagStr = `DEV_${String(index + 1).padStart(2, '0')}`;
+                                            return (
+                                                <div
+                                                    key={project.id}
+                                                    className={`gsap-coding-row pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
+                                                    onMouseEnter={() => setActiveProject({ type: 'coding', ...project })}
+                                                >
+                                                    <div className="flex flex-col pl-2">
+                                                        <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
+                                                            {tagStr}
+                                                        </span>
+                                                        <span className={`text-xs md:text-sm tracking-wider uppercase transition-colors duration-300 ${isActive ? 'text-orange-600' : 'text-[#111111] group-hover:text-orange-600'}`}>
+                                                            {project.name}
+                                                        </span>
+                                                    </div>
+                                                    <a
+                                                        href={project.Link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={`pr-2 transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'}`}
+                                                    >
+                                                        <Icon icon="ion:arrow-up-right-box-outline" className="text-orange-600" width="16" height="16" />
+                                                    </a>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
-                            );
-                        })()
-                    }
+                            </div>
 
-                    {
-                        currentPreview && currentPreview.type === "unreal" && (() => {
-                            const project = UnrealProjects[currentPreview.index];
-                            const videoId = project.Link ? project.Link.split('/').pop().split('?')[0] : '';
-                            return (
-                                <div className="relative overflow-hidden w-[1050px] h-[550px] flex p-6 gap-6 bg-[#f4f2ee]">
-                                    <div className="relative w-[700px] h-full border border-[#cfccb8] overflow-hidden">
-                                        {videoLoading && (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-white/95 backdrop-blur-sm z-10">
-                                                <div className="flex flex-col items-center gap-4">
-                                                    <div className="w-12 h-12 border-2 border-[#cfccb8] border-t-orange-600 rounded-full animate-spin"></div>
-                                                    <span className="text-orange-600 text-xs tracking-widest uppercase animate-pulse font-mono font-bold">[ INITIATING STREAM ]</span>
+                            {/* VLSI DATABASE PANEL */}
+                            <div className="w-full lg:w-1/2 p-10 h-full flex flex-col justify-between overflow-hidden bg-white">
+                                <div className="flex flex-col h-full overflow-hidden">
+                                    <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
+                                        <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                                            VLSI ARCHIVE
+                                        </h3>
+                                    </div>
+
+                                    {VLSIProjects.length > 0 ? (
+                                        <div className="flex-1 overflow-y-auto pr-2 flex flex-col scrollbar-thin scroll-container">
+                                            {VLSIProjects.map((project, index) => {
+                                                const isActive = activeProject && activeProject.type === 'vlsi' && activeProject.name === project.name;
+                                                const tagStr = `FAB_${String(index + 1).padStart(2, '0')}`;
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
+                                                        onMouseEnter={() => setActiveProject({ type: 'vlsi', ...project })}
+                                                    >
+                                                        <div className="flex flex-col pl-2">
+                                                            <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
+                                                                {tagStr}
+                                                            </span>
+                                                            <span className={`text-xs md:text-sm tracking-wider uppercase transition-colors duration-300 ${isActive ? 'text-orange-600' : 'text-[#111111] group-hover:text-orange-600'}`}>
+                                                                {project.name}
+                                                            </span>
+                                                        </div>
+                                                        <span className="text-[9px] text-orange-600 font-bold uppercase pr-2">VLSI</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ) : (
+                                        <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#cfccb8] bg-[#f4f2ee]/50 p-6 relative overflow-hidden group select-none">
+                                            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-600/5 to-transparent h-1/2 w-full animate-[pulse_2s_infinite]" />
+                                            <div className="relative mb-4 scale-110">
+                                                <div className="absolute inset-[-8px] border border-[#cfccb8]/40 rounded-full animate-ping duration-1000" />
+                                                <div className="w-16 h-16 rounded-full border border-[#cfccb8] flex items-center justify-center bg-white relative z-10">
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        className="w-10 h-10 stroke-orange-600 fill-none animate-[spin_12s_linear_infinite]"
+                                                        strokeWidth="1.5"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    >
+                                                        <rect x="4" y="4" width="16" height="16" rx="2" />
+                                                        <rect x="9" y="9" width="6" height="6" />
+                                                        <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
+                                                    </svg>
                                                 </div>
                                             </div>
-                                        )}
+                                            <div className="text-center relative z-10 flex flex-col gap-1">
+                                                <h4 className="text-orange-600 text-sm font-bold tracking-[0.2em] uppercase animate-pulse">
+                                                    [ DB.VLSI_WIP ]
+                                                </h4>
+                                                <p className="text-xs text-neutral-400 tracking-wider uppercase font-semibold">
+                                                    // Circuit models compiling
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
 
-                                        <iframe
-                                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0&vq=hd1080`}
-                                            allow="autoplay; encrypted-media"
-                                            onLoad={() => setVideoLoading(false)}
-                                            className="absolute w-[1920px] h-[1080px] max-w-none border-none pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-37"
-                                        />
+                        </div>
+                    </div>
+
+                    {/* ================= RIGHT COLUMN (Viewport + Status) ================= */}
+                    <div className="col-span-1 lg:col-span-4 flex flex-col">
+
+                        {/* LIVE VIEWPORT PREVIEW PANEL (Top-Right) */}
+                        <div className="hidden lg:flex lg:h-[850px] border-b border-[#cfccb8] p-10 flex-col justify-between bg-[#f4f2ee]/50 relative overflow-hidden">
+
+                            {/* Grid decorative brackets */}
+                            <div className='absolute top-2 left-2 text-neutral-400 text-[8px] tracking-widest uppercase font-bold select-none'>[ VIEWPORT ACTIVE ]</div>
+                            <div className='absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]/60' />
+                            <div className='absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]/60' />
+
+                            <div className="flex-1 flex flex-col justify-center mt-6">
+                                {activeProject ? (
+                                    <div className="flex flex-col h-full justify-between">
+
+                                        {/* Preview Media (Sized larger) */}
+                                        <div className="w-full h-64 lg:h-[480px] overflow-hidden border border-[#cfccb8] relative bg-black shrink-0">
+                                            {activeProject.type === 'unreal' ? (
+                                                (() => {
+                                                    const videoId = activeProject.Link ? activeProject.Link.split('/').pop().split('?')[0] : '';
+                                                    return (
+                                                        <iframe
+                                                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0`}
+                                                            allow="autoplay; encrypted-media"
+                                                            className="w-full h-full border-none pointer-events-none"
+                                                        />
+                                                    );
+                                                })()
+                                            ) : (
+                                                <img src={activeProject.image} alt={activeProject.name} className="w-full h-full object-cover" />
+                                            )}
+
+                                            {/* Floating ID Tag */}
+                                            <div className="absolute bottom-4 right-4 bg-white/95 border border-[#cfccb8]/60 px-3 py-1.5 text-[9px]   text-neutral-700 select-none shadow-sm z-10 uppercase tracking-widest">
+                                                ID: {getProjectIndexTag(activeProject)}
+                                            </div>
+                                        </div>
+
+                                        {/* Project Details */}
+                                        <div className="flex-1 flex flex-col justify-between py-6">
+                                            <div className="flex flex-col">
+                                                <div className="flex justify-between items-start gap-4 mb-5">
+                                                    <h4 className="text-base md:text-lg font-bold text-[#111111] uppercase tracking-wider leading-tight">
+                                                        {activeProject.name}
+                                                    </h4>
+                                                    {(activeProject.Link || activeProject.link) && (
+                                                        <a
+                                                            href={activeProject.Link || activeProject.link}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="bg-black hover:bg-neutral-800 text-white text-[9px] font-bold py-2 px-3.5 transition-colors tracking-widest uppercase rounded-sm shrink-0"
+                                                        >
+                                                            {getButtonText(activeProject)}
+                                                        </a>
+                                                    )}
+                                                </div>
+
+                                                {(() => {
+                                                    const { typeStr } = getProjectMetadata(activeProject);
+                                                    return (
+                                                        <div className="border-t border-[#cfccb8]/20 pt-5 mb-5">
+                                                            <div>
+                                                                <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider block mb-1">
+                                                                    TYPE
+                                                                </span>
+                                                                <span className="text-[10px] md:text-xs font-bold uppercase text-neutral-800 tracking-wider">
+                                                                    {typeStr}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })()}
+
+                                                <div>
+                                                    <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider block mb-2">
+                                                        STATUS_LOG
+                                                    </span>
+                                                    <div
+                                                        ref={descriptionContainerRef}
+                                                        className="text-neutral-500 text-[9px] leading-relaxed h-[125px] lg:h-[135px] overflow-y-auto pr-1 select-none scrollbar-thin scroll-container bg-[#f4f2ee]/30 border border-[#cfccb8]/20 p-3"
+                                                    >
+                                                        <span className="text-orange-600 block mb-0.5">
+                                                            [10:04:11] INITIALIZING_PREVIEW...
+                                                        </span>
+                                                        <span className="text-orange-600 block mb-0.5">
+                                                            [10:04:12] ASSET_MAPPING_COMPLETE.
+                                                        </span>
+                                                        <span className="text-orange-600 block mb-2">
+                                                            [10:04:12] RENDERING_BUFFERS_READY.
+                                                        </span>
+                                                        <span className="text-neutral-700 block uppercase font-bold tracking-wider mb-1">
+                                                            // DESCRIPTION
+                                                        </span>
+                                                        <p className="text-neutral-500   text-xs md:text-sm leading-relaxed tracking-wide">
+                                                            {activeProject.description}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
                                     </div>
+                                ) : (
+                                    <div className="flex-1 flex items-center justify-center text-xs text-neutral-400 uppercase tracking-widest">
+                                        // Awaiting Node selection
+                                    </div>
+                                )}
+                            </div>
+                        </div>
 
-                                    <div
-                                        ref={DesRef}
-                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col"
-                                    >
-                                        <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 font-mono font-bold">
-                                            [ SYS.LOG_DATA ]
+                        {/* SYSTEM STATUS PANEL (Bottom-Right) */}
+                        <div className="lg:h-[350px] p-10 flex flex-col justify-between bg-white select-none">
+                            <div className="flex flex-col h-full justify-between">
+                                <span className="text-xs   tracking-[0.25em] text-neutral-400 uppercase font-bold">// SYSTEM_STATUS</span>
+
+                                {/* Spinning Ring */}
+                                <div className="flex flex-col items-center justify-center flex-1 py-6">
+                                    <div className="relative flex items-center justify-center w-24 h-24 mb-4">
+                                        <div className="absolute inset-0 border-2 border-orange-600/10 rounded-full border-t-orange-600 animate-spin" />
+                                        <div className="absolute inset-2 border border-neutral-200 rounded-full flex flex-col items-center justify-center bg-[#f4f2ee]/30">
+                                            <span className="text-[10px]   text-neutral-400 font-bold">SYNC</span>
+                                            <span className="text-sm font-bold text-orange-600  ">96.2%</span>
                                         </div>
-                                        <h3 className="text-xl font-bold text-[#111111] mb-4 uppercase tracking-widest">
-                                            {project.name}
-                                        </h3>
-                                        <div ref={scrollTextRef} className="text-sm text-justify text-neutral-600 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                                            <span className="text-orange-600 mr-2 font-bold">{'>'}</span> {project.description}
-                                        </div>
+                                    </div>
+                                    <div className="text-center">
+                                        <span className="text-sm font-bold uppercase tracking-widest text-[#111111] block mb-1">ARCHIVE_SYNC</span>
+                                        <span className="text-[10px]   text-neutral-400 uppercase tracking-widest font-semibold block">// ALL CORE SYSTEM NODES ONLINE</span>
                                     </div>
                                 </div>
-                            );
-                        })()
-                    }
 
-                    {
-                        currentPreview && currentPreview.type === "vlsi" && (() => {
-                            const project = VLSIProjects[currentPreview.index];
-                            return (
-                                <div className="relative overflow-hidden w-[500px] h-[350px] flex p-6 bg-[#f4f2ee]">
-                                    <div
-                                        ref={DesRef}
-                                        className="relative flex-1 h-full border border-[#111111] bg-white p-6 flex flex-col"
-                                    >
-                                        <div className="text-orange-600 text-[10px] tracking-widest uppercase mb-4 border-b border-[#cfccb8] pb-2 flex justify-between font-mono font-bold">
-                                            <span>[ SYS.LOG_DATA ]</span>
-                                            <Icon icon="mdi:chip" width={16} />
-                                        </div>
-                                        <h3 className="text-xl font-bold text-[#111111] mb-4 uppercase tracking-widest">
-                                            {project.name}
-                                        </h3>
-                                        <div ref={scrollTextRef} className="text-sm text-justify text-neutral-600 tracking-widest font-light leading-relaxed overflow-y-auto pr-2 flex-1 whitespace-pre-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                                            <span className="text-orange-600 mr-2 font-bold">{'>'}</span> {project.description}
-                                        </div>
+                                {/* Loading progress bar */}
+                                <div className="w-full">
+                                    <div className="flex justify-between text-[10px]   text-neutral-400 mb-1.5 font-semibold">
+                                        <span>BUFFERING...</span>
+                                        <span>100% SECURE</span>
+                                    </div>
+                                    <div className="w-full h-[2px] bg-[#cfccb8]/30 overflow-hidden">
+                                        <div className="h-full bg-[#111111] w-[96.2%] animate-pulse" />
                                     </div>
                                 </div>
-                            );
-                        })()
-                    }
-                </div>,
-                document.body
-            )}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
 
         </section >
     );

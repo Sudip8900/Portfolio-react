@@ -62,6 +62,20 @@ const Hero = ({ IsReady }) => {
         gsap.set(".grid-cell", { opacity: 0, y: 30 });
         gsap.set(".bg-logo-text", { scale: 0.85, opacity: 0 });
         gsap.set(".scroll-circle-btn", { scale: 0, opacity: 0 });
+
+        // Parallax scroll animation for background watermark
+        gsap.fromTo(".hero-watermark",
+            { xPercent: 8 },
+            {
+                xPercent: -8,
+                scrollTrigger: {
+                    trigger: "#home",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 0.5,
+                }
+            }
+        );
     }, []);
 
     useGSAP(() => {
@@ -118,6 +132,15 @@ const Hero = ({ IsReady }) => {
 
     return (
         <section id="home" className="relative w-full min-h-screen bg-[#eae8e4] text-[#111111] font-sans overflow-hidden border-b border-[#cfccb8] noise-bg">
+
+            {/* Background Light Text Watermark */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                <div
+                    className="hero-watermark absolute right-0 top-10 select-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] tracking-tighter"
+                >
+                    SUDIP
+                </div>
+            </div>
 
             {/* Grid Container */}
             <div className="w-full min-h-screen grid grid-cols-1 md:grid-cols-4 select-none">
@@ -213,7 +236,7 @@ const Hero = ({ IsReady }) => {
                         </div>
 
                         {/* Interactive Canvas */}
-                        <div 
+                        <div
                             className="absolute inset-0 w-full h-full z-10 pointer-events-auto"
                             style={{ cursor: 'pointer' }}
                             onMouseEnter={() => !isMobile && setIsHelmetExploded(true)}
@@ -307,9 +330,9 @@ const Hero = ({ IsReady }) => {
                         <div className="flex items-center justify-between w-full gap-4">
                             <button
                                 onClick={handlePrevCarousel}
-                                className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border border-[#cfccb8] flex items-center justify-center text-neutral-600 hover:text-black hover:border-black transition-all cursor-pointer text-sm md:text-base lg:text-xl font-bold"
+                                className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border border-[#cfccb8] flex items-center justify-center text-neutral-600 hover:text-black hover:border-black transition-all cursor-pointer"
                             >
-                                ←
+                                <Icon icon="lucide:arrow-left" width="18" height="18" />
                             </button>
 
                             <div className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full border border-[#cfccb8] bg-white/50 flex items-center justify-center shadow-inner relative overflow-hidden transition-transform duration-300 hover:scale-105">
@@ -320,9 +343,9 @@ const Hero = ({ IsReady }) => {
 
                             <button
                                 onClick={handleNextCarousel}
-                                className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border border-[#cfccb8] flex items-center justify-center text-neutral-600 hover:text-black hover:border-black transition-all cursor-pointer text-sm md:text-base lg:text-xl font-bold"
+                                className="w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border border-[#cfccb8] flex items-center justify-center text-neutral-600 hover:text-black hover:border-black transition-all cursor-pointer"
                             >
-                                →
+                                <Icon icon="lucide:arrow-right" width="18" height="18" />
                             </button>
                         </div>
 

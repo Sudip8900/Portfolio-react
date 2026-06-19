@@ -41,7 +41,7 @@ const App = () => {
         scale: 1.1,
         duration: 0.4,
         ease: "power2.inOut"
-      }, "+=0.8") // Show READY state briefly
+      }, "+=0.15") // Show READY state briefly
         .to(".hud-door-top", {
           yPercent: -100,
           duration: 1,
