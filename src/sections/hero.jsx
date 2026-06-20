@@ -148,7 +148,7 @@ const Hero = ({ IsReady }) => {
     };
 
     return (
-        <section id="home" ref={heroRef} className="relative w-full min-h-screen bg-[#eae8e4] text-[#111111] font-sans overflow-hidden border-b border-[#cfccb8] noise-bg">
+        <section id="home" ref={heroRef} className="relative w-full min-h-screen md:h-screen md:min-h-[650px] md:max-h-[1080px] bg-[#eae8e4] text-[#111111] font-sans overflow-hidden border-b border-[#cfccb8] noise-bg">
 
             {/* Background Light Text Watermark */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -160,13 +160,13 @@ const Hero = ({ IsReady }) => {
             </div>
 
             {/* Grid Container */}
-            <div className="w-full min-h-screen grid grid-cols-1 md:grid-cols-4 select-none">
+            <div className="w-full min-h-screen md:h-full md:min-h-0 grid grid-cols-1 md:grid-cols-4 select-none">
 
                 {/* Column 1 (Left) */}
                 <div className="flex flex-col border-b md:border-b-0 md:border-r border-[#cfccb8] justify-between h-full z-10 order-2 md:order-1">
 
                     {/* Box 1.1: Title Info */}
-                    <div className="grid-cell border-b border-[#cfccb8] p-6 md:p-8 flex flex-col justify-center flex-grow min-h-[160px] md:min-h-[240px] lg:min-h-[280px] lg:pt-24 md:pt-20 pt-8">
+                    <div className="grid-cell border-b border-[#cfccb8] p-5 md:p-6 flex flex-col justify-center flex-grow min-h-[140px] md:min-h-[200px] lg:min-h-[230px] xl:min-h-[280px] lg:pt-16 md:pt-12 pt-6">
                         <div className="flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center gap-4 md:gap-6 w-full">
                             <h1 className="text-[13px] sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-extrabold tracking-tight text-[#111111] leading-tight shrink-0" style={{ fontFamily: '"Michroma", sans-serif' }}>
                                 SUDIP PAN<br />PORTFOLIO
@@ -190,7 +190,7 @@ const Hero = ({ IsReady }) => {
                     </div>
 
                     {/* Box 1.2: Metrics */}
-                    <div className="grid-cell border-b border-[#cfccb8] p-6 md:p-8 flex items-center md:items-start lg:items-center justify-between md:flex-col lg:flex-row gap-4 min-h-[100px] md:min-h-[130px] lg:min-h-[140px]">
+                    <div className="grid-cell border-b border-[#cfccb8] p-5 md:p-6 flex items-center md:items-start lg:items-center justify-between md:flex-col lg:flex-row gap-4 min-h-[90px] md:min-h-[110px] lg:min-h-[120px] xl:min-h-[140px]">
                         <div className="flex flex-col">
                             <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#111111] leading-none" style={{ fontFamily: '"Michroma", sans-serif' }}>{totalProjectsCount}</span>
                         </div>
@@ -200,7 +200,7 @@ const Hero = ({ IsReady }) => {
                     </div>
 
                     {/* Box 1.3: Call to Action (Step into...) */}
-                    <div className="grid-cell p-6 md:p-8 flex flex-col justify-end min-h-[150px] md:min-h-[180px] lg:min-h-[200px] relative">
+                    <div className="grid-cell p-5 md:p-6 flex flex-col justify-end min-h-[120px] md:min-h-[140px] lg:min-h-[160px] xl:min-h-[200px] relative">
                         <span className="absolute top-6 right-6 text-neutral-400 font-light text-sm md:text-base">+</span>
                         <span className="absolute bottom-6 left-6 text-neutral-400 font-light text-sm md:text-base">+</span>
                         <h3 className="text-xs md:text-sm lg:text-base font-bold tracking-widest leading-relaxed text-[#111111] uppercase max-w-[220px] md:max-w-none lg:max-w-[300px]" style={{ fontFamily: '"Michroma", sans-serif' }}>
@@ -211,7 +211,7 @@ const Hero = ({ IsReady }) => {
                 </div>
 
                 {/* Column 2 (Center) - Spans 2 cols on tablet/desktop */}
-                <div className="col-span-1 md:col-span-2 border-b md:border-b-0 md:border-r border-[#cfccb8] flex flex-col justify-between h-[80vh] md:h-full relative md:min-h-screen z-20 order-1 md:order-2 pt-20 md:pt-0">
+                <div className="col-span-1 md:col-span-2 border-b md:border-b-0 md:border-r border-[#cfccb8] flex flex-col justify-between h-[80vh] md:h-full relative z-20 order-1 md:order-2 pt-20 md:pt-0">
 
                     {/* 3D Helmet Viewport - spans the full height */}
                     <div className="grid-cell flex-grow relative flex items-center justify-center overflow-hidden h-full">
@@ -324,7 +324,7 @@ const Hero = ({ IsReady }) => {
                 <div className="flex flex-col justify-between h-full z-10 order-3">
 
                     {/* Box 3.0: Wireframe rotating helmet (Large displays only) */}
-                    <div className="hidden lg:flex grid-cell border-b border-[#cfccb8] p-6 justify-center items-center h-[340px] relative overflow-hidden pointer-events-auto bg-[#f4f2ee]/40">
+                    <div className="hidden lg:flex grid-cell border-b border-[#cfccb8] p-5 justify-center items-center h-[20vh] lg:h-[22vh] xl:h-[300px] min-h-[160px] max-h-[340px] relative overflow-hidden pointer-events-auto bg-[#f4f2ee]/40">
                         {/* Subtle atmospheric gradient behind */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-[radial-gradient(circle,_rgba(255,106,0,0.06)_0%,_rgba(207,204,184,0.15)_45%,_transparent_75%)] blur-2xl pointer-events-none z-0" />
 
@@ -336,7 +336,7 @@ const Hero = ({ IsReady }) => {
                     </div>
 
                     {/* Box 3.1: Mini Carousel (Skill Showcase) */}
-                    <div className="grid-cell border-b border-[#cfccb8] p-6 md:p-8 flex flex-col items-center justify-center gap-4 md:gap-6 flex-grow min-h-[280px] md:min-h-[320px] lg:min-h-[350px] lg:pt-24 md:pt-20 pt-16 pointer-events-auto">
+                    <div className="grid-cell border-b border-[#cfccb8] p-5 md:p-6 flex flex-col items-center justify-center gap-3 md:gap-4 flex-grow min-h-[220px] md:min-h-[260px] lg:min-h-[280px] xl:min-h-[320px] pointer-events-auto">
                         <div className="flex items-center justify-between w-full gap-4">
                             <button
                                 onClick={handlePrevCarousel}
@@ -370,7 +370,7 @@ const Hero = ({ IsReady }) => {
                     </div>
 
                     {/* Box 3.2: Social Links Row */}
-                    <div className="grid-cell border-b border-[#cfccb8] py-4 md:py-5 px-6 md:px-8 flex justify-center gap-4 md:gap-6 items-center min-h-[60px] md:min-h-[70px] pointer-events-auto">
+                    <div className="grid-cell border-b border-[#cfccb8] py-3 md:py-4 px-6 md:px-8 flex justify-center gap-4 md:gap-6 items-center min-h-[50px] md:min-h-[60px] xl:min-h-[70px] pointer-events-auto">
                         <a href="https://github.com/Sudip8900" target="_blank" rel="noreferrer" className="w-8 h-8 md:w-9 md:h-9 lg:w-11 lg:h-11 rounded-full border border-[#cfccb8]/60 bg-white/30 flex items-center justify-center text-neutral-600 hover:text-orange-600 hover:border-orange-500 transition-all">
                             <Icon icon="mdi:github" width="18" md:width="20" lg:width="22" height="18" md:height="20" lg:height="22" />
                         </a>
@@ -386,7 +386,7 @@ const Hero = ({ IsReady }) => {
                     </div>
 
                     {/* Box 3.3: Description Block */}
-                    <div className="grid-cell p-6 md:p-8 flex flex-col justify-center gap-3 md:gap-4 min-h-[150px] md:min-h-[180px] lg:min-h-[200px]">
+                    <div className="grid-cell p-5 md:p-6 xl:p-8 flex flex-col justify-center gap-3 md:gap-4 min-h-[120px] md:min-h-[140px] lg:min-h-[160px] xl:min-h-[200px]">
                         <h4 className="text-[10px] md:text-xs lg:text-sm font-bold tracking-wider text-[#111111] uppercase" style={{ fontFamily: '"Michroma", sans-serif' }}>
                             Immersive Virtual Worlds
                         </h4>
