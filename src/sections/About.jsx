@@ -3,6 +3,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SkillsData, education } from '../constants';
+import DrawText from '../componnts/DrawText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -198,15 +199,46 @@ const About = () => {
         }
 
         // Parallax scroll animation for background watermark
-        gsap.fromTo(".about-watermark", 
+        gsap.fromTo(".about-watermark",
             { xPercent: 8 },
-            { 
-                xPercent: -8, 
+            {
+                xPercent: -8,
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top bottom",
                     end: "bottom top",
                     scrub: 0.5,
+                }
+            }
+        );
+
+        // Profile picture zoom reveal animation on scroll
+        gsap.fromTo(".gsap-profile-img",
+            { scale: 1.3, yPercent: 5 },
+            {
+                scale: 1.0,
+                yPercent: 0,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".gsap-profile-img-container",
+                    start: "top 85%",
+                    end: "bottom 30%",
+                    scrub: 1,
+                }
+            }
+        );
+
+        gsap.fromTo(".gsap-profile-img-container",
+            { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)", opacity: 0 },
+            {
+                clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
+                opacity: 1,
+                duration: 1.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: ".gsap-profile-img-container",
+                    start: "top 80%",
+                    toggleActions: "play none none none"
                 }
             }
         );
@@ -298,37 +330,14 @@ const About = () => {
                     {/* LEFT SIDEBAR */}
                     <div className="editorial-col editorial-left p-6 flex flex-col justify-between min-h-[500px]">
                         <div className="flex flex-col gap-4">
-                            {/* 1. Small eyebrow label */}
-                            <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase  ">
-                                // ID: SP-049 // STATUS: ONLINE
-                            </span>
-
-                            {/* 3. Page title in bold display type */}
-                            <h3 className="uppercase" style={{ fontSize: '1.65rem', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: '1.1' }}>
-                                SUDIP PAN
-                            </h3>
-
-                            {/* 4. Year below title */}
-                            <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase">
-                                ©2026
-                            </span>
-
-                            {/* 5. Short descriptor */}
-                            <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase  ">
-                                IDENTITY DOSSIER // ECE
-                            </span>
-
-                            {/* 6. Hairline divider */}
-                            <hr style={{ borderColor: 'var(--rule)' }} className="border-t w-full" />
-
-                            {/* 2. Body text blurb (2-3 lines) */}
-                            <p style={{ fontSize: '0.9rem', color: 'var(--mid)', lineHeight: '1.55' }} className="font-normal">
-                                Address: Rameswarpur, Ramjibanpur, West Medinipur, West Bengal, India, 721242
-                            </p>
 
                             {/* 7. Description blurb */}
                             <p style={{ fontSize: '2rem', color: 'var(--mid)', lineHeight: '1.58' }} className="font-normal mt-2">
-                                I'm a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, visually engaging games that blend strong design, technical skill, and interactive innovation.
+                                I'm a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, <DrawText text="visually engaging games" color="#ea580c" fontSize={30} /> that blend strong design, technical skill, and <DrawText text="interactive innovation" color="#ea580c" fontSize={30} delay={0.25} />.
+                            </p>
+                            {/* 2. Body text blurb (2-3 lines) */}
+                            <p style={{ fontSize: '0.9rem', color: 'var(--mid)', lineHeight: '1.55', borderColor: 'var(--rule)' }} className="font-normal mt-6 border-t">
+                                Address: Rameswarpur, Ramjibanpur, West Medinipur, West Bengal, India, 721242
                             </p>
                             {/* Education Data Block */}
                             <div className="mt-6 flex flex-col gap-4 pt-4 border-t  " style={{ borderColor: 'var(--rule)' }}>
@@ -351,7 +360,7 @@ const About = () => {
 
                         {/* 8. CTA phrase at the bottom */}
                         <div style={{ fontSize: '1.55rem', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: '1.2' }} className="mt-8 pt-6">
-                            <span className="text-orange-600 font-bold">+</span> CREATE IMMERSIVE, VISUALLY ENGAGING GAMES
+                            <span className="text-orange-600 font-bold">+</span> <DrawText text="CREATE IMMERSIVE, VISUALLY ENGAGING GAMES" color="#ea580c" fontSize={24} />
                         </div>
                     </div>
 
@@ -369,12 +378,12 @@ const About = () => {
                         </div>
 
                         {/* 3. Primary hero image */}
-                        <div className="w-full flex-1 flex items-center justify-center p-6 mt-60">
-                            <div className="relative w-full max-w-[490px] aspect-[3/4] border overflow-hidden" style={{ borderColor: 'var(--rule)' }}>
+                        <div className="w-full flex-1 flex items-center justify-center p-6 mt-70">
+                            <div className="relative w-full max-w-[490px] aspect-[3/4] border overflow-hidden gsap-profile-img-container" style={{ borderColor: 'var(--rule)' }}>
                                 <img
                                     src="/Images/ProfilePic.png"
                                     alt="SUDIP PAN"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover gsap-profile-img"
                                 />
                                 {/* 4. Small filled dot indicator */}
                                 <div className="absolute bottom-3 right-3 w-2 h-2 rounded-full bg-orange-600" />

@@ -9,10 +9,71 @@ import InteractiveCard from '../componnts/InteractiveCard.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Helper component to handle smooth image transitions and show loading state
+const PreviewImage = ({ src, alt }) => {
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        setLoaded(false);
+        const img = new Image();
+        img.src = src;
+        if (img.complete) {
+            setLoaded(true);
+        } else {
+            img.onload = () => setLoaded(true);
+        }
+    }, [src]);
+
+    return (
+        <div className="w-full h-full relative bg-black">
+            {!loaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black">
+                    <div className="w-8 h-8 border border-orange-600/30 border-t-orange-600 rounded-full animate-spin" />
+                </div>
+            )}
+            <img
+                src={src}
+                alt={alt}
+                className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                onLoad={() => setLoaded(true)}
+            />
+        </div>
+    );
+};
+
+// Helper component to handle smooth iframe transitions and show loading state
+const PreviewIframe = ({ videoId }) => {
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        setLoaded(false);
+    }, [videoId]);
+
+    return (
+        <div className="w-full h-full relative bg-black">
+            {!loaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black">
+                    <div className="w-8 h-8 border border-orange-600/30 border-t-orange-600 rounded-full animate-spin" />
+                </div>
+            )}
+            <iframe
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0`}
+                allow="autoplay; encrypted-media"
+                className={`w-full h-full border-none pointer-events-none transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                onLoad={() => setLoaded(true)}
+            />
+        </div>
+    );
+};
+
 const Works = () => {
     const [activeProject, setActiveProject] = useState(null);
-    const [videoLoading, setVideoLoading] = useState(false);
+    const [hoveredProject, setHoveredProject] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All");
+    const floatingRef = useRef(null);
+    const floatingDescriptionRef = useRef(null);
 
     const categories = ["All", ...new Set(CodingProjects.map(p => p.category).filter(Boolean))];
     const filteredCodingProjects = CodingProjects.filter(p => selectedCategory === "All" || p.category === selectedCategory);
@@ -23,7 +84,6 @@ const Works = () => {
     const subRef2 = useRef(null);
     const dashboardRef = useRef(null);
     const countRefs = useRef({});
-    const descriptionContainerRef = useRef(null);
 
     const total = BlenderProjects.length + UnrealProjects.length + CodingProjects.length + VLSIProjects.length;
     const counts = [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length, total];
@@ -88,7 +148,13 @@ const Works = () => {
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
         hoverTimeoutRef.current = setTimeout(() => {
             setActiveProject(projectInfo);
-        }, 100);
+            setHoveredProject(projectInfo);
+        }, 50);
+    };
+
+    const handleProjectLeave = () => {
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        setHoveredProject(null);
     };
 
     // Clean up hover timeout on unmount
@@ -105,6 +171,86 @@ const Works = () => {
         }
     }, [activeProject]);
 
+    // Preload all project images for instant swapping
+    useEffect(() => {
+        const imagesToPreload = [
+            ...BlenderProjects.map(p => p.image),
+            ...CodingProjects.map(p => p.image)
+        ].filter(Boolean);
+
+        imagesToPreload.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+        });
+    }, []);
+
+    // Track mouse position and update floating preview coordinates
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            if (!floatingRef.current) return;
+
+            const cardWidth = 580;
+            const cardHeight = floatingRef.current.offsetHeight || 600;
+
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let targetX = e.clientX + 20;
+            let targetY = e.clientY + 20;
+
+            // Flip X position if card goes off right edge
+            if (targetX + cardWidth > viewportWidth) {
+                targetX = e.clientX - cardWidth - 20;
+            }
+
+            // Flip Y position if card goes off bottom edge
+            if (targetY + cardHeight > viewportHeight) {
+                targetY = e.clientY - cardHeight - 20;
+            }
+
+            // Stay within viewport left and top padding bounds
+            if (targetX < 10) targetX = 10;
+            if (targetY < 10) targetY = 10;
+
+            gsap.to(floatingRef.current, {
+                x: targetX,
+                y: targetY,
+                duration: 0.1,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, []);
+
+    // Animate floating preview appearance when hoveredProject changes
+    useEffect(() => {
+        if (!floatingRef.current) return;
+        if (hoveredProject) {
+            gsap.to(floatingRef.current, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.3,
+                ease: "power3.out",
+                display: "block"
+            });
+        } else {
+            gsap.to(floatingRef.current, {
+                opacity: 0,
+                scale: 0.95,
+                duration: 0.2,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    if (floatingRef.current) floatingRef.current.style.display = "none";
+                }
+            });
+        }
+    }, [hoveredProject]);
+
     // Track category switch animations for coding list
     useEffect(() => {
         gsap.fromTo('.gsap-coding-row',
@@ -112,17 +258,15 @@ const Works = () => {
             { opacity: 1, x: 0, duration: 0.3, stagger: 0.05, ease: "power2.out" }
         );
     }, [selectedCategory]);
-
-    // Auto-scroll long description text when it overflows the viewport container
+    // Auto-scroll long description text in the floating preview window when it overflows
     useEffect(() => {
-        const el = descriptionContainerRef.current;
+        const el = floatingDescriptionRef.current;
         if (!el) return;
 
-        // Reset scroll position on active project change
+        // Reset scroll position on hovered project change
         el.scrollTop = 0;
 
         let scrollInterval;
-        let isHovered = false;
         let delayTimeout;
 
         const startAutoScroll = () => {
@@ -130,8 +274,6 @@ const Works = () => {
             delayTimeout = setTimeout(() => {
                 if (!el) return;
                 scrollInterval = setInterval(() => {
-                    if (isHovered) return;
-
                     const maxScroll = el.scrollHeight - el.clientHeight;
                     if (maxScroll <= 0) {
                         checks++;
@@ -166,21 +308,12 @@ const Works = () => {
 
         startAutoScroll();
 
-        const handleMouseEnter = () => { isHovered = true; };
-        const handleMouseLeave = () => { isHovered = false; };
-
-        el.addEventListener('mouseenter', handleMouseEnter);
-        el.addEventListener('mouseleave', handleMouseLeave);
-
         return () => {
             clearTimeout(delayTimeout);
             if (scrollInterval) clearInterval(scrollInterval);
-            if (el) {
-                el.removeEventListener('mouseenter', handleMouseEnter);
-                el.removeEventListener('mouseleave', handleMouseLeave);
-            }
         };
-    }, [activeProject]);
+    }, [hoveredProject]);
+
 
     /* ================= GSAP ANIMATIONS ================= */
     useGSAP(() => {
@@ -264,9 +397,9 @@ const Works = () => {
 
         // Parallax scroll animation for background watermark
         gsap.fromTo(".works-watermark",
-            { xPercent: 8 },
+            { xPercent: -8 },
             {
-                xPercent: -8,
+                xPercent: 8,
                 scrollTrigger: {
                     trigger: "#works",
                     start: "top bottom",
@@ -279,17 +412,17 @@ const Works = () => {
     }, [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length]);
 
     return (
-        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 overflow-hidden bg-[#eae8e4] text-[#111111]'>
+        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 overflow-hidden bg-white text-[#111111]'>
             {/* Background Light Text Watermark */}
             <div
-                className="works-watermark absolute right-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
+                className="works-watermark absolute left-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
             >
                 WORKS
             </div>
 
             {/* Header (UNCHANGED as requested) */}
             <div className='flex items-center gap-4 mb-10 px-5 md:px-10 select-none' ref={headingRef} style={{ perspective: "1000px" }}>
-                <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
+                <div ref={lineRef} className='flex-1 h-[1px] bg-[#e4e4e7]' />
                 <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
                     {(() => {
                         const headerText = "[ SYS.WORKS_DB ]";
@@ -328,14 +461,14 @@ const Works = () => {
             <div className="px-5 md:px-10 mt-10">
                 <div
                     ref={dashboardRef}
-                    className="grid grid-cols-1 lg:grid-cols-12 gap-0 border border-[#cfccb8] bg-white relative overflow-hidden"
+                    className="grid grid-cols-1 lg:grid-cols-12 gap-0 border border-[#e4e4e7] bg-white relative overflow-hidden"
                 >
 
                     {/* ================= LEFT COLUMN (Stats + Unreal) ================= */}
-                    <div className="col-span-1 lg:col-span-3 border-b lg:border-b-0 lg:border-r border-[#cfccb8] flex flex-col">
+                    <div className="col-span-1 lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#e4e4e7] flex flex-col">
 
                         {/* STATS OVERVIEW PANEL (Top-Left) */}
-                        <div className="lg:h-[600px] border-b border-[#cfccb8] p-10 bg-white select-none flex flex-col justify-between gap-12">
+                        <div className="lg:h-[600px] border-b border-[#e4e4e7] p-10 bg-white select-none flex flex-col justify-between gap-12">
                             <div className="flex items-center gap-2 text-sm   tracking-[0.25em] text-neutral-400 uppercase font-bold">
                                 <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
                                 SYS.STAT_OVERVIEW
@@ -399,7 +532,7 @@ const Works = () => {
                                 </div>
 
                                 {/* Total Stat */}
-                                <div className="pt-6 border-t border-[#cfccb8]/40 flex justify-between items-center">
+                                <div className="pt-6 border-t border-[#e4e4e7]/40 flex justify-between items-center">
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2 text-sm   text-neutral-500 uppercase tracking-widest">
                                             <span>TOTAL_DB</span>
@@ -415,9 +548,9 @@ const Works = () => {
                         </div>
 
                         {/* UNREAL DATABASE PANEL (Bottom-Left) */}
-                        <div className="lg:h-[600px] p-10 flex flex-col bg-white overflow-hidden justify-between border-b lg:border-b-0 border-[#cfccb8]">
+                        <div className="lg:h-[600px] p-10 flex flex-col bg-white overflow-hidden justify-between border-b lg:border-b-0 border-[#e4e4e7]">
                             <div className="flex flex-col h-full overflow-hidden">
-                                <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
+                                <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 mb-6 select-none">
                                     <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                         UNREAL ARCHIVE
                                     </h3>
@@ -430,8 +563,9 @@ const Works = () => {
                                         return (
                                             <div
                                                 key={index}
-                                                className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
+                                                className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#fafafa]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#fafafa]/25'}`}
                                                 onMouseEnter={() => handleProjectHover({ type: 'unreal', ...project })}
+                                                onMouseLeave={handleProjectLeave}
                                             >
                                                 <div className="flex flex-col pl-2">
                                                     <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -459,12 +593,12 @@ const Works = () => {
                     </div>
 
                     {/* ================= MIDDLE COLUMN (Blender + Coding/VLSI) ================= */}
-                    <div className="col-span-1 lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#cfccb8] flex flex-col">
+                    <div className="col-span-1 lg:col-span-7 border-b lg:border-b-0 border-[#e4e4e7] flex flex-col">
 
                         {/* BLENDER PROJECTS LIST PANEL (Top-Middle) */}
-                        <div className="lg:h-[600px] border-b border-[#cfccb8] p-10 flex flex-col overflow-hidden bg-white">
+                        <div className="lg:h-[600px] border-b border-[#e4e4e7] p-10 flex flex-col overflow-hidden bg-white">
                             <div className="flex flex-col h-full overflow-hidden">
-                                <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
+                                <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 mb-6 select-none">
                                     <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                         BLENDER ARCHIVE
                                     </h3>
@@ -477,8 +611,9 @@ const Works = () => {
                                         return (
                                             <div
                                                 key={index}
-                                                className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
+                                                className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#fafafa]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#fafafa]/25'}`}
                                                 onMouseEnter={() => handleProjectHover({ type: 'blender', ...project })}
+                                                onMouseLeave={handleProjectLeave}
                                             >
                                                 <div className="flex flex-col pl-2">
                                                     <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -507,9 +642,9 @@ const Works = () => {
                         <div className="lg:h-[600px] flex flex-col lg:flex-row gap-0 overflow-hidden bg-white">
 
                             {/* CODING DATABASE PANEL */}
-                            <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-[#cfccb8] p-10 h-full flex flex-col justify-between overflow-hidden bg-white">
+                            <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-[#e4e4e7] p-10 h-full flex flex-col justify-between overflow-hidden bg-white">
                                 <div className="flex flex-col h-full overflow-hidden">
-                                    <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 select-none">
+                                    <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 select-none">
                                         <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                             CODING ARCHIVE
                                         </h3>
@@ -523,7 +658,7 @@ const Works = () => {
                                                 onClick={() => setSelectedCategory(category)}
                                                 className={`px-3 py-1 text-[10px] tracking-widest uppercase border transition-all duration-300 cursor-pointer ${selectedCategory === category
                                                     ? "border-orange-600 bg-orange-600/10 text-orange-600 font-bold"
-                                                    : "border-[#cfccb8] bg-transparent text-neutral-400 hover:text-[#111111] hover:border-[#111111]"
+                                                    : "border-[#e4e4e7] bg-transparent text-neutral-400 hover:text-[#111111] hover:border-[#111111]"
                                                     }`}
                                             >
                                                 {category}
@@ -540,6 +675,7 @@ const Works = () => {
                                                     key={project.id}
                                                     className={`gsap-coding-row pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
                                                     onMouseEnter={() => handleProjectHover({ type: 'coding', ...project })}
+                                                    onMouseLeave={handleProjectLeave}
                                                 >
                                                     <div className="flex flex-col pl-2">
                                                         <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -567,7 +703,7 @@ const Works = () => {
                             {/* VLSI DATABASE PANEL */}
                             <div className="w-full lg:w-1/2 p-10 h-full flex flex-col justify-between overflow-hidden bg-white">
                                 <div className="flex flex-col h-full overflow-hidden">
-                                    <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
+                                    <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 mb-6 select-none">
                                         <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                             VLSI ARCHIVE
                                         </h3>
@@ -581,8 +717,9 @@ const Works = () => {
                                                 return (
                                                     <div
                                                         key={index}
-                                                        className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
+                                                        className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#fafafa]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#fafafa]/25'}`}
                                                         onMouseEnter={() => handleProjectHover({ type: 'vlsi', ...project })}
+                                                        onMouseLeave={handleProjectLeave}
                                                     >
                                                         <div className="flex flex-col pl-2">
                                                             <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -598,11 +735,11 @@ const Works = () => {
                                             })}
                                         </div>
                                     ) : (
-                                        <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#cfccb8] bg-[#f4f2ee]/50 p-6 relative overflow-hidden group select-none">
+                                        <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#e4e4e7] bg-[#fafafa]/50 p-6 relative overflow-hidden group select-none">
                                             <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-600/5 to-transparent h-1/2 w-full animate-[pulse_2s_infinite]" />
                                             <div className="relative mb-4 scale-110">
-                                                <div className="absolute inset-[-8px] border border-[#cfccb8]/40 rounded-full animate-ping duration-1000" />
-                                                <div className="w-16 h-16 rounded-full border border-[#cfccb8] flex items-center justify-center bg-white relative z-10">
+                                                <div className="absolute inset-[-8px] border border-[#e4e4e7]/40 rounded-full animate-ping duration-1000" />
+                                                <div className="w-16 h-16 rounded-full border border-[#e4e4e7] flex items-center justify-center bg-white relative z-10">
                                                     <svg
                                                         viewBox="0 0 24 24"
                                                         className="w-10 h-10 stroke-orange-600 fill-none animate-[spin_12s_linear_infinite]"
@@ -629,158 +766,63 @@ const Works = () => {
                                 </div>
                             </div>
 
-                        </div>
-                    </div>
-
-                    {/* ================= RIGHT COLUMN (Viewport + Status) ================= */}
-                    <div className="col-span-1 lg:col-span-4 flex flex-col">
-
-                        {/* LIVE VIEWPORT PREVIEW PANEL (Top-Right) */}
-                        <div className="hidden lg:flex lg:h-[850px] border-b border-[#cfccb8] p-10 flex-col justify-between bg-[#f4f2ee]/50 relative overflow-hidden">
-
-                            {/* Grid decorative brackets */}
-                            <div className='absolute top-2 left-2 text-neutral-400 text-[8px] tracking-widest uppercase font-bold select-none'>[ VIEWPORT ACTIVE ]</div>
-                            <div className='absolute top-0 left-0 w-3 h-3 border-t border-l border-[#cfccb8]/60' />
-                            <div className='absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#cfccb8]/60' />
-
-                            <div className="flex-1 flex flex-col justify-center mt-6">
-                                {activeProject ? (
-                                    <div className="flex flex-col h-full justify-between">
-
-                                        {/* Preview Media (Sized larger) */}
-                                        <div className="w-full h-64 lg:h-[480px] overflow-hidden border border-[#cfccb8] relative bg-black shrink-0">
-                                            {activeProject.type === 'unreal' ? (
-                                                (() => {
-                                                    const videoId = activeProject.Link ? activeProject.Link.split('/').pop().split('?')[0] : '';
-                                                    return (
-                                                        <iframe
-                                                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&rel=0`}
-                                                            allow="autoplay; encrypted-media"
-                                                            className="w-full h-full border-none pointer-events-none"
-                                                        />
-                                                    );
-                                                })()
-                                            ) : (
-                                                <img src={activeProject.image} alt={activeProject.name} className="w-full h-full object-cover" />
-                                            )}
-
-                                            {/* Floating ID Tag */}
-                                            <div className="absolute bottom-4 right-4 bg-white/95 border border-[#cfccb8]/60 px-3 py-1.5 text-[9px]   text-neutral-700 select-none shadow-sm z-10 uppercase tracking-widest">
-                                                ID: {getProjectIndexTag(activeProject)}
-                                            </div>
-                                        </div>
-
-                                        {/* Project Details */}
-                                        <div className="flex-1 flex flex-col justify-between py-6">
-                                            <div className="flex flex-col">
-                                                <div className="flex justify-between items-start gap-4 mb-5">
-                                                    <h4 className="text-base md:text-lg font-bold text-[#111111] uppercase tracking-wider leading-tight">
-                                                        {activeProject.name}
-                                                    </h4>
-                                                    {(activeProject.Link || activeProject.link) && (
-                                                        <a
-                                                            href={activeProject.Link || activeProject.link}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="bg-black hover:bg-neutral-800 text-white text-[9px] font-bold py-2 px-3.5 transition-colors tracking-widest uppercase rounded-sm shrink-0"
-                                                        >
-                                                            {getButtonText(activeProject)}
-                                                        </a>
-                                                    )}
-                                                </div>
-
-                                                {(() => {
-                                                    const { typeStr } = getProjectMetadata(activeProject);
-                                                    return (
-                                                        <div className="border-t border-[#cfccb8]/20 pt-5 mb-5">
-                                                            <div>
-                                                                <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider block mb-1">
-                                                                    TYPE
-                                                                </span>
-                                                                <span className="text-[10px] md:text-xs font-bold uppercase text-neutral-800 tracking-wider">
-                                                                    {typeStr}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })()}
-
-                                                <div>
-                                                    <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider block mb-2">
-                                                        STATUS_LOG
-                                                    </span>
-                                                    <div
-                                                        ref={descriptionContainerRef}
-                                                        className="text-neutral-500 text-[9px] leading-relaxed h-[125px] lg:h-[135px] overflow-y-auto pr-1 select-none scrollbar-thin scroll-container bg-[#f4f2ee]/30 border border-[#cfccb8]/20 p-3"
-                                                    >
-                                                        <span className="text-orange-600 block mb-0.5">
-                                                            [10:04:11] INITIALIZING_PREVIEW...
-                                                        </span>
-                                                        <span className="text-orange-600 block mb-0.5">
-                                                            [10:04:12] ASSET_MAPPING_COMPLETE.
-                                                        </span>
-                                                        <span className="text-orange-600 block mb-2">
-                                                            [10:04:12] RENDERING_BUFFERS_READY.
-                                                        </span>
-                                                        <span className="text-neutral-700 block uppercase font-bold tracking-wider mb-1">
-                                                            // DESCRIPTION
-                                                        </span>
-                                                        <p className="text-neutral-500   text-xs md:text-sm leading-relaxed tracking-wide">
-                                                            {activeProject.description}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                ) : (
-                                    <div className="flex-1 flex items-center justify-center text-xs text-neutral-400 uppercase tracking-widest">
-                                        // Awaiting Node selection
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* SYSTEM STATUS PANEL (Bottom-Right) */}
-                        <div className="lg:h-[350px] p-10 flex flex-col justify-between bg-white select-none">
-                            <div className="flex flex-col h-full justify-between">
-                                <span className="text-xs   tracking-[0.25em] text-neutral-400 uppercase font-bold">// SYSTEM_STATUS</span>
-
-                                {/* Spinning Ring */}
-                                <div className="flex flex-col items-center justify-center flex-1 py-6">
-                                    <div className="relative flex items-center justify-center w-24 h-24 mb-4">
-                                        <div className="absolute inset-0 border-2 border-orange-600/10 rounded-full border-t-orange-600 animate-spin" />
-                                        <div className="absolute inset-2 border border-neutral-200 rounded-full flex flex-col items-center justify-center bg-[#f4f2ee]/30">
-                                            <span className="text-[10px]   text-neutral-400 font-bold">SYNC</span>
-                                            <span className="text-sm font-bold text-orange-600  ">96.2%</span>
-                                        </div>
-                                    </div>
-                                    <div className="text-center">
-                                        <span className="text-sm font-bold uppercase tracking-widest text-[#111111] block mb-1">ARCHIVE_SYNC</span>
-                                        <span className="text-[10px]   text-neutral-400 uppercase tracking-widest font-semibold block">// ALL CORE SYSTEM NODES ONLINE</span>
-                                    </div>
-                                </div>
-
-                                {/* Loading progress bar */}
-                                <div className="w-full">
-                                    <div className="flex justify-between text-[10px]   text-neutral-400 mb-1.5 font-semibold">
-                                        <span>BUFFERING...</span>
-                                        <span>100% SECURE</span>
-                                    </div>
-                                    <div className="w-full h-[2px] bg-[#cfccb8]/30 overflow-hidden">
-                                        <div className="h-full bg-[#111111] w-[96.2%] animate-pulse" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       </div>
 
                     </div>
 
                 </div>
             </div>
 
+            {/* Floating Preview Window (follows cursor on hover) */}
+            <div
+                ref={floatingRef}
+                className="fixed top-0 left-0 pointer-events-none z-[1000] w-[580px] bg-white border border-[#cfccb8] shadow-2xl flex flex-col opacity-0 scale-95 origin-center hidden lg:block"
+                style={{ transform: "translate3d(-1000px, -1000px, 0)" }}
+            >
+                {hoveredProject && (
+                    <div className="flex flex-col p-4 gap-3">
+                        {/* Title / Header */}
+                        <div className="flex justify-between items-baseline border-b border-[#cfccb8]/40 pb-2">
+                            <span className="text-xs font-bold text-[#111111] uppercase tracking-wider">
+                                {hoveredProject.name}
+                            </span>
+                            <span className="text-[9px] text-neutral-400 font-bold tracking-widest uppercase">
+                                {getProjectIndexTag(hoveredProject)}
+                            </span>
+                        </div>
+
+                        {/* Media Viewport */}
+                        <div className="w-full aspect-video overflow-hidden border border-[#cfccb8] relative bg-black shrink-0">
+                            {hoveredProject.type === 'unreal' ? (
+                                (() => {
+                                    const videoId = hoveredProject.Link ? hoveredProject.Link.split('/').pop().split('?')[0] : '';
+                                    return <PreviewIframe videoId={videoId} />;
+                                })()
+                            ) : (
+                                <PreviewImage src={hoveredProject.image} alt={hoveredProject.name} />
+                            )}
+                        </div>
+
+                        {/* Metadata (Type) */}
+                        {(() => {
+                            const { typeStr } = getProjectMetadata(hoveredProject);
+                            return (
+                                <div className="flex justify-between text-[9px] text-neutral-500 font-bold uppercase tracking-wider">
+                                    <span>TYPE: {typeStr}</span>
+                                </div>
+                            );
+                        })()}
+
+                        {/* Description */}
+                        <div
+                            ref={floatingDescriptionRef}
+                            className="text-xs text-neutral-500 leading-relaxed max-h-[180px] overflow-hidden select-none bg-[#f4f2ee]/30 border border-[#cfccb8]/20 p-2.5"
+                        >
+                            <p>{hoveredProject.description}</p>
+                        </div>
+                    </div>
+                )}
+            </div>
         </section >
     );
 };

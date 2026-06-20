@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import AutoType from '../componnts/autotype.jsx';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import DrawText from '../componnts/DrawText';
 import { Canvas } from '@react-three/fiber';
 import { Helmet } from '../componnts/helmet';
 import { SciFiGrid } from '../componnts/SciFiGrid.jsx';
@@ -204,7 +205,7 @@ const Hero = ({ IsReady }) => {
                         <span className="absolute top-6 right-6 text-neutral-400 font-light text-sm md:text-base">+</span>
                         <span className="absolute bottom-6 left-6 text-neutral-400 font-light text-sm md:text-base">+</span>
                         <h3 className="text-xs md:text-sm lg:text-base font-bold tracking-widest leading-relaxed text-[#111111] uppercase max-w-[220px] md:max-w-none lg:max-w-[300px]" style={{ fontFamily: '"Michroma", sans-serif' }}>
-                            Step into the future of interactive art
+                            Step into the future of <DrawText text="interactive art" color="#ea580c" fontSize={16} />
                         </h3>
                     </div>
 

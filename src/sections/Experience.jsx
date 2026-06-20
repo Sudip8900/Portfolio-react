@@ -6,6 +6,7 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
 import Magnetic from '../componnts/Magnetic.jsx';
+import DrawText from '../componnts/DrawText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -82,10 +83,10 @@ const Experience = () => {
         }
 
         // Parallax scroll animation for background watermark
-        gsap.fromTo(".experience-watermark", 
+        gsap.fromTo(".experience-watermark",
             { xPercent: 8 },
-            { 
-                xPercent: -8, 
+            {
+                xPercent: -8,
                 scrollTrigger: {
                     trigger: "#experience",
                     start: "top bottom",
@@ -247,7 +248,7 @@ const Experience = () => {
                                     <Icon icon="carbon:fingerprint-recognition" width="60" height="60" className="text-[#cfccb8] mt-10 group-hover:text-orange-600 transition-colors duration-500" style={{ transform: "translateZ(20px)" }} />
 
                                     <h1 className='text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
-                                        CREDENTIALS
+                                        <DrawText text="CREDENTIALS" color="#000000ff" fontSize={32} align="center" />
                                     </h1>
                                     <p className='text-neutral-500 text-xs tracking-widest uppercase mt-4 mb-10 text-center leading-relaxed   font-bold' style={{ transform: "translateZ(20px)" }}>
                                         // Authorized personnel only<br />// Download access data below
@@ -259,10 +260,9 @@ const Experience = () => {
                                                 <div className='block w-full cursor-pointer' onClick={() => setPreviewPdf(resume.path)}>
                                                     <button className='flex flex-row items-center justify-between w-full bg-[#f4f2ee] border border-[#cfccb8] text-[#111111] p-5 md:p-6 cursor-pointer hover:border-[#111111] hover:bg-[#eae8e4]/50 group/btn transition-all duration-300'>
                                                         <div className="flex flex-col items-start">
-                                                            <span className="text-[11px] md:text-xs   text-orange-600 font-bold tracking-widest uppercase mb-1">{resume.id}</span>
-                                                            <span className="text-sm md:text-base tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">{resume.label}</span>
+                                                            <span className="text-[10px] md:text-[0.75rem] tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">{resume.label}</span>
                                                         </div>
-                                                        <Icon icon="carbon:document-view" width="28" height="28" className="text-neutral-500 group-hover/btn:text-orange-600 transition-colors" />
+                                                        <Icon icon="carbon:document-view" width="28" height="28" className="text-orange-500 group-hover/btn:text-orange-600 transition-colors" />
                                                     </button>
                                                 </div>
                                             </Magnetic>

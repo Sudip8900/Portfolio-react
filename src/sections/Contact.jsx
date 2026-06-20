@@ -7,6 +7,7 @@ import Marque from '../componnts/Marque';
 import Magnetic from '../componnts/Magnetic.jsx';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
 import { Icon } from '@iconify/react';
+import DrawText from '../componnts/DrawText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -170,10 +171,10 @@ const Contact = () => {
             );
 
         // Parallax scroll animation for background watermark text
-        gsap.fromTo(".contact-watermark-text", 
-            { xPercent: 8 },
-            { 
-                xPercent: -8, 
+        gsap.fromTo(".contact-watermark-text",
+            { xPercent: -8 },
+            {
+                xPercent: 8,
                 scrollTrigger: {
                     trigger: "#contact",
                     start: "top bottom",
@@ -189,7 +190,7 @@ const Contact = () => {
         <section id="contact" className="min-h-screen bg-[#eae8e4] text-[#111111] relative overflow-hidden flex flex-col justify-between z-10">
             {/* Background Light Text Watermark */}
             <div
-                className="contact-watermark-text absolute right-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
+                className="contact-watermark-text absolute left-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
             >
                 CONTACT
             </div>
@@ -221,8 +222,9 @@ const Contact = () => {
                     <div className='col-span-1 lg:col-span-5 flex flex-col justify-between lg:pr-12'>
                         <div>
                             <span className="text-[10px]   text-neutral-400 tracking-[0.2em] uppercase block mb-4 gsap-contact-protocol">// +COMMUNICATION PROTOCOL V.01</span>
-                            <h2 className='text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95] text-[#111111] uppercase mb-8 gsap-contact-title'>
-                                GET IN<br />TOUCH
+                            <h2 className='text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95] text-[#111111] uppercase mb-8 gsap-contact-title flex flex-col items-start gap-2'>
+                                <DrawText text="GET IN" color="#111111" fontSize={72} />
+                                <DrawText text="TOUCH" color="#111111" fontSize={72} delay={0.2} />
                             </h2>
                             <p className="text-neutral-500 text-sm leading-relaxed max-w-md gsap-contact-desc">
                                 For inquiries regarding custom game development, 3D modeling, VLSI simulations, or collaborative work, please utilize the secure transmission channel. Response latency: 24-48 hours.
@@ -269,7 +271,7 @@ const Contact = () => {
                             <div className="grid grid-cols-12 relative">
                                 <div className="col-span-9 py-6 pr-4 gsap-contact-field-content">
                                     <label className="text-[15px]   tracking-widest text-neutral-800 uppercase mb-2 block select-none">
-                                        SUBJECT / IDENTITY
+                                        YOUR NAME/ORGANIZATION
                                     </label>
                                     <input
                                         type="text"
@@ -289,7 +291,7 @@ const Contact = () => {
                             <div className="grid grid-cols-12 relative">
                                 <div className="col-span-9 py-6 pr-4 gsap-contact-field-content">
                                     <label className="text-[15px]   tracking-widest text-neutral-800 uppercase mb-2 block select-none">
-                                        ENDPOINT
+                                        YOUR EMAIL ADDRESS
                                     </label>
                                     <input
                                         type="email"
@@ -309,7 +311,7 @@ const Contact = () => {
                             <div className="grid grid-cols-12 relative">
                                 <div className="col-span-9 py-6 pr-4 gsap-contact-field-content">
                                     <label className="text-[15px]   tracking-widest text-neutral-800 uppercase mb-2 block select-none">
-                                        TRANSMISSION DATA
+                                        MESSAGE
                                     </label>
                                     <textarea
                                         name="message"
