@@ -223,7 +223,22 @@ body::before {
 .animate-counter-orbit,
 .animate-spin-slow,
 .animate-spin-slow-reverse,
-.hud-element {
+.hud-element,
+#title-about-1,
+#title-about-2,
+#title-about-3,
+#title-about-4,
+#title-contact-1,
+#title-contact-2,
+#title-contact-3,
+#title-contact-4,
+.works-watermark,
+.contact-watermark-text,
+.hero-watermark {
   will-change: transform;
+}
+
+.works-floating-preview {
+  will-change: transform, opacity;
 }
 

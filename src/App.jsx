@@ -17,6 +17,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ limitCallbacks: true });
 
 const App = () => {
 

@@ -2,7 +2,7 @@ import { useGSAP } from '@gsap/react';
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects } from '../constants';
+import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects, unrealStatuses } from '../constants';
 import { Icon } from '@iconify/react';
 import Magnetic from '../componnts/Magnetic.jsx';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
@@ -71,6 +71,7 @@ const PreviewIframe = ({ videoId }) => {
 const Works = () => {
     const [activeProject, setActiveProject] = useState(null);
     const [hoveredProject, setHoveredProject] = useState(null);
+    const [displayProject, setDisplayProject] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const floatingRef = useRef(null);
     const floatingDescriptionRef = useRef(null);
@@ -87,7 +88,6 @@ const Works = () => {
 
     const total = BlenderProjects.length + UnrealProjects.length + CodingProjects.length + VLSIProjects.length;
     const counts = [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length, total];
-    const unrealStatuses = ["v1.0.4", "STABLE", "LIVE", "TESTING", "STABLE"];
 
     const getProjectMetadata = (project) => {
         if (!project) return { typeStr: "UNKNOWN", dateStr: "N/A" };
@@ -171,17 +171,20 @@ const Works = () => {
         }
     }, [activeProject]);
 
-    // Preload all project images for instant swapping
+    // Preload all project images for instant swapping (deferred to prioritize main page load animations)
     useEffect(() => {
-        const imagesToPreload = [
-            ...BlenderProjects.map(p => p.image),
-            ...CodingProjects.map(p => p.image)
-        ].filter(Boolean);
+        const timer = setTimeout(() => {
+            const imagesToPreload = [
+                ...BlenderProjects.map(p => p.image),
+                ...CodingProjects.map(p => p.image)
+            ].filter(Boolean);
 
-        imagesToPreload.forEach((src) => {
-            const img = new Image();
-            img.src = src;
-        });
+            imagesToPreload.forEach((src) => {
+                const img = new Image();
+                img.src = src;
+            });
+        }, 1500);
+        return () => clearTimeout(timer);
     }, []);
 
     // Track mouse position and update floating preview coordinates
@@ -230,13 +233,19 @@ const Works = () => {
     // Animate floating preview appearance when hoveredProject changes
     useEffect(() => {
         if (!floatingRef.current) return;
+
+        // Kill any existing animations on the floating preview card to prevent conflict
+        gsap.killTweensOf(floatingRef.current);
+
         if (hoveredProject) {
+            setDisplayProject(hoveredProject);
             gsap.to(floatingRef.current, {
                 opacity: 1,
                 scale: 1,
                 duration: 0.3,
                 ease: "power3.out",
-                display: "block"
+                display: "block",
+                overwrite: "auto"
             });
         } else {
             gsap.to(floatingRef.current, {
@@ -244,8 +253,12 @@ const Works = () => {
                 scale: 0.95,
                 duration: 0.2,
                 ease: "power2.inOut",
+                overwrite: "auto",
                 onComplete: () => {
-                    if (floatingRef.current) floatingRef.current.style.display = "none";
+                    if (floatingRef.current) {
+                        floatingRef.current.style.display = "none";
+                    }
+                    setDisplayProject(null);
                 }
             });
         }
@@ -312,7 +325,7 @@ const Works = () => {
             clearTimeout(delayTimeout);
             if (scrollInterval) clearInterval(scrollInterval);
         };
-    }, [hoveredProject]);
+    }, [displayProject]);
 
 
     /* ================= GSAP ANIMATIONS ================= */
@@ -412,7 +425,7 @@ const Works = () => {
     }, [BlenderProjects.length, UnrealProjects.length, CodingProjects.length, VLSIProjects.length]);
 
     return (
-        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 overflow-hidden bg-white text-[#111111]'>
+        <section id="works" className='relative z-10 min-h-screen flex flex-col py-20 overflow-hidden bg-[#eae8e4] text-[#111111]'>
             {/* Background Light Text Watermark */}
             <div
                 className="works-watermark absolute left-0 top-10 select-none pointer-events-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] z-0 tracking-tighter"
@@ -422,7 +435,7 @@ const Works = () => {
 
             {/* Header (UNCHANGED as requested) */}
             <div className='flex items-center gap-4 mb-10 px-5 md:px-10 select-none' ref={headingRef} style={{ perspective: "1000px" }}>
-                <div ref={lineRef} className='flex-1 h-[1px] bg-[#e4e4e7]' />
+                <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
                 <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
                     {(() => {
                         const headerText = "[ SYS.WORKS_DB ]";
@@ -461,14 +474,14 @@ const Works = () => {
             <div className="px-5 md:px-10 mt-10">
                 <div
                     ref={dashboardRef}
-                    className="grid grid-cols-1 lg:grid-cols-12 gap-0 border border-[#e4e4e7] bg-white relative overflow-hidden"
+                    className="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-transparent relative overflow-hidden"
                 >
 
                     {/* ================= LEFT COLUMN (Stats + Unreal) ================= */}
-                    <div className="col-span-1 lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#e4e4e7] flex flex-col">
+                    <div className="col-span-1 lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#cfccb8] flex flex-col">
 
-                        {/* STATS OVERVIEW PANEL (Top-Left) */}
-                        <div className="lg:h-[600px] border-b border-[#e4e4e7] p-10 bg-white select-none flex flex-col justify-between gap-12">
+                         {/* STATS OVERVIEW PANEL (Top-Left) */}
+                        <div className="lg:h-[600px] border-b border-[#cfccb8] p-10 bg-transparent select-none flex flex-col justify-between gap-12">
                             <div className="flex items-center gap-2 text-sm   tracking-[0.25em] text-neutral-400 uppercase font-bold">
                                 <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
                                 SYS.STAT_OVERVIEW
@@ -532,7 +545,7 @@ const Works = () => {
                                 </div>
 
                                 {/* Total Stat */}
-                                <div className="pt-6 border-t border-[#e4e4e7]/40 flex justify-between items-center">
+                                <div className="pt-6 border-t border-[#cfccb8]/40 flex justify-between items-center">
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2 text-sm   text-neutral-500 uppercase tracking-widest">
                                             <span>TOTAL_DB</span>
@@ -548,9 +561,9 @@ const Works = () => {
                         </div>
 
                         {/* UNREAL DATABASE PANEL (Bottom-Left) */}
-                        <div className="lg:h-[600px] p-10 flex flex-col bg-white overflow-hidden justify-between border-b lg:border-b-0 border-[#e4e4e7]">
+                        <div className="lg:h-[600px] p-10 flex flex-col bg-transparent overflow-hidden justify-between border-b lg:border-b-0 border-[#cfccb8]">
                             <div className="flex flex-col h-full overflow-hidden">
-                                <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 mb-6 select-none">
+                                <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
                                     <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                         UNREAL ARCHIVE
                                     </h3>
@@ -593,12 +606,12 @@ const Works = () => {
                     </div>
 
                     {/* ================= MIDDLE COLUMN (Blender + Coding/VLSI) ================= */}
-                    <div className="col-span-1 lg:col-span-7 border-b lg:border-b-0 border-[#e4e4e7] flex flex-col">
+                    <div className="col-span-1 lg:col-span-7 border-b lg:border-b-0 border-[#cfccb8] flex flex-col">
 
                         {/* BLENDER PROJECTS LIST PANEL (Top-Middle) */}
-                        <div className="lg:h-[600px] border-b border-[#e4e4e7] p-10 flex flex-col overflow-hidden bg-white">
+                        <div className="lg:h-[600px] border-b border-[#cfccb8] p-10 flex flex-col overflow-hidden bg-transparent">
                             <div className="flex flex-col h-full overflow-hidden">
-                                <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 mb-6 select-none">
+                                <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
                                     <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                         BLENDER ARCHIVE
                                     </h3>
@@ -639,12 +652,12 @@ const Works = () => {
                         </div>
 
                         {/* BOTTOM ROW (Coding + VLSI Split Flex Layout) */}
-                        <div className="lg:h-[600px] flex flex-col lg:flex-row gap-0 overflow-hidden bg-white">
+                        <div className="lg:h-[600px] flex flex-col lg:flex-row gap-0 overflow-hidden bg-transparent">
 
                             {/* CODING DATABASE PANEL */}
-                            <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-[#e4e4e7] p-10 h-full flex flex-col justify-between overflow-hidden bg-white">
+                            <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-[#cfccb8] p-10 h-full flex flex-col justify-between overflow-hidden bg-transparent">
                                 <div className="flex flex-col h-full overflow-hidden">
-                                    <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 select-none">
+                                    <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 select-none">
                                         <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                             CODING ARCHIVE
                                         </h3>
@@ -658,7 +671,7 @@ const Works = () => {
                                                 onClick={() => setSelectedCategory(category)}
                                                 className={`px-3 py-1 text-[10px] tracking-widest uppercase border transition-all duration-300 cursor-pointer ${selectedCategory === category
                                                     ? "border-orange-600 bg-orange-600/10 text-orange-600 font-bold"
-                                                    : "border-[#e4e4e7] bg-transparent text-neutral-400 hover:text-[#111111] hover:border-[#111111]"
+                                                    : "border-[#cfccb8] bg-transparent text-neutral-400 hover:text-[#111111] hover:border-[#111111]"
                                                     }`}
                                             >
                                                 {category}
@@ -701,9 +714,9 @@ const Works = () => {
                             </div>
 
                             {/* VLSI DATABASE PANEL */}
-                            <div className="w-full lg:w-1/2 p-10 h-full flex flex-col justify-between overflow-hidden bg-white">
+                            <div className="w-full lg:w-1/2 p-10 h-full flex flex-col justify-between overflow-hidden bg-transparent">
                                 <div className="flex flex-col h-full overflow-hidden">
-                                    <div className="flex justify-between items-center pb-3 border-b border-[#e4e4e7]/60 mb-6 select-none">
+                                    <div className="flex justify-between items-center pb-3 border-b border-[#cfccb8]/60 mb-6 select-none">
                                         <h3 className="font-bold text-[#111111] text-[10px] md:text-xs tracking-[0.2em] uppercase">
                                             VLSI ARCHIVE
                                         </h3>
@@ -735,11 +748,11 @@ const Works = () => {
                                             })}
                                         </div>
                                     ) : (
-                                        <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#e4e4e7] bg-[#fafafa]/50 p-6 relative overflow-hidden group select-none">
+                                        <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#cfccb8] bg-transparent p-6 relative overflow-hidden group select-none">
                                             <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-600/5 to-transparent h-1/2 w-full animate-[pulse_2s_infinite]" />
                                             <div className="relative mb-4 scale-110">
-                                                <div className="absolute inset-[-8px] border border-[#e4e4e7]/40 rounded-full animate-ping duration-1000" />
-                                                <div className="w-16 h-16 rounded-full border border-[#e4e4e7] flex items-center justify-center bg-white relative z-10">
+                                                <div className="absolute inset-[-8px] border border-[#cfccb8]/40 rounded-full animate-ping duration-1000" />
+                                                <div className="w-16 h-16 rounded-full border border-[#cfccb8] flex items-center justify-center bg-transparent relative z-10">
                                                     <svg
                                                         viewBox="0 0 24 24"
                                                         className="w-10 h-10 stroke-orange-600 fill-none animate-[spin_12s_linear_infinite]"
@@ -776,36 +789,36 @@ const Works = () => {
             {/* Floating Preview Window (follows cursor on hover) */}
             <div
                 ref={floatingRef}
-                className="fixed top-0 left-0 pointer-events-none z-[1000] w-[580px] bg-white border border-[#cfccb8] shadow-2xl flex flex-col opacity-0 scale-95 origin-center hidden lg:block"
+                className="works-floating-preview fixed top-0 left-0 pointer-events-none z-[1000] w-[580px] bg-white border border-[#cfccb8] shadow-2xl flex flex-col opacity-0 scale-95 origin-center hidden lg:block"
                 style={{ transform: "translate3d(-1000px, -1000px, 0)" }}
             >
-                {hoveredProject && (
+                {displayProject && (
                     <div className="flex flex-col p-4 gap-3">
                         {/* Title / Header */}
                         <div className="flex justify-between items-baseline border-b border-[#cfccb8]/40 pb-2">
                             <span className="text-xs font-bold text-[#111111] uppercase tracking-wider">
-                                {hoveredProject.name}
+                                {displayProject.name}
                             </span>
                             <span className="text-[9px] text-neutral-400 font-bold tracking-widest uppercase">
-                                {getProjectIndexTag(hoveredProject)}
+                                {getProjectIndexTag(displayProject)}
                             </span>
                         </div>
 
                         {/* Media Viewport */}
                         <div className="w-full aspect-video overflow-hidden border border-[#cfccb8] relative bg-black shrink-0">
-                            {hoveredProject.type === 'unreal' ? (
+                            {displayProject.type === 'unreal' ? (
                                 (() => {
-                                    const videoId = hoveredProject.Link ? hoveredProject.Link.split('/').pop().split('?')[0] : '';
+                                    const videoId = displayProject.Link ? displayProject.Link.split('/').pop().split('?')[0] : '';
                                     return <PreviewIframe videoId={videoId} />;
                                 })()
                             ) : (
-                                <PreviewImage src={hoveredProject.image} alt={hoveredProject.name} />
+                                <PreviewImage src={displayProject.image} alt={displayProject.name} />
                             )}
                         </div>
 
                         {/* Metadata (Type) */}
                         {(() => {
-                            const { typeStr } = getProjectMetadata(hoveredProject);
+                            const { typeStr } = getProjectMetadata(displayProject);
                             return (
                                 <div className="flex justify-between text-[9px] text-neutral-500 font-bold uppercase tracking-wider">
                                     <span>TYPE: {typeStr}</span>
@@ -818,7 +831,7 @@ const Works = () => {
                             ref={floatingDescriptionRef}
                             className="text-xs text-neutral-500 leading-relaxed max-h-[180px] overflow-hidden select-none bg-[#f4f2ee]/30 border border-[#cfccb8]/20 p-2.5"
                         >
-                            <p>{hoveredProject.description}</p>
+                            <p>{displayProject.description}</p>
                         </div>
                     </div>
                 )}

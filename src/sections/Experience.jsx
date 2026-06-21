@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { experience, resumes } from '../constants';
+import { experience, resumes, roleTagsMap } from '../constants';
 import { Icon } from '@iconify/react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -10,14 +10,7 @@ import DrawText from '../componnts/DrawText';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const roleTagsMap = {
-    1: ["3D Modeling", "Texturing", "Rigging", "Animation"],
-    2: ["UE5 Blueprints", "Gameplay C++", "AI Systems", "Optimization"],
-    3: ["IC Layout", "Schematic Capture", "DRC/LVS Verification", "Cadence Virtuoso"],
-    5: ["Content Creation", "Social Media", "Graphic Design"],
-    6: ["Customer Relations", "Booking Engine", "Sales Strategy"],
-    7: ["Community Projects", "Developer Events", "Teamwork"]
-};
+
 
 const Experience = () => {
     const [previewPdf, setPreviewPdf] = useState(null);
@@ -234,25 +227,19 @@ const Experience = () => {
                         </div>
                     </div>
 
-                    {/* Column 3: Credentials / CV (Right) */}
+                    {/* Column 3: CV (Right) */}
                     <div className="col-span-1 lg:col-span-3 lg:pl-8 gsap-fade-in">
                         <div className="lg:sticky lg:top-32 h-fit">
                             <InteractiveCard>
                                 <div className='p-6 md:p-8 bg-white border border-[#cfccb8] flex flex-col justify-center items-center relative overflow-hidden group hover:border-[#111111] transition-all duration-300'>
 
                                     {/* HUD Decorative Elements */}
-                                    <div className='absolute top-4 left-4 text-neutral-500   text-[9px] tracking-widest uppercase font-bold'>[ SECURITY.CLEARANCE.REQUIRED ]</div>
                                     <div className='absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
                                     <div className='absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
 
-                                    <Icon icon="carbon:fingerprint-recognition" width="60" height="60" className="text-[#cfccb8] mt-10 group-hover:text-orange-600 transition-colors duration-500" style={{ transform: "translateZ(20px)" }} />
-
-                                    <h1 className='text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-6 text-center' style={{ transform: "translateZ(30px)" }}>
-                                        <DrawText text="CREDENTIALS" color="#000000ff" fontSize={32} align="center" />
+                                    <h1 className='w-full text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-6 mb-15 text-left' style={{ transform: "translateZ(30px)" }}>
+                                        <DrawText text="CV" color="#000000ff" fontSize={75} align="left" />
                                     </h1>
-                                    <p className='text-neutral-500 text-xs tracking-widest uppercase mt-4 mb-10 text-center leading-relaxed   font-bold' style={{ transform: "translateZ(20px)" }}>
-                                        // Authorized personnel only<br />// Download access data below
-                                    </p>
 
                                     <div className="w-full flex flex-col gap-4 relative z-10" style={{ transform: "translateZ(40px)" }}>
                                         {resumes.map((resume) => (

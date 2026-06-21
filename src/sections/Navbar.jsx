@@ -4,6 +4,7 @@ import Magnetic from '../componnts/Magnetic.jsx';
 import { Icon } from '@iconify/react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { sectionsList, sectionIcons } from '../constants';
 
 const Navbar = ({ IsReady }) => {
     const [scrolled, setScrolled] = useState(false);
@@ -12,16 +13,6 @@ const Navbar = ({ IsReady }) => {
     const mobileMenuRef = useRef(null);
     const lastScrollYRef = useRef(0);
     const isOpenRef = useRef(isOpen);
-
-    const sectionsList = ['home', 'about', 'works', 'experience', 'contact'];
-
-    const sectionIcons = {
-        home: 'carbon:home',
-        about: 'carbon:user',
-        works: 'carbon:code',
-        experience: 'carbon:development',
-        contact: 'carbon:email'
-    };
 
     // Keep isOpenRef in sync with state to avoid re-registering scroll listener
     useEffect(() => {
@@ -125,9 +116,8 @@ const Navbar = ({ IsReady }) => {
                         </div>
                     </button>
 
-                    {/* Desktop Dropdown - same width as the Column 1 button */}
                     <div 
-                        className="absolute top-[64px] left-0 w-full h-[calc(100vh-64px)] bg-[#eae8e4] border-r border-b border-[#cfccb8] text-[#111111] flex flex-col justify-between px-8 py-10 shadow-lg overflow-y-auto transition-[clip-path] duration-500 ease-out z-[60]"
+                        className="absolute top-[64px] left-0 w-full h-[calc(100vh-64px)] bg-[#0d0d11]/98 backdrop-blur-lg border-r border-b border-[#1f1f2e] text-[#eae8e4] flex flex-col justify-between px-8 py-10 shadow-2xl overflow-y-auto transition-[clip-path] duration-500 ease-out z-[60]"
                         style={{
                             fontFamily: '"Michroma", sans-serif',
                             clipPath: isOpen ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' : 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)'
@@ -135,9 +125,9 @@ const Navbar = ({ IsReady }) => {
                     >
                         <div>
                             {/* Drawer Header */}
-                            <div className="flex items-center gap-2 select-none border-b border-[#cfccb8]/40 pb-4 mb-8">
-                                <span className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-ping" />
-                                <span className="text-xs lg:text-[13px] tracking-[0.3em] font-black text-orange-600">
+                            <div className="flex items-center gap-2 select-none border-b border-[#1f1f2e] pb-4 mb-8">
+                                <span className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+                                <span className="text-xs lg:text-[13px] tracking-[0.3em] font-black text-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.3)]">
                                     SYS_NAVIGATOR
                                 </span>
                             </div>
@@ -147,46 +137,47 @@ const Navbar = ({ IsReady }) => {
                                 {sectionsList.map((section, index) => {
                                     const num = String(index + 1).padStart(2, '0');
                                     return (
-                                        <div key={index} className="mob-nav-link border-b border-[#cfccb8]/40 pb-3 group">
+                                        <div key={index} className="mob-nav-link border-b border-[#1f1f2e]/60 pb-3 group relative">
                                             <Link 
                                                 onClick={toggleMenu} 
-                                                className="flex items-center justify-between transition-colors duration-300 cursor-pointer text-[#111111]/70 hover:text-orange-600" 
+                                                className="flex items-center justify-between transition-all duration-300 cursor-pointer text-[#eae8e4]/70 hover:text-orange-500 group-hover:translate-x-2 py-1.5" 
                                                 to={section} 
                                                 smooth 
                                                 offset={-50} 
                                                 duration={500}
                                             >
                                                 <div className="flex items-center">
-                                                    <span className="text-sm md:text-base text-orange-600 font-sans mr-4 tracking-normal font-bold">{num} //</span>
-                                                    <Icon icon={sectionIcons[section]} className="mr-3 text-xl md:text-2xl opacity-60 group-hover:opacity-100 group-hover:text-orange-600 transition-all duration-300" />
+                                                    <span className="text-sm md:text-base text-orange-500 font-sans mr-4 tracking-normal font-bold">{num} //</span>
+                                                    <Icon icon={sectionIcons[section]} className="mr-3 text-xl md:text-2xl opacity-60 group-hover:opacity-100 group-hover:text-orange-500 transition-all duration-300" />
                                                     <span className="text-base md:text-lg tracking-[0.25em] uppercase">{section}</span>
                                                 </div>
-                                                <span className="text-neutral-400 group-hover:text-orange-600 group-hover:translate-x-1.5 transition-all duration-300">→</span>
+                                                <span className="text-neutral-500 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-300">→</span>
                                             </Link>
+                                            <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                                         </div>
                                     );
                                 })}
                             </div>
 
                             {/* Tech Graphic Accent Panel */}
-                            <div className="my-8 relative w-full border border-[#cfccb8] flex flex-col gap-4 p-5 overflow-hidden bg-[#eae8e4]/50 select-none">
+                            <div className="my-8 relative w-full border border-[#1f1f2e] flex flex-col gap-4 p-5 overflow-hidden bg-[#121217] select-none">
                                 {/* Dot Matrix Grid background */}
-                                <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#111111 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
+                                <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
                                 <div className="flex justify-between items-center w-full relative z-10">
-                                    <div className="flex flex-col gap-1 text-[10px] lg:text-xs text-neutral-500 tracking-widest">
+                                    <div className="flex flex-col gap-1 text-[10px] lg:text-xs text-neutral-400 tracking-widest">
                                         <div>STATUS: ONLINE</div>
                                         <div>SYS.VER: 2026.06.17</div>
                                     </div>
                                     {/* Mini Rotating Radar */}
-                                    <div className="relative w-12 h-12 border border-[#cfccb8] rounded-full flex items-center justify-center opacity-85">
-                                        <div className="absolute w-[85%] h-[85%] border border-dashed border-[#cfccb8]/60 rounded-full animate-[spin_12s_linear_infinite]" />
-                                        <div className="absolute w-full h-[1px] bg-orange-600/50 cs-radar-arm" />
-                                        <div className="w-1.5 h-1.5 rounded-full bg-orange-600 animate-pulse" />
+                                    <div className="relative w-12 h-12 border border-[#2a2a38] rounded-full flex items-center justify-center opacity-90">
+                                        <div className="absolute w-[85%] h-[85%] border border-dashed border-[#cfccb8]/15 rounded-full animate-[spin_12s_linear_infinite]" />
+                                        <div className="absolute w-full h-[1px] bg-gradient-to-r from-orange-500 to-transparent cs-radar-arm" />
+                                        <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_6px_rgba(249,115,22,0.7)] animate-pulse" />
                                     </div>
                                 </div>
-                                <div className="border-t border-[#cfccb8]/30 pt-3 relative z-10">
-                                    <div className="text-[9px] lg:text-[10px] text-neutral-500 uppercase tracking-widest mb-1">LOCATION</div>
-                                    <div className="text-[10px] lg:text-xs text-[#111111] leading-relaxed font-bold tracking-wider">
+                                <div className="border-t border-[#22222c] pt-3 relative z-10">
+                                    <div className="text-[9px] lg:text-[10px] text-neutral-400 uppercase tracking-widest mb-1">// LOCATION</div>
+                                    <div className="text-[10px] lg:text-xs text-[#eae8e4] leading-relaxed font-bold tracking-wider">
                                         Rameswarpur, Ramjibanpur, West Medinipur, West Bengal, India, 721242
                                     </div>
                                 </div>
@@ -194,19 +185,19 @@ const Navbar = ({ IsReady }) => {
                         </div>
 
                         {/* Bottom Contact / Connect Info */}
-                        <div className="flex flex-col gap-5 border-t border-[#cfccb8] pt-6 text-xs lg:text-sm mt-auto">
+                        <div className="flex flex-col gap-5 border-t border-[#1f1f2e] pt-6 text-xs lg:text-sm mt-auto">
                             <div>
-                                <p className="text-orange-600 tracking-[0.25em] mb-1 font-bold text-xs lg:text-sm">CONTACT_SYS</p>
-                                <a href="mailto:iamsudippan@gmail.com" className="text-neutral-700 hover:text-orange-600 transition-colors tracking-wide font-medium text-xs lg:text-sm">
+                                <p className="text-orange-500 tracking-[0.25em] mb-1 font-bold text-xs lg:text-sm">CONTACT_SYS</p>
+                                <a href="mailto:iamsudippan@gmail.com" className="text-neutral-300 hover:text-orange-500 transition-colors tracking-wide font-medium text-xs lg:text-sm">
                                     iamsudippan@gmail.com
                                 </a>
                             </div>
                             <div>
-                                <p className="text-orange-600 tracking-[0.25em] mb-2 font-bold text-xs lg:text-sm">TERMINALS</p>
+                                <p className="text-orange-500 tracking-[0.25em] mb-2 font-bold text-xs lg:text-sm">TERMINALS</p>
                                 <div className="flex flex-wrap gap-2.5">
-                                    <a href="https://github.com/Sudip8900" target="_blank" rel="noreferrer" className="text-[10px] lg:text-xs font-bold text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-3 py-1 transition-all">GITHUB</a>
-                                    <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target="_blank" rel="noreferrer" className="text-[10px] lg:text-xs font-bold text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-3 py-1 transition-all">LINKEDIN</a>
-                                    <a href="https://www.instagram.com/sudip_pan00/" target="_blank" rel="noreferrer" className="text-[10px] lg:text-xs font-bold text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-3 py-1 transition-all">INSTAGRAM</a>
+                                    <a href="https://github.com/Sudip8900" target="_blank" rel="noreferrer" className="text-[10px] lg:text-xs font-bold text-neutral-400 hover:text-white hover:bg-orange-500/10 border border-[#22222c] hover:border-orange-500 rounded-full px-3 py-1 transition-all">GITHUB</a>
+                                    <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target="_blank" rel="noreferrer" className="text-[10px] lg:text-xs font-bold text-neutral-400 hover:text-white hover:bg-orange-500/10 border border-[#22222c] hover:border-orange-500 rounded-full px-3 py-1 transition-all">LINKEDIN</a>
+                                    <a href="https://www.instagram.com/sudip_pan00/" target="_blank" rel="noreferrer" className="text-[10px] lg:text-xs font-bold text-neutral-400 hover:text-white hover:bg-orange-500/10 border border-[#22222c] hover:border-orange-500 rounded-full px-3 py-1 transition-all">INSTAGRAM</a>
                                 </div>
                             </div>
                         </div>
@@ -291,7 +282,7 @@ const Navbar = ({ IsReady }) => {
             {/* Mobile Dropdown Menu (Full Height, Full Width on Mobile View) */}
             <div 
                 ref={mobileMenuRef}
-                className={`md:hidden fixed top-[56px] left-0 w-full h-[calc(100vh-56px)] bg-[#eae8e4] border-b border-[#cfccb8] text-[#111111] flex flex-col justify-between px-6 py-8 shadow-lg overflow-y-auto transition-[clip-path] duration-500 ease-out z-[60]`}
+                className={`md:hidden fixed top-[56px] left-0 w-full h-[calc(100vh-56px)] bg-[#0d0d11]/98 backdrop-blur-lg border-b border-[#1f1f2e] text-[#eae8e4] flex flex-col justify-between px-6 py-8 shadow-2xl overflow-y-auto transition-[clip-path] duration-500 ease-out z-[60]`}
                 style={{
                     fontFamily: '"Michroma", sans-serif',
                     clipPath: isOpen ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' : 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)'
@@ -303,46 +294,47 @@ const Navbar = ({ IsReady }) => {
                         {sectionsList.map((section, index) => {
                             const num = String(index + 1).padStart(2, '0');
                             return (
-                                <div key={index} className="mob-nav-link border-b border-[#cfccb8]/40 pb-3 group">
+                                <div key={index} className="mob-nav-link border-b border-[#1f1f2e]/60 pb-3 group relative">
                                     <Link 
                                         onClick={toggleMenu} 
-                                        className="flex items-center justify-between transition-colors duration-300 cursor-pointer text-[#111111]/70 hover:text-orange-600" 
+                                        className="flex items-center justify-between transition-all duration-300 cursor-pointer text-[#eae8e4]/70 hover:text-orange-500 group-hover:translate-x-2 py-1.5" 
                                         to={section} 
                                         smooth 
                                         offset={-50} 
                                         duration={500}
                                     >
                                         <div className="flex items-center">
-                                            <span className="text-sm md:text-base text-orange-600 mr-4 font-bold">{num} //</span>
+                                            <span className="text-sm md:text-base text-orange-500 mr-4 font-bold">{num} //</span>
                                             <Icon icon={sectionIcons[section]} className="mr-3 text-xl md:text-2xl opacity-60 group-hover:opacity-100 group-hover:text-orange-600 transition-all duration-300" />
                                             <span className="text-base md:text-lg tracking-[0.25em] uppercase">{section}</span>
                                         </div>
-                                        <span className="text-neutral-400 group-hover:text-orange-600 group-hover:translate-x-1.5 transition-all duration-300">→</span>
+                                        <span className="text-neutral-500 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-300">→</span>
                                     </Link>
+                                    <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                                 </div>
                             );
                         })}
                     </div>
 
                     {/* Tech Graphic Accent Panel */}
-                    <div className="my-8 relative w-full border border-[#cfccb8] flex flex-col gap-4 p-5 overflow-hidden bg-[#eae8e4]/50 select-none">
+                    <div className="my-8 relative w-full border border-[#1f1f2e] flex flex-col gap-4 p-5 overflow-hidden bg-[#121217] select-none">
                         {/* Dot Matrix Grid background */}
-                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#111111 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
                         <div className="flex justify-between items-center w-full relative z-10">
-                            <div className="flex flex-col gap-1 text-[10px] md:text-xs text-neutral-500 tracking-widest">
+                            <div className="flex flex-col gap-1 text-[10px] md:text-xs text-neutral-400 tracking-widest">
                                 <div>STATUS: ONLINE</div>
                                 <div>SYS.VER: 2026.06.17</div>
                             </div>
                             {/* Mini Rotating Radar */}
-                            <div className="relative w-12 h-12 border border-[#cfccb8] rounded-full flex items-center justify-center opacity-85">
-                                <div className="absolute w-[85%] h-[85%] border border-dashed border-[#cfccb8]/60 rounded-full animate-[spin_12s_linear_infinite]" />
-                                <div className="absolute w-full h-[1px] bg-orange-600/50 cs-radar-arm" />
-                                <div className="w-1.5 h-1.5 rounded-full bg-orange-600 animate-pulse" />
+                            <div className="relative w-12 h-12 border border-[#2a2a38] rounded-full flex items-center justify-center opacity-90">
+                                <div className="absolute w-[85%] h-[85%] border border-dashed border-[#cfccb8]/15 rounded-full animate-[spin_12s_linear_infinite]" />
+                                <div className="absolute w-full h-[1px] bg-gradient-to-r from-orange-500 to-transparent cs-radar-arm" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_6px_rgba(249,115,22,0.7)] animate-pulse" />
                             </div>
                         </div>
-                        <div className="border-t border-[#cfccb8]/30 pt-3 relative z-10">
-                            <div className="text-[9px] md:text-[10px] text-neutral-500 uppercase tracking-widest mb-1">LOCATION</div>
-                            <div className="text-[10px] md:text-xs text-[#111111] leading-relaxed font-bold tracking-wider">
+                        <div className="border-t border-[#22222c] pt-3 relative z-10">
+                            <div className="text-[9px] md:text-[10px] text-neutral-400 uppercase tracking-widest mb-1">// LOCATION</div>
+                            <div className="text-[10px] md:text-xs text-[#eae8e4] leading-relaxed font-bold tracking-wider">
                                 Rameswarpur, Ramjibanpur, West Medinipur, West Bengal, India, 721242
                             </div>
                         </div>
@@ -350,19 +342,19 @@ const Navbar = ({ IsReady }) => {
                 </div>
 
                 {/* Bottom Contact / Connect Info */}
-                <div className="flex flex-col gap-5 border-t border-[#cfccb8] pt-6 text-xs md:text-sm mt-auto">
+                <div className="flex flex-col gap-5 border-t border-[#1f1f2e] pt-6 text-xs md:text-sm mt-auto">
                     <div>
-                        <p className="text-orange-600 tracking-[0.25em] mb-1 font-bold text-xs md:text-sm">CONTACT_SYS</p>
-                        <a href="mailto:iamsudippan@gmail.com" className="text-neutral-700 hover:text-orange-600 transition-colors tracking-wide font-medium text-xs md:text-sm">
+                        <p className="text-orange-500 tracking-[0.25em] mb-1 font-bold text-xs md:text-sm">CONTACT_SYS</p>
+                        <a href="mailto:iamsudippan@gmail.com" className="text-neutral-300 hover:text-orange-500 transition-colors tracking-wide font-medium text-xs md:text-sm">
                             iamsudippan@gmail.com
                         </a>
                     </div>
                     <div>
-                        <p className="text-orange-600 tracking-[0.25em] mb-2 font-bold text-xs md:text-sm">TERMINALS</p>
+                        <p className="text-orange-500 tracking-[0.25em] mb-2 font-bold text-xs md:text-sm">TERMINALS</p>
                         <div className="flex flex-wrap gap-2.5">
-                            <a href="https://github.com/Sudip8900" target="_blank" rel="noreferrer" className="text-[10px] md:text-xs font-bold text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-4 py-1.5 transition-all">GITHUB</a>
-                            <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target="_blank" rel="noreferrer" className="text-[10px] md:text-xs font-bold text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-4 py-1.5 transition-all">LINKEDIN</a>
-                            <a href="https://www.instagram.com/sudip_pan00/" target="_blank" rel="noreferrer" className="text-[10px] md:text-xs font-bold text-neutral-700 hover:text-orange-600 hover:bg-orange-600/10 border border-[#cfccb8] rounded-full px-4 py-1.5 transition-all">INSTAGRAM</a>
+                            <a href="https://github.com/Sudip8900" target="_blank" rel="noreferrer" className="text-[10px] md:text-xs font-bold text-neutral-400 hover:text-white hover:bg-orange-500/10 border border-[#22222c] hover:border-orange-500 rounded-full px-4 py-1.5 transition-all">GITHUB</a>
+                            <a href="https://www.linkedin.com/in/sudip-pan-7a3946253" target="_blank" rel="noreferrer" className="text-[10px] md:text-xs font-bold text-neutral-400 hover:text-white hover:bg-orange-500/10 border border-[#22222c] hover:border-orange-500 rounded-full px-4 py-1.5 transition-all">LINKEDIN</a>
+                            <a href="https://www.instagram.com/sudip_pan00/" target="_blank" rel="noreferrer" className="text-[10px] md:text-xs font-bold text-neutral-400 hover:text-white hover:bg-orange-500/10 border border-[#22222c] hover:border-orange-500 rounded-full px-4 py-1.5 transition-all">INSTAGRAM</a>
                         </div>
                     </div>
                 </div>

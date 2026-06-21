@@ -1,434 +1,120 @@
-import React, { useRef, useEffect } from 'react';
-import Marque from '../componnts/Marque';
-import Magnetic from '../componnts/Magnetic';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
+import React, { useRef } from "react";
+import Magnetic from "../componnts/Magnetic";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── Decrypted Text Component ───────────────────────────── */
-const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>';
-const DecryptedText = ({ text, className }) => {
-    const [displayText, setDisplayText] = React.useState(text);
-    const intervalRef = useRef(null);
-
-    const scramble = () => {
-        let iterations = 0;
-        clearInterval(intervalRef.current);
-        intervalRef.current = setInterval(() => {
-            setDisplayText(text.split('').map((char, index) => {
-                if (index < iterations || char === ' ') return text[index];
-                return chars[Math.floor(Math.random() * chars.length)];
-            }).join(''));
-            
-            if (iterations >= text.length) {
-                clearInterval(intervalRef.current);
-            }
-            iterations += 1/3;
-        }, 30);
-    };
-
-    // Scramble effect only on hover to prevent layout thrashing during scroll pin
-    useEffect(() => {
-        return () => clearInterval(intervalRef.current);
-    }, []);
-
-    return (
-        <span 
-            className={className} 
-            onMouseEnter={scramble}
-        >
-            {displayText}
-        </span>
-    );
-};
-
-/* ─── Radar Sweep Component ─────────────────────────────── */
-const Radar = () => (
-    <div className="cs-radar absolute right-6 bottom-6 hidden lg:block z-10">
-        <div className="relative w-28 h-28">
-            {[0, 8, 16, 24].map((inset) => (
-                <div
-                    key={inset}
-                    className="absolute border border-[#cfccb8] rounded-full hover:border-[#111111] transition-colors duration-300"
-                    style={{ inset }}
-                />
-            ))}
-            {/* Crosshairs */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-full h-px bg-[#cfccb8]/50" />
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="h-full w-px bg-[#cfccb8]/50" />
-            </div>
-            {/* Sweep arm */}
-            <div className="absolute inset-0 origin-center cs-radar-arm">
-                <div className="w-1/2 h-px absolute top-1/2 right-0 bg-gradient-to-r from-orange-600 to-transparent" />
-            </div>
-            {/* Sweep glow cone */}
-            <div className="absolute inset-0 rounded-full cs-radar-sweep" />
-            {/* Blip */}
-            <div
-                className="absolute w-1.5 h-1.5 bg-orange-600 rounded-full cs-radar-blip"
-                style={{ top: '30%', left: '65%' }}
-            />
-            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] font-mono text-neutral-500 tracking-widest whitespace-nowrap font-bold">
-                <DecryptedText text="TRACKING" />
-            </span>
-        </div>
-    </div>
-);
-
-/* ─── Telemetry Row ──────────────────────────────────────── */
-const TelLeft = ({ label, val }) => (
-    <div className="flex flex-col gap-0.5 telemetry-left group cursor-default">
-        <span className="text-[#111111]/80 group-hover:text-orange-600 transition-colors duration-200"><DecryptedText text={label} /></span>
-        <span className="text-neutral-400 group-hover:text-neutral-600 transition-colors duration-200"><DecryptedText text={val} /></span>
-    </div>
-);
-
-const TelRight = ({ label, val, pulse }) => (
-    <div className="flex flex-col gap-0.5 telemetry-right group cursor-default text-right">
-        <span className="text-neutral-400 group-hover:text-neutral-600 transition-colors duration-200"><DecryptedText text={label} /></span>
-        <span className={`text-[#111111]/80 group-hover:text-orange-600 transition-colors duration-200 ${pulse ? 'animate-pulse text-orange-600 font-bold' : ''}`}>
-            <DecryptedText text={val} />
-        </span>
-    </div>
-);
-
-/* ─── Main Component ─────────────────────────────────────── */
 const ContactSummary = () => {
-    const contactSumRef = useRef(null);
-    const bgRef = useRef(null);
-    const SumRef = useRef(null);
-    const canvasRef = useRef(null);
+    const containerRef = useRef(null);
 
-    const marqueItems = ["INITIALIZING HANDSHAKE", "ESTABLISHING UPLINK", "SYNCING DATA", "OPENING CHANNELS", "AWAITING INPUT", "SYSTEM READY", "CONNECTION SECURE", "PINGING SERVER", "TRANSMITTING", "RECEIVING"];
-    const marqueItems2 = ["CREATE", "INNOVATE", "BUILD", "DESIGN", "DEVELOP", "CODE", "ENGINEER", "EXECUTE", "DEPLOY", "LAUNCH"];
-
-    /* ── Canvas floating particles (Interactive) ── */
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let animId;
-        let mouse = { x: -1000, y: -1000 };
-
-        const resize = () => {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-        };
-        resize();
-        window.addEventListener('resize', resize);
-
-        const pts = Array.from({ length: 90 }, () => ({
-            x: Math.random() * canvas.width, 
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.4,
-            vy: (Math.random() - 0.5) * 0.4,
-            r: Math.random() * 1.5 + 0.5,
-            baseAlpha: Math.random() * 0.2 + 0.1,
-            phase: Math.random() * Math.PI * 2,
-        }));
-
-        const handleMouseMove = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-        };
-        
-        const handleMouseLeave = () => {
-            mouse.x = -1000;
-            mouse.y = -1000;
-        };
-        
-        canvas.addEventListener('mousemove', handleMouseMove);
-        canvas.addEventListener('mouseleave', handleMouseLeave);
-
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            pts.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-                
-                if (p.x < 0) p.x = canvas.width;
-                if (p.x > canvas.width) p.x = 0;
-                if (p.y < 0) p.y = canvas.height;
-                if (p.y > canvas.height) p.y = 0;
-
-                const dx = mouse.x - p.x;
-                const dy = mouse.y - p.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                
-                let alpha = p.baseAlpha + 0.2 * Math.abs(Math.sin(p.phase));
-                p.phase += 0.02;
-
-                if (dist < 180) {
-                    p.x -= dx * 0.015;
-                    p.y -= dy * 0.015;
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(mouse.x, mouse.y);
-                    ctx.strokeStyle = `rgba(17,17,17,${0.15 - dist/900})`;
-                    ctx.stroke();
-                    alpha = 0.6;
-                }
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(17,17,17,${alpha})`;
-                ctx.fill();
-            });
-            animId = requestAnimationFrame(animate);
-        };
-
-        // Use IntersectionObserver to pause when offscreen
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (!animId) {
-                        animate();
-                    }
-                } else {
-                    if (animId) {
-                        cancelAnimationFrame(animId);
-                        animId = null;
-                    }
-                }
-            });
-        }, { threshold: 0.05 });
-
-        observer.observe(canvas);
-
-        return () => { 
-            observer.disconnect();
-            if (animId) {
-                cancelAnimationFrame(animId); 
-            }
-            window.removeEventListener('resize', resize); 
-            canvas.removeEventListener('mousemove', handleMouseMove);
-            canvas.removeEventListener('mouseleave', handleMouseLeave);
-        };
-    }, []);
-
-    /* ── GSAP ── */
     useGSAP(() => {
-        /* Pin */
-        gsap.to(contactSumRef.current, {
+        if (!containerRef.current) return;
+
+        gsap.to("#title-contact-1", {
+            xPercent: 20,
             scrollTrigger: {
-                trigger: contactSumRef.current,
-                start: 'center center',
-                end: '+=800 center',
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
                 scrub: 0.5,
-                pin: true,
-                pinSpacing: true,
             },
         });
-
-        /* Set everything invisible before reveal */
-        gsap.set('.cs-bg-grid', { autoAlpha: 0 });
-        gsap.set('.tech-bracket', { autoAlpha: 0, scale: 0 });
-        gsap.set('.cs-radar', { autoAlpha: 0, scale: 0 });
-        gsap.set('.telemetry-left', { autoAlpha: 0, x: -40 });
-        gsap.set('.telemetry-right', { autoAlpha: 0, x: 40 });
-        gsap.set('.incoming-label', { autoAlpha: 0, y: -16, scale: 0.8 });
-        gsap.set('.main-text-word', { autoAlpha: 0, y: 36, filter: 'blur(10px)' });
-        gsap.set('.cs-cta', { autoAlpha: 0, y: 20 });
-        gsap.set('.cs-scan-line', { left: '-4%', autoAlpha: 1 });
-        if (SumRef.current) {
-            gsap.set(SumRef.current, { transformPerspective: 1000 });
-        }
-
-        /* Boot sequence timeline */
-        const tl = gsap.timeline({
-            scrollTrigger: { trigger: SumRef.current, start: 'top 82%' },
+        gsap.to("#title-contact-2", {
+            xPercent: -30,
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
+            },
         });
-
-        tl
-            /* 1 – scan line sweeps */
-            .to('.cs-scan-line', { left: '104%', duration: 1.2, ease: 'power2.inOut' }, 0)
-            /* 2 – grid powers on */
-            .to('.cs-bg-grid', { autoAlpha: 1, duration: 0.45, ease: 'power2.out' }, 0.25)
-            /* 3 – corner brackets */
-            .to('.tech-bracket', { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'back.out(3)', stagger: 0.07 }, 0.5)
-            /* 4 – radar initialises */
-            .to('.cs-radar', { autoAlpha: 1, scale: 1, duration: 0.6, ease: 'back.out(2)' }, 0.65)
-            /* 5 – telemetry slides in */
-            .to('.telemetry-left', { autoAlpha: 1, x: 0, duration: 0.4, ease: 'power3.out', stagger: 0.07 }, 0.75)
-            .to('.telemetry-right', { autoAlpha: 1, x: 0, duration: 0.4, ease: 'power3.out', stagger: 0.07 }, 0.75)
-            /* 6 – transmission label */
-            .to('.incoming-label', { autoAlpha: 1, y: 0, scale: 1, duration: 0.4, ease: 'back.out(1.5)' }, 1.05)
-            /* 7 – main words fly up */
-            .to('.main-text-word', { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.6, ease: 'power3.out', stagger: 0.1 }, 1.15)
-            /* 8 – CTA */
-            .to('.cs-cta', { autoAlpha: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' }, 1.8);
-
-        /* Mouse parallax for Grid and Content (Optimized with quickTo) */
-        const xBgTo = gsap.quickTo(bgRef.current, "x", { duration: 1, ease: 'power2.out' });
-        const yBgTo = gsap.quickTo(bgRef.current, "y", { duration: 1, ease: 'power2.out' });
-        const rotXTo = gsap.quickTo(SumRef.current, "rotateX", { duration: 1, ease: 'power2.out' });
-        const rotYTo = gsap.quickTo(SumRef.current, "rotateY", { duration: 1, ease: 'power2.out' });
-
-        const onMove = (e) => {
-            if (!bgRef.current || !SumRef.current) return;
-            const x = (e.clientX / window.innerWidth - 0.5) * 40;
-            const y = (e.clientY / window.innerHeight - 0.5) * 40;
-            xBgTo(x);
-            yBgTo(y);
-            rotXTo(-y * 0.5);
-            rotYTo(x * 0.5);
-        };
-        window.addEventListener('mousemove', onMove);
-        return () => window.removeEventListener('mousemove', onMove);
-    }, { scope: contactSumRef });
+        gsap.to("#title-contact-3", {
+            xPercent: 100,
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
+            },
+        });
+        gsap.to("#title-contact-4", {
+            xPercent: -100,
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
+            },
+        });
+    }, { scope: containerRef });
 
     return (
-        <section
-            ref={contactSumRef}
-            className="flex flex-col items-center justify-between min-h-screen gap-12 mt-16 bg-[#eae8e4] overflow-hidden relative z-10"
-        >
-            {/* ── Top Marquee ── */}
-            <Marque
-                items={marqueItems}
-                className="border-y-2 border-[#111111] bg-white relative z-20"
-                iconClassname="text-[#111111]/40"
-                iconName="carbon:data-1"
-            />
+        <section ref={containerRef} className="mt-32 overflow-hidden leading-snug text-center mb-42 contact-text-responsive relative bg-transparent">
+            {/* Background Decorative Grid Lines */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.015)_1px,transparent_1px)] bg-[size:100%_40px] pointer-events-none z-0" />
 
-            {/* ── Main Area ── */}
-            <div className="w-full px-5 relative flex justify-center items-center h-full flex-1">
+            {/* Top Border HUD Line */}
+            <div className="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 mb-12 opacity-80 z-10">
+                <div className="h-[1px] bg-[#cfccb8] w-full" />
+                <span className="text-[10px] font-mono tracking-[0.3em] text-orange-600 whitespace-nowrap px-4 font-bold">[ SYSTEM_CONNECT_UPLINK_V2.0.4 ]</span>
+                <div className="h-[1px] bg-[#cfccb8] w-full" />
+            </div>
 
-                {/* Particle canvas */}
-                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-[1] pointer-events-auto" />
+            <div className="w-full flex flex-col h-auto whitespace-nowrap relative z-10">
+                <div className="font-light uppercase tracking-[0.2em] md:tracking-[0.3em]">
+                    <div className="w-full h-auto text-[clamp(1.5rem,4.5vw,3rem)] md:text-5xl flex flex-col gap-8 opacity-95">
 
-                {/* Parallax background grid */}
-                <div
-                    ref={bgRef}
-                    className="cs-bg-grid absolute inset-[-50px] pointer-events-none z-[0]"
-                    style={{
-                        backgroundImage: 'linear-gradient(rgba(17,17,17,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(17,17,17,0.03) 1px,transparent 1px)',
-                        backgroundSize: '50px 50px',
-                        maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%,#000 50%,transparent 100%)',
-                        WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%,#000 50%,transparent 100%)',
-                    }}
-                />
+                        {/* Row 1 */}
+                        <div id="title-contact-1" className="flex items-center justify-center gap-6 md:gap-10 py-5">
+                            <span className="text-neutral-400 text-xs md:text-sm font-mono tracking-widest">[SYS.COMMS_01]</span>
+                            <span className="text-orange-600/50">{'<'}</span>
+                            <p className="bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent font-extrabold">Let's Connect</p>
+                            <span className="text-orange-600/50">{'/>'}</span>
+                            <div className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-pulse" />
+                            <p className="outlined-text-dark font-normal">Get in Touch</p>
+                        </div>
 
-                {/* Scroll-trigger scan line */}
-                <div
-                    className="cs-scan-line absolute top-0 bottom-0 z-30 pointer-events-none"
-                    style={{
-                        width: '3px',
-                        left: '-4%',
-                        background: 'linear-gradient(to bottom, transparent 0%, #111111 40%, #ea580c 50%, #111111 60%, transparent 100%)',
-                    }}
-                />
+                        {/* Row 2 */}
+                        <div id="title-contact-2" className="flex items-center justify-center gap-6 md:gap-10 py-5 translate-x-16">
+                            <p className="outlined-text-dark font-normal">Initiate Connection</p>
+                            <span className="text-orange-600/50 text-xl">{'//'}</span>
+                            <p className="font-extrabold text-[#111111]">Collaboration</p>
+                            <span className="text-orange-600/50 text-xl">{'//'}</span>
+                            <p className="bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent font-extrabold">Interactive Worlds</p>
+                            <span className="text-neutral-400 text-xs md:text-sm font-mono tracking-widest">[SYS.COMMS_02]</span>
+                        </div>
 
-                {/* Radar */}
-                <Radar />
+                        {/* Row 3 */}
+                        <div id="title-contact-3" className="flex items-center justify-center gap-6 md:gap-10 py-5 -translate-x-48">
+                            <span className="text-neutral-400 text-xs md:text-sm font-mono tracking-widest">[SYS.COMMS_03]</span>
+                            <p className="outlined-text-dark font-normal">Custom Systems</p>
+                            <span className="text-orange-600/50">{'>>'}</span>
+                            <p className="bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent font-extrabold">3D Environments</p>
+                            <div className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-pulse" />
+                            <p className="outlined-text-dark font-normal">UI/UX Integrations</p>
+                            <span className="text-orange-600/50">{'<<'}</span>
+                        </div>
 
-                {/* Left Telemetry */}
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] hidden md:flex flex-col gap-4 font-mono tracking-widest z-10 font-bold">
-                    <TelLeft label="SYS.ON" val="0x8F2A" />
-                    <TelLeft label="NET.OK" val="PING 12ms" />
-                    <TelLeft label="FRQ.89" val="1024 GB/s" />
-                    <TelLeft label="MEM.OK" val="16.0 TB" />
-                </div>
+                        {/* Row 4 */}
+                        <div id="title-contact-4" className="flex items-center justify-center gap-6 md:gap-10 py-5 translate-x-16">
+                            <p className="bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent font-extrabold">Build the Future</p>
+                            <span className="text-orange-600/50 text-xl">{'::'}</span>
+                            <p className="outlined-text-dark font-normal">Send a Message</p>
+                            <span className="text-neutral-400 text-xs md:text-sm font-mono tracking-widest">[SYS.COMMS_04]</span>
+                        </div>
 
-                {/* Right Telemetry */}
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] hidden md:flex flex-col gap-4 font-mono tracking-widest z-10 font-bold">
-                    <TelRight label="{DATA.SYNC}" val="ACTIVE" />
-                    <TelRight label="{UPLINK}" val="SECURE" />
-                    <TelRight label="{STATUS}" val="STABLE" pulse />
-                    <TelRight label="{SIGNAL}" val="██████ 94%" />
-                </div>
-
-                {/* ── Central Content ── */}
-                <div
-                    ref={SumRef}
-                    className="text-center font-light contact-text-responsive py-8 md:py-14 px-4 md:px-12 relative z-20 group"
-                    style={{ transformStyle: 'preserve-3d' }}
-                >
-                    {/* Corner brackets */}
-                    <div className="absolute left-0 top-0 w-8 h-8 border-l-2 border-t-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2" />
-                    <div className="absolute right-0 top-0 w-8 h-8 border-r-2 border-t-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:translate-x-2 group-hover:-translate-y-2" />
-                    <div className="absolute left-0 bottom-0 w-8 h-8 border-l-2 border-b-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:-translate-x-2 group-hover:translate-y-2" />
-                    <div className="absolute right-0 bottom-0 w-8 h-8 border-r-2 border-b-2 border-[#111111] tech-bracket transition-transform duration-300 group-hover:translate-x-2 group-hover:translate-y-2" />
-
-                    {/* Bracket coords (decorative) */}
-                    <span className="absolute top-1 left-10 text-[8px] font-mono text-neutral-400 hidden md:block transition-all duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2 font-bold"><DecryptedText text="X:00 Y:00" /></span>
-                    <span className="absolute top-1 right-10 text-[8px] font-mono text-neutral-400 hidden md:block transition-all duration-300 group-hover:translate-x-2 group-hover:-translate-y-2 font-bold"><DecryptedText text="X:FF Y:FF" /></span>
-
-                    {/* INCOMING TRANSMISSION label */}
-                    <div className="incoming-label absolute -top-4 left-1/2 -translate-x-1/2 text-[#111111] text-[10px] md:text-xs tracking-[0.3em] uppercase flex items-center gap-3 whitespace-nowrap bg-white px-5 py-1.5 border-2 border-[#111111] rounded-none" style={{ transform: 'translateZ(30px)' }}>
-                        <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
-                        <DecryptedText text="[ INCOMING TRANSMISSION ]" />
-                        <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
-                    </div>
-
-                    {/* Main text */}
-                    <p className="uppercase tracking-widest leading-tight text-[#111111]" style={{ transform: 'translateZ(50px)' }}>
-                        <span className="text-neutral-400 font-mono text-sm mr-2 main-text-word inline-block font-bold">{'>'}</span>
-                        <DecryptedText text="LET'S" className="main-text-word inline-block font-bold" />
-                        <br />
-                        <span className="main-text-word inline-block mt-2">
-                            <Magnetic>
-                                <span className="cs-glitch-word font-bold text-orange-600 inline-block cursor-pointer transition-all duration-300 hover:text-[#111111] hover:scale-105">
-                                    CONNECT
-                                </span>
-                            </Magnetic>
-                        </span>
-                        <br />
-                        <span className="text-neutral-400 text-sm mx-2 main-text-word inline-block font-bold">&amp;</span>
-                        <span className="main-text-word inline-block mt-2">
-                            <Magnetic>
-                                <DecryptedText text="CREATE" className="italic text-[#111111] font-bold inline-block cursor-pointer transition-all duration-300 hover:text-orange-600 hover:scale-105" />
-                            </Magnetic>
-                        </span>{' '}
-                        <DecryptedText text="SOMETHING" className="main-text-word inline-block ml-1 font-bold" />
-                        <br />
-                        <span className="main-text-word inline-block mt-2">
-                            <Magnetic>
-                                <DecryptedText text="AMAZING" className="border-b-2 border-[#111111] text-[#111111] inline-block cursor-pointer transition-all duration-300 hover:text-orange-600 hover:border-orange-600 hover:scale-105" />
-                            </Magnetic>
-                        </span>{' '}
-                        <span className="main-text-word inline-block">
-                            <Magnetic>
-                                <DecryptedText text="TOGETHER" className="text-orange-600 inline-block cursor-pointer transition-all duration-300 hover:text-[#111111] hover:scale-105" />
-                            </Magnetic>
-                        </span>
-                        <span className="main-text-word animate-pulse text-orange-600 font-mono ml-2 inline-block">_</span>
-                    </p>
-
-                    {/* CTA button */}
-                    <div className="cs-cta mt-12 flex justify-center" style={{ transform: 'translateZ(40px)' }}>
-                        <Magnetic>
-                            <button
-                                id="contact-summary-cta"
-                                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="cs-cta-btn relative group px-10 py-4 font-mono text-sm tracking-[0.35em] uppercase border-2 border-[#111111] bg-white text-[#111111] overflow-hidden transition-all duration-300 focus:outline-none"
-                            >
-                                {/* Fill sweep */}
-                                <span className="absolute inset-0 bg-[#111111] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none" />
-                                <span className="relative z-10 flex items-center gap-3 font-semibold group-hover:text-white transition-colors duration-300">
-                                    <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-pulse" />
-                                    <DecryptedText text="INITIATE CONTACT" />
-                                    <span className="w-1.5 h-1.5 bg-orange-600 rounded-full animate-pulse" />
-                                </span>
-                            </button>
-                        </Magnetic>
                     </div>
                 </div>
             </div>
 
-            {/* ── Bottom Marquee ── */}
-            <Marque
-                items={marqueItems2}
-                reverse
-                className="text-[#111111] bg-white border-y-2 border-[#111111] relative z-20"
-                iconClassname="text-[#111111]/40"
-                iconName="carbon:code"
-            />
+            {/* Bottom Border HUD Line */}
+            <div className="relative w-full max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 mt-12 opacity-80 z-10">
+                <div className="h-[1px] bg-[#cfccb8] w-full" />
+                <span className="text-[10px] font-mono tracking-[0.3em] text-orange-600 whitespace-nowrap px-4 font-bold">[ STATUS: COMM_CHANNELS_ACTIVE ]</span>
+                <div className="h-[1px] bg-[#cfccb8] w-full" />
+            </div>
         </section>
     );
 };

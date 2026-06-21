@@ -354,3 +354,99 @@ export const resumes = [
         path: "/Documets/Resume2.pdf"
     }
 ];
+
+export const categoryNames = {
+    0: "COLLECTION 01",             // LANGUAGES
+    1: "COLLECTION 02",             // TOOLS
+    2: "COLLECTION 03"              // VLSI / HARDWARE
+};
+
+export const contactMarqueItems = [
+    "SYSTEM OVERRIDE",
+    "ACCESS GRANTED",
+    "DATA TRANSMISSION COMPLETE",
+    "ENCRYPTED COMM LINK OPEN",
+    "AWAITING DIRECTIVES",
+    "PROTOCOL ENGAGED",
+    "CONNECTION STABLE",
+    "SECURE UPLINK ESTABLISHED"
+];
+
+export const marqueItems = [
+    "INITIALIZING HANDSHAKE",
+    "ESTABLISHING UPLINK",
+    "SYNCING DATA",
+    "OPENING CHANNELS",
+    "AWAITING INPUT",
+    "SYSTEM READY",
+    "CONNECTION SECURE",
+    "PINGING SERVER",
+    "TRANSMITTING",
+    "RECEIVING"
+];
+
+export const marqueItems2 = [
+    "CREATE",
+    "INNOVATE",
+    "BUILD",
+    "DESIGN",
+    "DEVELOP",
+    "CODE",
+    "ENGINEER",
+    "EXECUTE",
+    "DEPLOY",
+    "LAUNCH"
+];
+
+export const roleTagsMap = {
+    1: ["3D Modeling", "Texturing", "Rigging", "Animation"],
+    2: ["UE5 Blueprints", "Gameplay C++", "AI Systems", "Optimization"],
+    3: ["IC Layout", "Schematic Capture", "DRC/LVS Verification", "Cadence Virtuoso"],
+    5: ["Content Creation", "Social Media", "Graphic Design"],
+    6: ["Customer Relations", "Booking Engine", "Sales Strategy"],
+    7: ["Community Projects", "Developer Events", "Teamwork"]
+};
+
+export const heroProjectImages = [
+    "/Images/perfume bottle.jpg",
+    "/Images/cartoony house.jpg",
+    "/Images/fantasy bottle.jpg",
+    "/Images/bulb.jpg",
+    "/Images/rifle.jpg",
+    "/Images/speaker.jpg",
+    "/Images/karambit.jpg",
+    "/Images/katana.jpg"
+];
+
+export const heroCarouselItems = [
+    {
+        id: 0,
+        title: "GAME DEV",
+        desc: "Custom controllers, pathfinding AI, and procedural systems in Unreal & C++.",
+        icon: "carbon:game-console"
+    },
+    {
+        id: 1,
+        title: "GAME DESIGN",
+        desc: "Immersive layouts, puzzle design, player pacing, and mechanics synergy.",
+        icon: "carbon:cube"
+    },
+    {
+        id: 2,
+        title: "ELECTRONICS",
+        desc: "Microcontroller coding, circuit design, and embedded systems.",
+        icon: "carbon:chip"
+    }
+];
+
+export const sectionsList = ['home', 'about', 'works', 'experience', 'contact'];
+
+export const sectionIcons = {
+    home: 'carbon:home',
+    about: 'carbon:user',
+    works: 'carbon:code',
+    experience: 'carbon:development',
+    contact: 'carbon:email'
+};
+
+export const unrealStatuses = ["v1.0.4", "STABLE", "LIVE", "TESTING", "STABLE"];

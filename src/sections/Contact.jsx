@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { socials } from '../constants';
+import { socials, contactMarqueItems } from '../constants';
 import Marque from '../componnts/Marque';
 import Magnetic from '../componnts/Magnetic.jsx';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
@@ -17,17 +17,6 @@ const Contact = () => {
 
     const [result, setResult] = useState("");
     const [isTransmitting, setIsTransmitting] = useState(false);
-
-    const items = [
-        "SYSTEM OVERRIDE",
-        "ACCESS GRANTED",
-        "DATA TRANSMISSION COMPLETE",
-        "ENCRYPTED COMM LINK OPEN",
-        "AWAITING DIRECTIVES",
-        "PROTOCOL ENGAGED",
-        "CONNECTION STABLE",
-        "SECURE UPLINK ESTABLISHED"
-    ];
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -361,7 +350,7 @@ const Contact = () => {
             {/* Bottom Marquee Footer */}
             <div className="mt-20 border-t-2 border-[#111111] bg-white">
                 <Marque
-                    items={items}
+                    items={contactMarqueItems}
                     className='text-[#111111]'
                     iconName='carbon:connection-signal'
                     iconClassname='text-orange-600'

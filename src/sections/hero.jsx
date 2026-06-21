@@ -12,7 +12,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from 'react-scroll';
 import Magnetic from '../componnts/Magnetic.jsx';
 import { Icon } from '@iconify/react';
-import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects } from '../constants';
+import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects, heroProjectImages, heroCarouselItems } from '../constants';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,40 +39,12 @@ const Hero = ({ IsReady }) => {
         };
     }, []);
 
-    const projectImages = [
-        "/Images/perfume bottle.jpg",
-        "/Images/cartoony house.jpg",
-        "/Images/fantasy bottle.jpg",
-        "/Images/bulb.jpg",
-        "/Images/rifle.jpg",
-        "/Images/speaker.jpg",
-        "/Images/karambit.jpg",
-        "/Images/katana.jpg"
-    ];
+    const projectImages = heroProjectImages;
 
     const totalProjectsCount = BlenderProjects.length + UnrealProjects.length + CodingProjects.length + VLSIProjects.length;
 
     // Carousel items for the right column
-    const carouselItems = [
-        {
-            id: 0,
-            title: "GAME DEV",
-            desc: "Custom controllers, pathfinding AI, and procedural systems in Unreal & C++.",
-            icon: "carbon:game-console"
-        },
-        {
-            id: 1,
-            title: "GAME DESIGN",
-            desc: "Immersive layouts, puzzle design, player pacing, and mechanics synergy.",
-            icon: "carbon:cube"
-        },
-        {
-            id: 2,
-            title: "ELECTRONICS",
-            desc: "Microcontroller coding, circuit design, and embedded systems.",
-            icon: "carbon:chip"
-        }
-    ];
+    const carouselItems = heroCarouselItems;
 
     // GSAP Entrance Animations
     useGSAP(() => {
@@ -261,7 +233,7 @@ const Hero = ({ IsReady }) => {
                             onMouseLeave={() => !isMobile && setIsHelmetExploded(false)}
                             onClick={() => isMobile && setIsHelmetExploded(!isHelmetExploded)}
                         >
-                            <Canvas frameloop={isHeroVisible ? "always" : "never"} shadows={!isMobile} dpr={[1, 1.5]} gl={{ localClippingEnabled: true }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="w-full h-full">
+                            <Canvas frameloop={isHeroVisible ? "always" : "never"} shadows={!isMobile} dpr={[1, 1.5]} gl={{ localClippingEnabled: true, powerPreference: "high-performance" }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="w-full h-full">
                                 <ambientLight intensity={1.5} />
                                 <Environment resolution={256}>
                                     <group rotation={[-Math.PI / 3, 4, 1]}>
@@ -330,7 +302,7 @@ const Hero = ({ IsReady }) => {
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-[radial-gradient(circle,_rgba(255,106,0,0.06)_0%,_rgba(207,204,184,0.15)_45%,_transparent_75%)] blur-2xl pointer-events-none z-0" />
 
                         <div className="absolute inset-0 w-full h-full z-10">
-                            <Canvas frameloop={isHeroVisible ? "always" : "never"} dpr={[1, 1.5]} gl={{ localClippingEnabled: true }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="w-full h-full">
+                            <Canvas frameloop={isHeroVisible ? "always" : "never"} dpr={[1, 1.5]} gl={{ localClippingEnabled: true, powerPreference: "high-performance" }} camera={{ position: [0, 0, 10], fov: 17.5, near: 1, far: 20 }} className="w-full h-full">
                                 <Helmet IsReady={IsReady} wireframeOnly={true} position={[0, -4.0, 0.5]} scale={1.05} />
                             </Canvas>
                         </div>

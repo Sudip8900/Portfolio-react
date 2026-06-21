@@ -2,85 +2,10 @@ import { useRef, useState, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SkillsData, education } from '../constants';
+import { SkillsData, education, categoryNames } from '../constants';
 import DrawText from '../componnts/DrawText';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const renderConsoleOutput = (tabIndex) => {
-    switch (tabIndex) {
-        case 0:
-            return (
-                <div className="  text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
-                    <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 via-transparent to-transparent pointer-events-none" />
-                    <div>
-                        <div className="text-orange-600 font-bold border-b border-orange-600/20 pb-2 mb-3.5 flex justify-between text-xs sm:text-sm md:text-base lg:text-lg">
-                            <span>[ SYS.ENV_INIT ]</span>
-                            <span className="animate-pulse">● LOAD</span>
-                        </div>
-                        <div className="flex flex-col gap-1.5 sm:gap-2">
-                            <div>{`> C.COMPILER ... [ OK ] 90%`}</div>
-                            <div>{`> PYTHON.INTERP .. [ OK ] 85%`}</div>
-                            <div>{`> CPP.RUNTIME ... [ OK ] 80%`}</div>
-                            <div>{`> NODEJS.ENGINE .. [ OK ] 85%`}</div>
-                            <div>{`> REACT.VIRTDOM .. [ OK ] 80%`}</div>
-                        </div>
-                    </div>
-                    <div className="border-t border-green-600/20 pt-2.5 mt-2.5 flex justify-between text-neutral-400 text-[10px] sm:text-xs md:text-sm">
-                        <span>// SYS.STATUS</span>
-                        <span className="text-green-500 font-bold">READY</span>
-                    </div>
-                </div>
-            );
-        case 1:
-            return (
-                <div className="  text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
-                    <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 via-transparent to-transparent pointer-events-none" />
-                    <div>
-                        <div className="text-orange-600 font-bold border-b border-orange-600/20 pb-2 mb-3.5 flex justify-between text-xs sm:text-sm md:text-base lg:text-lg">
-                            <span>[ SYS.TOOL_INIT ]</span>
-                            <span className="animate-pulse">● DIAG</span>
-                        </div>
-                        <div className="flex flex-col gap-1.5 sm:gap-2">
-                            <div>{`> UE5.BLUEPRINTS .. [ OK ] 90%`}</div>
-                            <div>{`> BLENDER.3D ... [ OK ] 85%`}</div>
-                            <div>{`> VSCODE.IDE ... [ OK ] 95%`}</div>
-                            <div>{`> MSBUILD.CPP ... [ OK ] 80%`}</div>
-                            <div>{`> FIGMA.WIRE .... [ OK ] 75%`}</div>
-                        </div>
-                    </div>
-                    <div className="border-t border-green-600/20 pt-2.5 mt-2.5 flex justify-between text-neutral-400 text-[10px] sm:text-xs md:text-sm">
-                        <span>// SYS.STATUS</span>
-                        <span className="text-green-500 font-bold">STABLE</span>
-                    </div>
-                </div>
-            );
-        case 2:
-            return (
-                <div className="  text-xs sm:text-sm md:text-base lg:text-lg text-green-600 leading-relaxed h-full flex flex-col justify-between p-5 md:p-7 bg-[#111111] border border-orange-600/30 overflow-hidden relative select-none">
-                    <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 via-transparent to-transparent pointer-events-none" />
-                    <div>
-                        <div className="text-orange-600 font-bold border-b border-orange-600/20 pb-2 mb-3.5 flex justify-between text-xs sm:text-sm md:text-base lg:text-lg">
-                            <span>[ SYS.HW_QUERY ]</span>
-                            <span className="animate-pulse">● RUN</span>
-                        </div>
-                        <div className="flex flex-col gap-1.5 sm:gap-2">
-                            <div>{`> CADENCE.VIRTUO .. [ OK ] 80%`}</div>
-                            <div>{`> CIRCUIT.DRC ... [ OK ] 85%`}</div>
-                            <div>{`> VERILOG.HDL ... [ OK ] 75%`}</div>
-                            <div>{`> ECE.ANALOG.SYS .. [ OK ] 80%`}</div>
-                        </div>
-                    </div>
-                    <div className="border-t border-green-600/20 pt-2.5 mt-2.5 flex justify-between text-neutral-400 text-[10px] sm:text-xs md:text-sm">
-                        <span>// SYS.STATUS</span>
-                        <span className="text-green-500 font-bold">SECURE</span>
-                    </div>
-                </div>
-            );
-        default:
-            return null;
-    }
-};
 
 const About = () => {
     const [activeTab, setActiveTab] = useState(0);
@@ -106,12 +31,6 @@ const About = () => {
     };
 
 
-
-    const categoryNames = {
-        0: "COLLECTION 01",             // LANGUAGES
-        1: "COLLECTION 02",             // TOOLS
-        2: "COLLECTION 03"              // VLSI / HARDWARE
-    };
 
     const getCategoryDetails = (tabIndex) => {
         switch (tabIndex) {
@@ -270,8 +189,6 @@ const About = () => {
                 .editorial-grid {
                     display: flex;
                     flex-direction: column;
-                    border-top: 1px solid var(--rule);
-                    border-bottom: 1px solid var(--rule);
                 }
                 @media (min-width: 900px) {
                     .editorial-grid {
@@ -401,25 +318,15 @@ const About = () => {
                                 <span style={{ fontSize: '0.8rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase  ">
                                     {categoryNames[activeTab]}
                                 </span>
-                                <div className="flex gap-2 text-xs">
-                                    <button onClick={handlePrevTab} className="hover:text-orange-600 cursor-pointer transition-colors p-1" style={{ color: 'var(--ink)' }}>
+                                <div className="flex gap-5 text-m">
+                                    <button onClick={handlePrevTab} className=" text-white bg-black hover:bg-orange-600 cursor-pointer transition-colors px-3 py-0 pb-[6px] ">
                                         ←
                                     </button>
-                                    <button onClick={handleNextTab} className="hover:text-orange-600 cursor-pointer transition-colors p-1" style={{ color: 'var(--ink)' }}>
+                                    <button onClick={handleNextTab} className=" text-white bg-black hover:bg-orange-600 cursor-pointer transition-colors px-3 py-0 pb-[6px] ">
                                         →
                                     </button>
                                 </div>
                             </div>
-
-                            {/* Terminal Diagnostic Console */}
-                            <div className="aspect-[4/3] w-full border overflow-hidden bg-[#111111]" style={{ borderColor: 'var(--rule)' }}>
-                                {renderConsoleOutput(activeTab)}
-                            </div>
-
-                            {/* Caption below image */}
-                            <span style={{ fontSize: '0.78rem', letterSpacing: '0.12em', color: 'var(--mid)' }} className="uppercase block  ">
-                                EXPLORE {SkillsData[activeTab].category}
-                            </span>
                         </div>
 
                         {/* Bottom panel */}
@@ -462,7 +369,7 @@ const About = () => {
 
                             {/* Live telemetry dump */}
                             {hoveredSkill && (
-                                <div className="mt-4 border-t pt-3 text-xs md:text-sm text-[#888888]   leading-relaxed" style={{ borderColor: 'var(--rule)' }}>
+                                <div className="mt-5 border-t pt-3 text-xs md:text-sm text-[#888888]   leading-relaxed" style={{ borderColor: 'var(--rule)' }}>
                                     <span className="text-orange-600 font-bold block mb-1">// {hoveredSkill.name.toUpperCase()}</span>
                                     <p>{hoveredSkill.desc}</p>
                                 </div>
