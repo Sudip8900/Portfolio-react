@@ -222,9 +222,9 @@ export const CodingProjects = [
     },
     {
         id: 2,
-        name: "Forge IDE (Custom IDE)",
+        name: "code ZEN (Custom IDE)",
         category: "Cpp",
-        Link: "https://github.com/Sudip8900/Forge-IDE-Custom-IDE-.git",
+        Link: "https://github.com/Sudip8900/code-ZEN-Custom-IDE-.git",
         image: "/Images/IDE.png",
         description: `A modern, high-performance IDE built from the ground up with a focus on productivity, extensibility, and developer experience. Features include an advanced integrated terminal, intelligent project management, multi-language support, customizable themes, and a scalable architecture designed to handle projects of any size. The IDE emphasizes performance, clean UI design, and seamless workflow integration for software development across multiple programming languages and frameworks.`,
     }

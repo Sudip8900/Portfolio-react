@@ -579,6 +579,11 @@ const Works = () => {
                                                 className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#fafafa]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#fafafa]/25'}`}
                                                 onMouseEnter={() => handleProjectHover({ type: 'unreal', ...project })}
                                                 onMouseLeave={handleProjectLeave}
+                                                onClick={() => {
+                                                    if (project.Link) {
+                                                        window.open(project.Link, '_blank', 'noopener,noreferrer');
+                                                    }
+                                                }}
                                             >
                                                 <div className="flex flex-col pl-2">
                                                     <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -588,14 +593,11 @@ const Works = () => {
                                                         {project.name}
                                                     </span>
                                                 </div>
-                                                <a
-                                                    href={project.Link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
+                                                <span
                                                     className={`pr-2 transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'}`}
                                                 >
                                                     <Icon icon="ion:arrow-up-right-box-outline" className="text-orange-600" width="16" height="16" />
-                                                </a>
+                                                </span>
                                             </div>
                                         );
                                     })}
@@ -627,6 +629,11 @@ const Works = () => {
                                                 className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#fafafa]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#fafafa]/25'}`}
                                                 onMouseEnter={() => handleProjectHover({ type: 'blender', ...project })}
                                                 onMouseLeave={handleProjectLeave}
+                                                onClick={() => {
+                                                    if (project.link) {
+                                                        window.open(project.link, '_blank', 'noopener,noreferrer');
+                                                    }
+                                                }}
                                             >
                                                 <div className="flex flex-col pl-2">
                                                     <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -636,14 +643,11 @@ const Works = () => {
                                                         {project.name}
                                                     </span>
                                                 </div>
-                                                <a
-                                                    href={project.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
+                                                <span
                                                     className={`pr-2 transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'}`}
                                                 >
                                                     <Icon icon="ion:arrow-up-right-box-outline" className="text-orange-600" width="16" height="16" />
-                                                </a>
+                                                </span>
                                             </div>
                                         );
                                     })}
@@ -689,6 +693,11 @@ const Works = () => {
                                                     className={`gsap-coding-row pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#f4f2ee]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#f4f2ee]/25'}`}
                                                     onMouseEnter={() => handleProjectHover({ type: 'coding', ...project })}
                                                     onMouseLeave={handleProjectLeave}
+                                                    onClick={() => {
+                                                        if (project.Link) {
+                                                            window.open(project.Link, '_blank', 'noopener,noreferrer');
+                                                        }
+                                                    }}
                                                 >
                                                     <div className="flex flex-col pl-2">
                                                         <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">
@@ -698,14 +707,11 @@ const Works = () => {
                                                             {project.name}
                                                         </span>
                                                     </div>
-                                                    <a
-                                                        href={project.Link}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
+                                                    <span
                                                         className={`pr-2 transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'}`}
                                                     >
                                                         <Icon icon="ion:arrow-up-right-box-outline" className="text-orange-600" width="16" height="16" />
-                                                    </a>
+                                                    </span>
                                                 </div>
                                             );
                                         })}
@@ -733,6 +739,12 @@ const Works = () => {
                                                         className={`pl-4 pr-2 py-5 border-l-2 transition-all duration-300 cursor-pointer group flex justify-between items-center relative ${isActive ? 'border-l-orange-600 bg-[#fafafa]/45 text-orange-600 font-bold' : 'border-l-transparent hover:bg-[#fafafa]/25'}`}
                                                         onMouseEnter={() => handleProjectHover({ type: 'vlsi', ...project })}
                                                         onMouseLeave={handleProjectLeave}
+                                                        onClick={() => {
+                                                            const targetLink = project.Link || project.link;
+                                                            if (targetLink) {
+                                                                window.open(targetLink, '_blank', 'noopener,noreferrer');
+                                                            }
+                                                        }}
                                                     >
                                                         <div className="flex flex-col pl-2">
                                                             <span className="text-[9px] text-neutral-400 tracking-wider mb-1 block uppercase">

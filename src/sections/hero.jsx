@@ -262,11 +262,18 @@ const Hero = ({ IsReady }) => {
                                         return (
                                             <div
                                                 key={i}
-                                                className="absolute left-1/2 top-1/2 pointer-events-auto"
+                                                className="absolute left-1/2 top-1/2 pointer-events-auto cursor-pointer"
                                                 style={{
                                                     transform: `translate(-50%, -50%) rotate(${angle}deg) translate(${isBtnHovered ? (isMobile ? '105px' : '135px') : '0px'}) rotate(-${angle}deg) scale(${isBtnHovered ? 1 : 0})`,
                                                     opacity: isBtnHovered ? 1 : 0,
                                                     transition: `transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.04}s, opacity 0.5s ease ${i * 0.04}s`
+                                                }}
+                                                onClick={() => {
+                                                    const matchedProj = BlenderProjects.find(p => p.image === img);
+                                                    const targetLink = matchedProj ? (matchedProj.link || matchedProj.Link) : null;
+                                                    if (targetLink) {
+                                                        window.open(targetLink, '_blank', 'noopener,noreferrer');
+                                                    }
                                                 }}
                                             >
                                                 {/* Counter-rotating wrapper to keep image upright */}
