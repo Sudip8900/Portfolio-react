@@ -291,6 +291,17 @@ export const experience = [
 
 export const SkillsData = [
     {
+        category: "TOOLS",
+        skills: [
+            { name: "Unreal Engine", icon: "simple-icons:unrealengine", level: 90, desc: "Gameplay programming, modular combat systems, Level Design, AI navigation, blueprints, and C++." },
+            { name: "Blender", icon: "logos:blender", level: 85, desc: "3D hard-surface modeling, game environment creation, texturing, rigging, and animation." },
+            { name: "VS Code", icon: "logos:visual-studio-code", level: 95, desc: "Primary IDE for script development, web apps, and config setups." },
+            { name: "Visual Studio", icon: "logos:visual-studio", level: 80, desc: "Unreal Engine C++ development, compilation, and code debugging." },
+            { name: "Figma", icon: "logos:figma", level: 75, desc: "UI/UX wireframing, branding, and interactive design mockups." },
+            { name: "Perforce", icon: "simple-icons:perforce", level: 80, desc: "Version control and source code management for collaborative Unreal Engine projects." }
+        ]
+    },
+    {
         category: "LANGUAGES",
         skills: [
             { name: "C", icon: "logos:c", level: 90, desc: "System-level programming, core algorithms, and embedded systems foundations." },
@@ -298,16 +309,6 @@ export const SkillsData = [
             { name: "C++", icon: "logos:c-plusplus", level: 80, desc: "Unreal Engine gameplay development and high-performance system programming." },
             { name: "JavaScript", icon: "logos:javascript", level: 85, desc: "Web application logic, interactive UI features, and frontend architecture." },
             { name: "React", icon: "logos:react", level: 80, desc: "Responsive user interface design, component state architectures, and GSAP sync." }
-        ]
-    },
-    {
-        category: "TOOLS",
-        skills: [
-            { name: "Unreal Engine", icon: "simple-icons:unrealengine", level: 90, desc: "Gameplay programming, modular combat systems, Level Design, AI navigation, blueprints, and C++." },
-            { name: "Blender", icon: "logos:blender", level: 85, desc: "3D hard-surface modeling, game environment creation, texturing, rigging, and animation." },
-            { name: "VS Code", icon: "logos:visual-studio-code", level: 95, desc: "Primary IDE for script development, web apps, and config setups." },
-            { name: "Visual Studio", icon: "logos:visual-studio", level: 80, desc: "Unreal Engine C++ development, compilation, and code debugging." },
-            { name: "Figma", icon: "logos:figma", level: 75, desc: "UI/UX wireframing, branding, and interactive design mockups." }
         ]
     },
     {

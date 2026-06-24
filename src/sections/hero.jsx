@@ -152,7 +152,7 @@ const Hero = ({ IsReady }) => {
                             <div className="flex-grow md:flex-grow-0 min-h-[50px] md:min-h-[90px] md:w-full flex items-center md:items-start" style={{ fontFamily: '"Michroma", sans-serif' }}>
                                 <AutoType
                                     subTitle="I am a passionate"
-                                    text={["Game Developer", "Game Designer", "Level Designer", "Unreal Engine Developer", "Electronics Engineer"]}
+                                    text={["Game Developer", "Level Designer", "Unreal Engine Developer", "Electronics Engineer", "VLSI Designer"]}
                                     Ntextcolor="text-[#111111]/70 tracking-wider font-semibold"
                                     AnimTextcolor="text-orange-600 font-extrabold block mt-1 md:mt-2"
                                     NtextSize="text-[10px] sm:text-xs md:text-sm"

@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SkillsData, education, categoryNames } from '../constants';
 import DrawText from '../componnts/DrawText';
+import InteractiveSkillBalls from '../componnts/InteractiveSkillBalls';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,13 +37,13 @@ const About = () => {
         switch (tabIndex) {
             case 0:
                 return {
-                    title: "Languages & Frameworks",
-                    desc: "Mastering system programming, custom scripting, electronics automation, and modern web application logic."
+                    title: "3D Design & Game Engine Tools",
+                    desc: "Crafting highly modular combat systems, detailed level geometry, hard-surface modeling, and asset animations."
                 };
             case 1:
                 return {
-                    title: "3D Design & Game Engine Tools",
-                    desc: "Crafting highly modular combat systems, detailed level geometry, hard-surface modeling, and asset animations."
+                    title: "Languages & Frameworks",
+                    desc: "Mastering system programming, custom scripting, electronics automation, and modern web application logic."
                 };
             case 2:
                 return {
@@ -182,7 +183,7 @@ const About = () => {
                     background-color: var(--bg);
                     color: var(--ink);
                 }
-                .about-editorial-container * {
+                .about-editorial-container *:not(.interactive-skill-balls-container, .interactive-skill-balls-container *) {
                     border-radius: 0px !important;
                     box-shadow: none !important;
                 }
@@ -253,8 +254,8 @@ const About = () => {
                                 I'm a passionate game developer and designer with a background in 3D art and electronics engineering. I create immersive, <DrawText text="visually engaging games" color="#ea580c" fontSize={30} /> that blend strong design, technical skill, and <DrawText text="interactive innovation" color="#ea580c" fontSize={30} delay={0.25} />.
                             </p>
                             {/* 2. Body text blurb (2-3 lines) */}
-                            <p style={{ fontSize: '0.9rem', color: 'var(--mid)', lineHeight: '1.55', borderColor: 'var(--rule)' }} className="font-normal mt-6 border-t">
-                                Address: Rameswarpur, Ramjibanpur, West Medinipur, West Bengal, India, 721242
+                            <p style={{ fontSize: '1.2rem', color: 'var(--mid)', lineHeight: '1.55', borderColor: 'var(--rule)' }} className="font-normal mt-6 border-t">
+                                Address: West Bengal, India
                             </p>
                             {/* Education Data Block */}
                             <div className="mt-6 flex flex-col gap-4 pt-4 border-t  " style={{ borderColor: 'var(--rule)' }}>
@@ -349,21 +350,13 @@ const About = () => {
                                     {activeDetails.desc}
                                 </p>
 
-                                {/* Technical capabilities list */}
-                                <div className="flex flex-col gap-1.5 pt-3 border-t" style={{ borderColor: 'var(--rule)' }}>
-                                    {SkillsData[activeTab].skills.map((skill, idx) => (
-                                        <div
-                                            key={idx}
-                                            onMouseEnter={() => setHoveredSkill(skill)}
-                                            className={`text-xs md:text-sm   tracking-wider flex justify-between items-center py-1.5 cursor-pointer transition-colors ${hoveredSkill.name === skill.name
-                                                ? 'text-orange-600 font-bold'
-                                                : 'text-[#888888] hover:text-orange-600'
-                                                }`}
-                                        >
-                                            <span>[ {skill.name.toUpperCase()} ]</span>
-                                            <span>{skill.level}%</span>
-                                        </div>
-                                    ))}
+                                {/* Technical capabilities list (Interactive Balls) */}
+                                <div className="pt-3 border-t animate-fade-in" style={{ borderColor: 'var(--rule)' }}>
+                                    <InteractiveSkillBalls
+                                        skills={SkillsData[activeTab].skills}
+                                        hoveredSkill={hoveredSkill}
+                                        setHoveredSkill={setHoveredSkill}
+                                    />
                                 </div>
                             </div>
 
