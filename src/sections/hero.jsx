@@ -12,7 +12,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from 'react-scroll';
 import Magnetic from '../componnts/Magnetic.jsx';
 import { Icon } from '@iconify/react';
-import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects, heroProjectImages, heroCarouselItems } from '../constants';
+import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects, heroCarouselItems } from '../constants';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,8 +38,6 @@ const Hero = ({ IsReady }) => {
             if (currentHero) observer.unobserve(currentHero);
         };
     }, []);
-
-    const projectImages = heroProjectImages;
 
     const totalProjectsCount = BlenderProjects.length + UnrealProjects.length + CodingProjects.length + VLSIProjects.length;
 
@@ -254,37 +252,46 @@ const Hero = ({ IsReady }) => {
                             onMouseEnter={() => setIsBtnHovered(true)}
                             onMouseLeave={() => setIsBtnHovered(false)}
                         >
-                            {/* Orbiting Images Ring */}
+                            {/* Orbiting Icons Ring (Floating Category Bubbles) */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
                                 <div className="absolute left-1/2 top-1/2 w-0 h-0 animate-orbit-ring">
-                                    {projectImages.map((img, i) => {
-                                        const angle = i * (360 / projectImages.length);
+                                    {[
+                                        { label: 'UE5', icon: 'simple-icons:unrealengine', targetId: 'works' },
+                                        { label: '3D', icon: 'logos:blender', targetId: 'works' },
+                                        { label: 'VLSI', icon: 'mdi:chip', targetId: 'works' },
+                                        { label: 'CODE', icon: 'mdi:code-braces', targetId: 'works' }
+                                    ].map((bubble, i, arr) => {
+                                        const angle = i * (360 / arr.length) + 45; // Offset by 45deg for a clean diamond shape
                                         return (
-                                            <div
+                                            <Link
                                                 key={i}
+                                                to={bubble.targetId}
+                                                smooth={true}
+                                                duration={600}
+                                                offset={-50}
                                                 className="absolute left-1/2 top-1/2 pointer-events-auto cursor-pointer"
                                                 style={{
                                                     transform: `translate(-50%, -50%) rotate(${angle}deg) translate(${isBtnHovered ? (isMobile ? '105px' : '135px') : '0px'}) rotate(-${angle}deg) scale(${isBtnHovered ? 1 : 0})`,
                                                     opacity: isBtnHovered ? 1 : 0,
-                                                    transition: `transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.04}s, opacity 0.5s ease ${i * 0.04}s`
-                                                }}
-                                                onClick={() => {
-                                                    const matchedProj = BlenderProjects.find(p => p.image === img);
-                                                    const targetLink = matchedProj ? (matchedProj.link || matchedProj.Link) : null;
-                                                    if (targetLink) {
-                                                        window.open(targetLink, '_blank', 'noopener,noreferrer');
-                                                    }
+                                                    transition: `transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.08}s, opacity 0.5s ease ${i * 0.08}s`
                                                 }}
                                             >
-                                                {/* Counter-rotating wrapper to keep image upright */}
-                                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-[#111111] bg-white overflow-hidden shadow-[3px_3px_0px_#cfccb8] animate-counter-orbit">
-                                                    <img
-                                                        src={img}
-                                                        alt="Project thumbnail"
-                                                        className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-300 hover:scale-125 cursor-pointer pointer-events-auto"
+                                                {/* Counter-rotating wrapper to keep bubble content upright */}
+                                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-[#111111] bg-white flex flex-col items-center justify-center shadow-[3px_3px_0px_#cfccb8] transition-all duration-300 hover:scale-110 hover:border-orange-600 hover:shadow-[3px_3px_0px_#ea580c] group animate-counter-orbit">
+                                                    <Icon
+                                                        icon={bubble.icon}
+                                                        width={isMobile ? "18" : "24"}
+                                                        height={isMobile ? "18" : "24"}
+                                                        className="text-[#111111] group-hover:text-orange-600 transition-colors duration-300"
                                                     />
+                                                    <span 
+                                                        className="text-[7px] md:text-[9px] font-black tracking-widest text-neutral-400 group-hover:text-orange-600 transition-colors duration-300 uppercase mt-0.5 leading-none" 
+                                                        style={{ fontFamily: '"Michroma", sans-serif' }}
+                                                    >
+                                                        {bubble.label}
+                                                    </span>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         );
                                     })}
                                 </div>
