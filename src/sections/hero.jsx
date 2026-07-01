@@ -166,7 +166,7 @@ const Hero = ({ IsReady }) => {
                             <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#111111] leading-none" style={{ fontFamily: '"Michroma", sans-serif' }}>{totalProjectsCount}</span>
                         </div>
                         <span className="text-[10px] md:text-xs text-neutral-500 tracking-wider text-right md:text-left lg:text-right max-w-[160px] md:max-w-none lg:max-w-[200px] leading-relaxed font-semibold" style={{ fontFamily: '"Michroma", sans-serif' }}>
-                            COMPLETED GAMES & HARDWARE PROJECTS
+                            GAMEPLAY DEMOS, 3D MODELS, COADING & HARDWARE PROJECTS
                         </span>
                     </div>
 
