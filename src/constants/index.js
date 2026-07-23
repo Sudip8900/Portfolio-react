@@ -199,6 +199,28 @@ export const UnrealProjects = [
 
         Additional logic was implemented for target prioritization, visibility validation, distance checking, and smooth target switching between nearby enemies. The system dynamically updates target states during movement and combat, ensuring stable lock behavior even in fast-paced gameplay scenarios. By integrating the targeting mechanics with the modular combat architecture, the system remains scalable and adaptable for future combat and AI expansions.`,
     },
+    {
+        id: 6,
+        name: "Procedural Avoidance System",
+        Link: "https://youtu.be/b9x6KUkvbYI",
+        description: `Modular Procedural Avoidance System (C++)
+        Unreal Engine 5 | C++ | Component Architecture | Procedural Animation
+
+        Developed a fully decoupled, performant Procedural Avoidance System in native C++ for Unreal Engine 5. Inspired by a Blueprint concept from LoCoDev, I re-architected and expanded the feature set into a modular UActorComponent designed for production-ready character movement.
+
+        Key Features & Technical Implementation:
+        Input-Driven Execution Model: Eliminated expensive Event Tick overhead by exposing UpdateObstacleAvoidance as a Blueprint-callable function, triggering traces strictly when movement input is active.
+
+        Multi-Height Profile Sweeps: Built multi-layered sphere sweeps across configurable height profiles (Foot, Waist, Chest) to dynamically differentiate between low ledges, curbs, and full-height obstacles.
+
+        Velocity Prediction & Normal Alignment: Applied vector dot-product math to scale avoidance intensity based on impact surface normals and projected trace origins forward based on character movement speed.
+
+        Action Suppression System: Implemented automatic state filtering that smoothly suppresses and decays avoidance traces when the character is airborne (IsFalling()), jumping, or vaulting.
+
+        Crash-Safe Montage Pipeline: Designed SafePlayMontage with safety guards and opt-out toggles (bEnableImpactMontages) to gracefully prevent engine crashes when impact animations/montages are unassigned or still in production.
+
+        In-Editor Debugging: Integrated custom DrawDebugHelpers featuring dynamic color-coded directional vectors and impact normal indicators for quick tuning.`,
+    },
 ];
 
 export const CodingProjects = [
