@@ -7,31 +7,29 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
 import Magnetic from '../componnts/Magnetic.jsx';
 import DrawText from '../componnts/DrawText';
+import PdfModal from '../componnts/PdfModal.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
-
-
 const Experience = () => {
     const [previewPdf, setPreviewPdf] = useState(null);
+    const sectionRef = useRef(null);
     const headingRef = useRef(null);
     const lineRef = useRef(null);
+    const gridRef = useRef(null);
+    const leftColRef = useRef(null);
+    const rightColRef = useRef(null);
 
     useGSAP(() => {
-        // Simple, robust, isolated scroll triggers for every element
+        // 1. Element entrance animations
         const elements = gsap.utils.toArray('.gsap-fade-in');
-
         elements.forEach((el) => {
             gsap.fromTo(el,
-                {
-                    opacity: 0,
-                    y: 50
-                },
+                { opacity: 0, y: 35 },
                 {
                     opacity: 1,
                     y: 0,
-                    duration: 0.8,
-                    delay: 0.3,
+                    duration: 0.7,
                     ease: "power3.out",
                     scrollTrigger: {
                         trigger: el,
@@ -42,7 +40,7 @@ const Experience = () => {
             );
         });
 
-        // Section header reveal animation
+        // 2. Section header reveal animation
         if (headingRef.current) {
             const headerTl = gsap.timeline({
                 scrollTrigger: {
@@ -55,7 +53,7 @@ const Experience = () => {
                 duration: 0.5,
                 scaleX: 0,
                 opacity: 0,
-                delay: 0.3,
+                delay: 0.2,
                 transformOrigin: "left center",
                 ease: "power2.out",
             })
@@ -75,13 +73,13 @@ const Experience = () => {
                 }, "-=0.4");
         }
 
-        // Parallax scroll animation for background watermark
+        // 3. Parallax scroll animation for background watermark
         gsap.fromTo(".experience-watermark",
             { xPercent: 8 },
             {
                 xPercent: -8,
                 scrollTrigger: {
-                    trigger: "#experience",
+                    trigger: sectionRef.current,
                     start: "top bottom",
                     end: "bottom top",
                     scrub: 0.5,
@@ -89,174 +87,261 @@ const Experience = () => {
             }
         );
 
-    }, []);
+        // 4. GSAP ScrollTrigger Pinning for Desktop side columns
+        const mm = gsap.matchMedia();
+        mm.add("(min-width: 1024px)", () => {
+            if (gridRef.current && leftColRef.current && rightColRef.current) {
+                ScrollTrigger.create({
+                    trigger: gridRef.current,
+                    start: "top top+=90",
+                    end: "bottom bottom",
+                    pin: leftColRef.current,
+                    pinSpacing: false,
+                    anticipatePin: 1,
+                });
+
+                ScrollTrigger.create({
+                    trigger: gridRef.current,
+                    start: "top top+=90",
+                    end: "bottom bottom",
+                    pin: rightColRef.current,
+                    pinSpacing: false,
+                    anticipatePin: 1,
+                });
+            }
+        });
+
+    }, { scope: sectionRef });
 
     return (
-        <section id="experience" className='min-h-screen pb-20 bg-[#eae8e4] text-[#111111] relative z-10'>
+        <section id="experience" ref={sectionRef} className='min-h-screen pb-24 bg-[#eae8e4] text-[#111111] relative z-10'>
             {/* Background Light Text Watermark */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                <div
-                    className="experience-watermark absolute right-0 top-10 select-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] tracking-tighter"
-                >
+                <div className="experience-watermark absolute right-0 top-10 select-none text-[16vw] font-black uppercase leading-none text-[#111111]/[0.02] tracking-tighter">
                     EXPERIENCE
                 </div>
             </div>
+
             {/* Background Grid Pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.02)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full">
 
                 {/* Header Section */}
-                <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
-                    <div className='header-block w-12 h-2 bg-orange-600' />
-                    <h1 className='text-xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
+                <div ref={headingRef} className='flex items-center gap-2 sm:gap-4 mb-12 sm:mb-20 select-none w-full max-w-full overflow-hidden' style={{ perspective: "1000px" }}>
+                    <div className='header-block w-8 sm:w-12 h-1.5 sm:h-2 bg-orange-600 shrink-0' />
+                    <h1 className='text-[10px] xs:text-sm sm:text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider sm:tracking-widest overflow-hidden flex flex-nowrap whitespace-nowrap py-1 shrink-0'>
                         {(() => {
                             const headerText = "[ SYS.EXPERIENCE_LOGS ]";
                             return headerText.split("").map((char, index) => (
-                                <span
-                                    key={index}
-                                    className="header-char inline-block origin-bottom text-[#111111]"
-                                >
+                                <span key={index} className="header-char inline-block origin-bottom text-[#111111]">
                                     {char === " " ? "\u00A0" : char}
                                 </span>
                             ));
                         })()}
                     </h1>
-                    <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
+                    <div ref={lineRef} className='flex-1 min-w-[12px] h-[1px] bg-[#cfccb8]' />
                 </div>
 
-                <div className='grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-0'>
+                {/* Main 3-Column Layout */}
+                <div ref={gridRef} className='grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-0 relative'>
 
-                    {/* Column 1: Technical Core (Left) */}
-                    <div className="col-span-1 lg:col-span-3 lg:pr-8 lg:border-r lg:border-[#cfccb8]/60 pb-8 lg:pb-0 gsap-fade-in">
-                        <div className="lg:sticky lg:top-32 h-fit">
-                            <div className="flex items-center gap-2 mb-8 text-[11px] font-bold tracking-[0.2em] text-[#111111]   select-none">
+                    {/* Column 1: Technical Core (Left Sidebar - Pinned on Desktop) */}
+                    <div className="col-span-1 lg:col-span-3 lg:pr-8 lg:border-r lg:border-[#cfccb8]/60 pb-8 lg:pb-0">
+                        <div ref={leftColRef} className="w-full">
+                            <div className="flex items-center gap-2 mb-8 text-[11px] font-bold tracking-[0.2em] text-[#111111] select-none">
                                 <span className="w-2 h-2 bg-orange-600" />
                                 TECHNICAL CORE
                             </div>
-                            <div className="flex flex-col gap-10">
-                                <div>
-                                    <h3 className="text-lg font-bold tracking-wider text-[#111111] mb-2 uppercase  ">
-                                        3D Art & Modeling
-                                    </h3>
-                                    <p className="text-neutral-500 text-xs leading-relaxed mb-4">
-                                        Focus on hard-surface modeling, game asset creation, procedural texturing, and rigging for interactive systems.
-                                    </p>
-                                    <div className="flex flex-col gap-1   text-[9px] text-neutral-400 tracking-wider">
-                                        <span>[ BLENDER_CORE ]</span>
-                                        <span>[ PROCEDURAL_TEXTURING ]</span>
-                                        <span>[ RIGGING_&_ANIMATION ]</span>
+                            <div className="flex flex-col gap-5 gsap-fade-in">
+
+                                {/* Bento Card 1 */}
+                                <InteractiveCard>
+                                    <div className="p-5 bg-[#faf9f6] border border-[#cfccb8] hover:border-[#111111] transition-all duration-300 relative group">
+                                        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-orange-600/40 group-hover:border-orange-600 transition-colors" />
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="text-xs font-bold tracking-wider text-[#111111] uppercase">
+                                                3D Art & Modeling
+                                            </h3>
+                                        </div>
+                                        <p className="text-neutral-500 text-[11px] leading-relaxed mb-3">
+                                            Hard-surface modeling, game assets, procedural texturing, and rigging.
+                                        </p>
+                                        <div className="flex flex-wrap gap-1 text-[8px] font-mono text-neutral-400">
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">BLENDER</span>
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">TEXTURING</span>
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">RIGGING</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-bold tracking-wider text-[#111111] mb-2 uppercase ">
-                                        Game Systems
-                                    </h3>
-                                    <p className="text-neutral-500 text-xs leading-relaxed mb-4">
-                                        Modular gameplay mechanics, advanced enemy AI systems, camera targeting, and real-time performance optimization.
-                                    </p>
-                                    <div className="flex flex-col gap-1   text-[9px] text-neutral-400 tracking-wider">
-                                        <span>[ UNREAL_ENGINE_5 ]</span>
-                                        <span>[ GAMEPLAY_CPP ]</span>
-                                        <span>[ BLUEPRINT_ARCHITECTURE ]</span>
+                                </InteractiveCard>
+
+                                {/* Bento Card 2 */}
+                                <InteractiveCard>
+                                    <div className="p-5 bg-white border border-[#cfccb8] hover:border-[#111111] transition-all duration-300 relative group">
+                                        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-orange-600/40 group-hover:border-orange-600 transition-colors" />
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="text-xs font-bold tracking-wider text-[#111111] uppercase">
+                                                Game Systems
+                                            </h3>
+                                        </div>
+                                        <p className="text-neutral-500 text-[11px] leading-relaxed mb-3">
+                                            Gameplay mechanics, AI behavior trees, camera systems, and C++ optimization.
+                                        </p>
+                                        <div className="flex flex-wrap gap-1 text-[8px] font-mono text-neutral-400">
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">UNREAL_5</span>
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">CPP</span>
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">BLUEPRINTS</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-bold tracking-wider text-[#111111] mb-2 uppercase ">
-                                        VLSI & Hardware
-                                    </h3>
-                                    <p className="text-neutral-500 text-xs leading-relaxed mb-4">
-                                        Analog and digital IC layout, schematic design, simulation, and DRC/LVS circuit validation.
-                                    </p>
-                                    <div className="flex flex-col gap-1   text-[9px] text-neutral-400 tracking-wider">
-                                        <span>[ CADENCE_VIRTUOSO ]</span>
-                                        <span>[ VERILOG_HDL ]</span>
-                                        <span>[ CIRCUIT_VERIFICATION ]</span>
+                                </InteractiveCard>
+
+                                {/* Bento Card 3 */}
+                                <InteractiveCard>
+                                    <div className="p-5 bg-[#faf9f6] border border-[#cfccb8] hover:border-[#111111] transition-all duration-300 relative group">
+                                        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-orange-600/40 group-hover:border-orange-600 transition-colors" />
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="text-xs font-bold tracking-wider text-[#111111] uppercase">
+                                                VLSI & Hardware
+                                            </h3>
+                                        </div>
+                                        <p className="text-neutral-500 text-[11px] leading-relaxed mb-3">
+                                            Analog & digital IC layout, schematic design, simulation, and DRC/LVS validation.
+                                        </p>
+                                        <div className="flex flex-wrap gap-1 text-[8px] font-mono text-neutral-400">
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">CADENCE</span>
+                                            <span className="bg-[#f4f2ee] px-2 py-0.5 border border-[#cfccb8]/40 text-neutral-600">VERILOG</span>
+                                        </div>
                                     </div>
-                                </div>
+                                </InteractiveCard>
+
                             </div>
                         </div>
                     </div>
 
-                    {/* Column 2: Professional Log / Experience entries (Middle) */}
-                    <div className="col-span-1 lg:col-span-6 lg:px-10 lg:border-r lg:border-[#cfccb8]/60 pb-8 lg:pb-0">
-                        <div className="flex items-center gap-2 mb-8 text-[11px] font-bold tracking-[0.2em] text-[#111111]   select-none">
-                            <span className="w-2 h-2 bg-orange-600" />
-                            PROFESSIONAL LOG
+                    {/* Column 2: Professional Log Bento Grid (Middle Scrolling Area) */}
+                    <div className="col-span-1 lg:col-span-6 lg:px-8 lg:border-r lg:border-[#cfccb8]/60 pb-8 lg:pb-0">
+                        <div className="flex items-center justify-between mb-8 text-[11px] font-bold tracking-[0.2em] text-[#111111] select-none border-b border-[#cfccb8]/40 pb-4">
+                            <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 bg-orange-600" />
+                                EXPERIENCE GRID
+                            </div>
                         </div>
-                        <div className="flex flex-col gap-12">
-                            {experience.map((exp) => (
-                                <div key={exp.id} className="gsap-fade-in relative border-b border-[#cfccb8]/30 pb-10 last:border-none last:pb-0">
-                                    <div className="flex justify-between items-start mb-2">
-                                        <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-[#111111]">
-                                            {exp.role}
-                                        </h3>
-                                        {exp.duration.toLowerCase().includes('present') && (
-                                            <span className="text-[9px]   font-bold border border-[#111111] px-2 py-0.5 tracking-wider uppercase text-[#111111] select-none">
-                                                CURRENT
-                                            </span>
-                                        )}
+
+                        {/* Bento Box Layout Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                            {experience.map((exp, index) => {
+                                const isCurrent = exp.duration.toLowerCase().includes('present');
+                                const isFeatured = exp.role === "Game Developer" || exp.role === "3D Artist";
+
+                                return (
+                                    <div
+                                        key={exp.id}
+                                        className={`gsap-fade-in ${isFeatured ? 'col-span-1 sm:col-span-2' : 'col-span-1'}`}
+                                    >
+                                        <InteractiveCard>
+                                            <div className={`w-full h-full p-6 md:p-7 border border-[#cfccb8] hover:border-[#111111] transition-all duration-300 relative overflow-hidden group/bento flex flex-col justify-between ${isFeatured
+                                                    ? 'bg-gradient-to-br from-white via-[#faf9f6] to-[#f4f2ee] shadow-sm hover:shadow-xl min-h-[220px]'
+                                                    : 'bg-white/90 hover:bg-white shadow-sm hover:shadow-lg min-h-[200px]'
+                                                }`}>
+
+                                                {/* Bento Corner Brackets */}
+                                                <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-[#cfccb8] group-hover/bento:border-orange-600 transition-colors duration-300" />
+                                                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-[#cfccb8] group-hover/bento:border-orange-600 transition-colors duration-300" />
+
+                                                {/* Top Header Row */}
+                                                <div>
+                                                    <div className="flex items-center justify-between gap-2 mb-3">
+                                                        <span className="text-[9px] font-mono text-neutral-400 tracking-widest">[ BENTO_0{index + 1} ]</span>
+                                                        {isCurrent && (
+                                                            <span className="text-[8px] font-mono font-bold tracking-widest uppercase bg-orange-600 text-white px-2 py-0.5 shadow-sm">
+                                                                ACTIVE
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Role Title */}
+                                                    <h3 className={`font-bold uppercase tracking-wider text-[#111111] mb-2 group-hover/bento:text-orange-600 transition-colors ${isFeatured ? 'text-xl md:text-2xl' : 'text-base md:text-lg'
+                                                        }`}>
+                                                        {exp.role}
+                                                    </h3>
+
+                                                    {/* Company Badge */}
+                                                    <div className="flex items-center gap-2 mb-3 bg-[#f4f2ee] px-2.5 py-1 border border-[#cfccb8]/50 w-fit">
+                                                        {exp.icon ? (
+                                                            <Icon icon={exp.icon} width="16" height="16" className="text-neutral-700" />
+                                                        ) : (
+                                                            <img src={exp.image} alt={exp.company} className="w-3.5 h-3.5 object-contain" />
+                                                        )}
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#111111]">
+                                                            {exp.company}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Description */}
+                                                    <p className="text-neutral-600 text-xs leading-relaxed mb-4">
+                                                        {exp.description}
+                                                    </p>
+                                                </div>
+
+                                                {/* Bottom Metadata & Tech Stack */}
+                                                <div className="pt-3 border-t border-[#cfccb8]/30 flex flex-col gap-2">
+                                                    <span className="text-[10px] font-mono text-neutral-500 font-bold">
+                                                        ⏱ {exp.duration}
+                                                    </span>
+
+                                                    {roleTagsMap[exp.id] && (
+                                                        <div className="flex flex-wrap gap-1.5 pt-1">
+                                                            {roleTagsMap[exp.id].map((tag, i) => (
+                                                                <span key={i} className="text-[8px] font-mono tracking-wider uppercase border border-[#cfccb8]/60 bg-[#f9f8f6] px-2 py-0.5 text-neutral-600 font-semibold">
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                            </div>
+                                        </InteractiveCard>
                                     </div>
+                                );
+                            })}
 
-                                    <div className="flex items-center gap-2 mb-4">
-                                        {exp.icon ? (
-                                            <Icon icon={exp.icon} width="16" height="16" className="text-neutral-600" />
-                                        ) : (
-                                            <img src={exp.image} alt={exp.company} className="w-4 h-4 object-contain" />
-                                        )}
-                                        <span className="text-[11px]   tracking-widest uppercase text-neutral-500 font-bold">
-                                            {exp.company}
-                                        </span>
-                                    </div>
-
-                                    <p className="text-neutral-600 text-sm leading-relaxed mb-6">
-                                        {exp.description}
-                                    </p>
-
-                                    {roleTagsMap[exp.id] && (
-                                        <div className="flex flex-wrap gap-2">
-                                            {roleTagsMap[exp.id].map((tag, i) => (
-                                                <span key={i} className="text-[9px]   tracking-widest uppercase border border-[#cfccb8] px-3 py-1 text-neutral-500 font-semibold select-none">
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
                         </div>
                     </div>
 
-                    {/* Column 3: CV (Right) */}
-                    <div className="col-span-1 lg:col-span-3 lg:pl-8 gsap-fade-in">
-                        <div className="lg:sticky lg:top-32 h-fit">
-                            <InteractiveCard>
-                                <div className='p-6 md:p-8 bg-white border border-[#cfccb8] flex flex-col justify-center items-center relative overflow-hidden group hover:border-[#111111] transition-all duration-300'>
+                    {/* Column 3: CV (Right Sidebar - Pinned on Desktop) */}
+                    <div className="col-span-1 lg:col-span-3 lg:pl-8">
+                        <div ref={rightColRef} className="w-full">
+                            <div className="gsap-fade-in">
+                                <InteractiveCard>
+                                    <div className='p-6 md:p-8 bg-white border border-[#cfccb8] flex flex-col justify-center items-center relative overflow-hidden group hover:border-[#111111] transition-all duration-300 shadow-sm hover:shadow-xl'>
 
-                                    {/* HUD Decorative Elements */}
-                                    <div className='absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
-                                    <div className='absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
+                                        {/* HUD Decorative Elements */}
+                                        <div className='absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
+                                        <div className='absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-[#cfccb8] group-hover:border-[#111111] transition-colors duration-300' />
 
-                                    <h1 className='w-full text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-6 mb-15 text-left' style={{ transform: "translateZ(30px)" }}>
-                                        <DrawText text="CV" color="#000000ff" fontSize={75} align="left" />
-                                    </h1>
+                                        <h1 className='w-full text-[#111111] font-bold text-3xl md:text-4xl uppercase tracking-widest mt-4 mb-10 text-left' style={{ transform: "translateZ(30px)" }}>
+                                            <DrawText text="CV" color="#000000ff" fontSize={75} align="left" />
+                                        </h1>
 
-                                    <div className="w-full flex flex-col gap-4 relative z-10" style={{ transform: "translateZ(40px)" }}>
-                                        {resumes.map((resume) => (
-                                            <Magnetic key={resume.id}>
-                                                <div className='block w-full cursor-pointer' onClick={() => setPreviewPdf(resume.path)}>
-                                                    <button className='flex flex-row items-center justify-between w-full bg-[#f4f2ee] border border-[#cfccb8] text-[#111111] p-5 md:p-6 cursor-pointer hover:border-[#111111] hover:bg-[#eae8e4]/50 group/btn transition-all duration-300'>
-                                                        <div className="flex flex-col items-start">
-                                                            <span className="text-[10px] md:text-[0.75rem] tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">{resume.label}</span>
-                                                        </div>
-                                                        <Icon icon="carbon:document-view" width="28" height="28" className="text-orange-500 group-hover/btn:text-orange-600 transition-colors" />
-                                                    </button>
-                                                </div>
-                                            </Magnetic>
-                                        ))}
+                                        <div className="w-full flex flex-col gap-4 relative z-10" style={{ transform: "translateZ(40px)" }}>
+                                            {resumes.map((resume) => (
+                                                <Magnetic key={resume.id}>
+                                                    <div className='block w-full cursor-pointer' onClick={() => setPreviewPdf(resume.path)}>
+                                                        <button className='flex flex-row items-center justify-between w-full bg-[#f4f2ee] border border-[#cfccb8] text-[#111111] p-5 md:p-6 cursor-pointer hover:border-[#111111] hover:bg-[#eae8e4]/50 group/btn transition-all duration-300'>
+                                                            <div className="flex flex-col items-start">
+                                                                <span className="text-[10px] md:text-[0.75rem] tracking-widest uppercase relative z-10 group-hover/btn:text-orange-600 transition-colors font-bold">{resume.label}</span>
+                                                            </div>
+                                                            <Icon icon="carbon:document-view" width="28" height="28" className="text-orange-500 group-hover/btn:text-orange-600 transition-colors" />
+                                                        </button>
+                                                    </div>
+                                                </Magnetic>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                            </InteractiveCard>
+                                </InteractiveCard>
+                            </div>
                         </div>
                     </div>
 
@@ -264,33 +349,7 @@ const Experience = () => {
             </div>
 
             {/* Resume Preview Modal */}
-            {previewPdf && (
-                <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#eae8e4]/90 backdrop-blur-md p-4 md:p-10" onClick={() => setPreviewPdf(null)}>
-                    <div className="w-full max-w-5xl h-full max-h-[95vh] md:max-h-[90vh] border-2 border-[#111111] bg-white flex flex-col relative" onClick={(e) => e.stopPropagation()}>
-
-                        {/* Header */}
-                        <div className="flex justify-between items-center p-4 border-b-2 border-[#111111] bg-[#f4f2ee]">
-                            <div className="text-[#111111] uppercase tracking-widest text-sm font-bold flex items-center gap-3  ">
-                                <span className="w-2.5 h-2.5 bg-orange-600 rounded-full animate-pulse" />
-                                [ DOCUMENT.PREVIEW ]
-                            </div>
-                            <div className="flex gap-4">
-                                <a href={previewPdf} download className="text-xs bg-orange-600 text-white border-2 border-[#111111] px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-500 transition-all flex items-center gap-2">
-                                    <Icon icon="carbon:cloud-download" width="16" height="16" /> DOWNLOAD
-                                </a>
-                                <button onClick={() => setPreviewPdf(null)} className="text-xs border-2 border-[#111111] bg-white text-[#111111] px-4 py-2 uppercase tracking-widest font-bold hover:bg-orange-600/10 hover:text-orange-600 transition-all">
-                                    CLOSE
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* PDF Viewer */}
-                        <div className="flex-1 w-full bg-[#eae8e4] relative">
-                            <iframe src={previewPdf} className="w-full h-full border-none" title="PDF Preview" />
-                        </div>
-                    </div>
-                </div>
-            )}
+            <PdfModal pdfUrl={previewPdf} onClose={() => setPreviewPdf(null)} />
         </section>
     );
 };

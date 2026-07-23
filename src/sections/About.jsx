@@ -197,25 +197,38 @@ const About = () => {
                         flex-direction: row;
                     }
                     .editorial-left {
+                        order: 1;
                         flex: 1 1 0%;
                         min-width: 0;
                         border-right: 1px solid var(--rule);
                         border-bottom: 0;
                     }
                     .editorial-center {
+                        order: 2;
                         flex: 1 1 0%;
                         min-width: 0;
                         border-right: 1px solid var(--rule);
                         border-bottom: 0;
                     }
                     .editorial-right {
+                        order: 3;
                         flex: 1 1 0%;
                         min-width: 0;
                     }
                 }
                 @media (max-width: 899.98px) {
-                    .editorial-left, .editorial-center {
+                    .editorial-center {
+                        order: 1;
                         border-bottom: 1px solid var(--rule);
+                        border-right: 0;
+                    }
+                    .editorial-left {
+                        order: 2;
+                        border-bottom: 1px solid var(--rule);
+                        border-right: 0;
+                    }
+                    .editorial-right {
+                        order: 3;
                         border-right: 0;
                     }
                 }
@@ -224,9 +237,9 @@ const About = () => {
             <div className="about-editorial-container w-full">
 
                 {/* Section Header */}
-                <div ref={headingRef} className="flex items-center gap-4 mb-10 px-5 md:px-10 select-none" style={{ perspective: "1000px" }}>
-                    <div className="header-block w-12 h-2 bg-orange-600" />
-                    <h1 className="text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1 text-[#111111]">
+                <div ref={headingRef} className="flex items-center gap-2 sm:gap-4 mb-10 px-4 sm:px-6 md:px-10 select-none w-full max-w-full overflow-hidden" style={{ perspective: "1000px" }}>
+                    <div className="header-block w-8 sm:w-12 h-1.5 sm:h-2 bg-orange-600 shrink-0" />
+                    <h1 className="text-xs xs:text-base sm:text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider sm:tracking-widest overflow-hidden flex flex-nowrap whitespace-nowrap py-1 text-[#111111] shrink-0">
                         {(() => {
                             const headerText = "[ SYS.ABOUT_ME ]";
                             return headerText.split("").map((char, index) => (
@@ -240,7 +253,7 @@ const About = () => {
                             ));
                         })()}
                     </h1>
-                    <div ref={lineRef} className="flex-1 h-[1px]" style={{ backgroundColor: 'var(--rule)' }} />
+                    <div ref={lineRef} className="flex-1 min-w-[12px] h-[1px]" style={{ backgroundColor: 'var(--rule)' }} />
                 </div>
 
                 {/* Main Editorial Grid */}
@@ -296,7 +309,7 @@ const About = () => {
                         </div>
 
                         {/* 3. Primary hero image */}
-                        <div className="w-full flex-1 flex items-center justify-center p-6 mt-70">
+                        <div className="w-full flex-1 flex items-center justify-center p-6 mt-48 sm:mt-56 md:mt-70">
                             <div className="relative w-full max-w-[490px] aspect-[3/4] border overflow-hidden gsap-profile-img-container" style={{ borderColor: 'var(--rule)' }}>
                                 <img
                                     src="/Images/ProfilePic.png"

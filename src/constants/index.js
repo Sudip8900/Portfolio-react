@@ -230,7 +230,27 @@ export const CodingProjects = [
     }
 ];
 
-export const VLSIProjects = [];
+export const VLSIProjects = [
+    {
+        id: 1,
+        name: "High Gain Amplifier using CMOS",
+        category: "VLSI / Analog IC",
+        Link: "/Documets/High Gain Amplifiers Using CMOS_edited.pdf",
+        image: "/Images/Two Stage Op amp .png",
+        images: [
+            "/Images/Two Stage Op amp .png",
+            "/Images/InstrumentationAmp.png"
+        ],
+        description: `Designed and simulated a high-gain, low-power Operational Amplifier and 3-Op-Amp Instrumentation Amplifier in 90 nm CMOS technology using Cadence Virtuoso.
+
+Key Architectural & Performance Highlights:
+• Open-Loop Voltage Gain: 66.5893 dB
+• Phase Margin: 71.8° (ensuring robust closed-loop frequency stability)
+• Technology Node: 90 nm CMOS (Cadence Virtuoso design environment)
+• Circuit Topologies: Two-Stage Op-Amp (Differential Input + Common Source with Miller compensation Cc) and 3-Op-Amp Instrumentation Amplifier front-end.
+• Applications: High-precision analog signal conditioning, biomedical sensor interfaces, and data acquisition.`
+    }
+];
 
 export const experience = [
     {

@@ -187,9 +187,9 @@ const Contact = () => {
             <div className="pt-20 px-5 md:px-10 relative z-10 w-full flex-1">
 
                 {/* Header */}
-                <div ref={headingRef} className='flex items-center gap-4 mb-20 select-none' style={{ perspective: "1000px" }}>
-                    <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
-                    <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
+                <div ref={headingRef} className='flex items-center gap-2 sm:gap-4 mb-12 sm:mb-20 select-none w-full max-w-full overflow-hidden' style={{ perspective: "1000px" }}>
+                    <div ref={lineRef} className='flex-1 min-w-[12px] h-[1px] bg-[#cfccb8]' />
+                    <h1 className='text-xs xs:text-base sm:text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider sm:tracking-widest overflow-hidden flex flex-nowrap whitespace-nowrap py-1 shrink-0'>
                         {(() => {
                             const headerText = "[ SYS.COMM_LINK ]";
                             return headerText.split("").map((char, index) => (
@@ -202,7 +202,7 @@ const Contact = () => {
                             ));
                         })()}
                     </h1>
-                    <div className='header-block w-12 h-2 bg-orange-600' />
+                    <div className='header-block w-8 sm:w-12 h-1.5 sm:h-2 bg-orange-600 shrink-0' />
                 </div>
 
                 <div className='grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-0 relative z-10'>

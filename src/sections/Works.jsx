@@ -6,38 +6,62 @@ import { BlenderProjects, UnrealProjects, CodingProjects, VLSIProjects, unrealSt
 import { Icon } from '@iconify/react';
 import Magnetic from '../componnts/Magnetic.jsx';
 import InteractiveCard from '../componnts/InteractiveCard.jsx';
+import PdfModal from '../componnts/PdfModal.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
 // Helper component to handle smooth image transitions and show loading state
-const PreviewImage = ({ src, alt }) => {
+const PreviewImage = ({ src, images, alt }) => {
+    const imageList = Array.isArray(images) && images.length > 0 ? images : (src ? [src] : []);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [loaded, setLoaded] = useState(false);
+
+    const activeSrc = imageList[currentIndex] || src;
 
     useEffect(() => {
         setLoaded(false);
+        if (!activeSrc) return;
         const img = new Image();
-        img.src = src;
+        img.src = activeSrc;
         if (img.complete) {
             setLoaded(true);
         } else {
             img.onload = () => setLoaded(true);
         }
-    }, [src]);
+    }, [activeSrc]);
+
+    useEffect(() => {
+        if (imageList.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % imageList.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [imageList]);
 
     return (
-        <div className="w-full h-full relative bg-black">
+        <div className="w-full h-full relative bg-[#0a0a0a]">
             {!loaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black">
+                <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]">
                     <div className="w-8 h-8 border border-orange-600/30 border-t-orange-600 rounded-full animate-spin" />
                 </div>
             )}
             <img
-                src={src}
+                src={activeSrc}
                 alt={alt}
-                className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'
+                className={`w-full h-full object-contain p-2 transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'
                     }`}
                 onLoad={() => setLoaded(true)}
             />
+            {imageList.length > 1 && (
+                <div className="absolute bottom-2 right-2 flex items-center gap-1.5 z-10 bg-black/70 px-2 py-1 rounded-full border border-white/10">
+                    {imageList.map((_, idx) => (
+                        <div
+                            key={idx}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-4 bg-orange-500' : 'w-1.5 bg-white/40'}`}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
@@ -73,6 +97,7 @@ const Works = () => {
     const [hoveredProject, setHoveredProject] = useState(null);
     const [displayProject, setDisplayProject] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All");
+    const [previewPdf, setPreviewPdf] = useState(null);
     const floatingRef = useRef(null);
     const floatingDescriptionRef = useRef(null);
 
@@ -115,7 +140,7 @@ const Works = () => {
             return { typeStr: "SOFTWARE / SYSTEM", dateStr: "2024.07.01" };
         }
         if (project.type === 'vlsi') {
-            return { typeStr: "VLSI / CADENCE", dateStr: "2024.09.01" };
+            return { typeStr: "VLSI / 90NM CMOS", dateStr: "2024.09.15" };
         }
         return { typeStr: "PORTFOLIO / OBJ", dateStr: "2024.01.01" };
     };
@@ -176,7 +201,8 @@ const Works = () => {
         const timer = setTimeout(() => {
             const imagesToPreload = [
                 ...BlenderProjects.map(p => p.image),
-                ...CodingProjects.map(p => p.image)
+                ...CodingProjects.map(p => p.image),
+                ...VLSIProjects.map(p => p.image)
             ].filter(Boolean);
 
             imagesToPreload.forEach((src) => {
@@ -433,10 +459,10 @@ const Works = () => {
                 WORKS
             </div>
 
-            {/* Header (UNCHANGED as requested) */}
-            <div className='flex items-center gap-4 mb-10 px-5 md:px-10 select-none' ref={headingRef} style={{ perspective: "1000px" }}>
-                <div ref={lineRef} className='flex-1 h-[1px] bg-[#cfccb8]' />
-                <h1 className='text-2xl md:text-5xl font-bold uppercase tracking-widest overflow-hidden flex flex-wrap gap-y-1 py-1'>
+            {/* Header */}
+            <div className='flex items-center gap-2 sm:gap-4 mb-10 px-4 sm:px-6 md:px-10 select-none w-full max-w-full overflow-hidden' ref={headingRef} style={{ perspective: "1000px" }}>
+                <div ref={lineRef} className='flex-1 min-w-[12px] h-[1px] bg-[#cfccb8]' />
+                <h1 className='text-xs xs:text-base sm:text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider sm:tracking-widest overflow-hidden flex flex-nowrap whitespace-nowrap py-1 shrink-0'>
                     {(() => {
                         const headerText = "[ SYS.WORKS_DB ]";
                         return headerText.split("").map((char, index) => (
@@ -449,7 +475,7 @@ const Works = () => {
                         ));
                     })()}
                 </h1>
-                <div className='header-block w-12 h-2 bg-orange-600/60' />
+                <div className='header-block w-8 sm:w-12 h-1.5 sm:h-2 bg-orange-600/60 shrink-0' />
             </div>
 
             <div
@@ -480,7 +506,7 @@ const Works = () => {
                     {/* ================= LEFT COLUMN (Stats + Unreal) ================= */}
                     <div className="col-span-1 lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#cfccb8] flex flex-col">
 
-                         {/* STATS OVERVIEW PANEL (Top-Left) */}
+                        {/* STATS OVERVIEW PANEL (Top-Left) */}
                         <div className="lg:h-[600px] border-b border-[#cfccb8] p-10 bg-transparent select-none flex flex-col justify-between gap-12">
                             <div className="flex items-center gap-2 text-sm   tracking-[0.25em] text-neutral-400 uppercase font-bold">
                                 <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
@@ -741,7 +767,9 @@ const Works = () => {
                                                         onMouseLeave={handleProjectLeave}
                                                         onClick={() => {
                                                             const targetLink = project.Link || project.link;
-                                                            if (targetLink) {
+                                                            if (targetLink && targetLink.toLowerCase().endsWith('.pdf')) {
+                                                                setPreviewPdf(targetLink);
+                                                            } else if (targetLink) {
                                                                 window.open(targetLink, '_blank', 'noopener,noreferrer');
                                                             }
                                                         }}
@@ -754,7 +782,12 @@ const Works = () => {
                                                                 {project.name}
                                                             </span>
                                                         </div>
-                                                        <span className="text-[9px] text-orange-600 font-bold uppercase pr-2">VLSI</span>
+                                                        <div className="flex items-center gap-2 pr-2">
+                                                            <span className="text-[9px] text-orange-600 font-bold uppercase">VLSI</span>
+                                                            <span className={`transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'}`}>
+                                                                <Icon icon="ion:arrow-up-right-box-outline" className="text-orange-600" width="16" height="16" />
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 );
                                             })}
@@ -791,7 +824,7 @@ const Works = () => {
                                 </div>
                             </div>
 
-                       </div>
+                        </div>
 
                     </div>
 
@@ -824,7 +857,7 @@ const Works = () => {
                                     return <PreviewIframe videoId={videoId} />;
                                 })()
                             ) : (
-                                <PreviewImage src={displayProject.image} alt={displayProject.name} />
+                                <PreviewImage src={displayProject.image} images={displayProject.images} alt={displayProject.name} />
                             )}
                         </div>
 
@@ -848,6 +881,9 @@ const Works = () => {
                     </div>
                 )}
             </div>
+
+            {/* Document Preview Modal */}
+            <PdfModal pdfUrl={previewPdf} onClose={() => setPreviewPdf(null)} />
         </section >
     );
 };

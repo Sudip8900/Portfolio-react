@@ -92,7 +92,9 @@ const App = () => {
         autoRaf={false}
         options={{
           smoothWheel: true,
+          smoothTouch: false,
           wheelMultiplier: 1,
+          touchMultiplier: 1.2,
           prevent: (node) => node.closest('.scroll-container')
         }} className='relative w-full overflow-x-clip min-h-screen'>
         {loadingPhase !== 'hidden' && (

@@ -4,22 +4,22 @@
   --font-sans: "Michroma", sans-serif;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-scrollbar-width: none;
+  scrollbar-width: none;
+  overflow-x: clip;
+}
+
 body {
   font-family: "Michroma", sans-serif;
   @apply bg-[#eae8e4] text-[#111111] relative min-h-screen;
   overflow-x: clip;
-}
-
-/* Hide scrollbar for Chrome, Edge, Safari */
-::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for Firefox */
-html {
-  -webkit-scrollbar-width: none;
-  scrollbar-width: none;
-  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* Hide scrollbar for IE */
@@ -235,10 +235,15 @@ body::before {
 .works-watermark,
 .contact-watermark-text,
 .hero-watermark {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
   will-change: transform;
 }
 
 .works-floating-preview {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   will-change: transform, opacity;
 }
 
