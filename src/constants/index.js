@@ -221,6 +221,24 @@ export const UnrealProjects = [
 
         In-Editor Debugging: Integrated custom DrawDebugHelpers featuring dynamic color-coded directional vectors and impact normal indicators for quick tuning.`,
     },
+    {
+        id: 7,
+        name: "Gameplay Ability System: Dash",
+        Link: "https://youtu.be/Nq3aRZmpuH0",
+        description: `Designed and implemented a fully modular Dash Ability using Unreal Engine 5's Gameplay Ability System (GAS). The ability is built with scalability and reusability in mind, allowing it to integrate seamlessly with other gameplay mechanics.
+
+        Key Features:
+
+        Developed as a self-contained Gameplay Ability, making it easy to extend or reuse across different characters.
+        Utilized Gameplay Effects for cooldown management instead of hardcoded timers, enabling data-driven balancing.
+        Integrated with the Ability System Component (ASC) for activation, cooldown tracking, and ability lifecycle management.
+        Implemented configurable dash parameters such as distance, speed, direction, and cooldown to support different gameplay styles.
+        Designed the system to work with animation, VFX, and SFX through Gameplay Ability events, allowing clean separation between gameplay logic and presentation.
+        Built using a modular architecture that minimizes coupling with the character class, making future abilities easier to implement and maintain.
+        Supports UI integration by exposing cooldown information through GAS, enabling dynamic cooldown indicators without hardcoded values.
+
+        This implementation demonstrates proficiency in Unreal Engine's Gameplay Ability System, modular gameplay architecture, Blueprint/C++ integration, and scalable gameplay programming practices.`,
+    },
 ];
 
 export const CodingProjects = [
