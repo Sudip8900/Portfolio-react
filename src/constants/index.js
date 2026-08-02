@@ -283,69 +283,127 @@ export const VLSIProjects = [
         ],
         description: `Designed and simulated a high-gain, low-power Operational Amplifier and 3-Op-Amp Instrumentation Amplifier in 90 nm CMOS technology using Cadence Virtuoso.
 
-Key Architectural & Performance Highlights:
-• Open-Loop Voltage Gain: 66.5893 dB
-• Phase Margin: 71.8° (ensuring robust closed-loop frequency stability)
-• Technology Node: 90 nm CMOS (Cadence Virtuoso design environment)
-• Circuit Topologies: Two-Stage Op-Amp (Differential Input + Common Source with Miller compensation Cc) and 3-Op-Amp Instrumentation Amplifier front-end.
-• Applications: High-precision analog signal conditioning, biomedical sensor interfaces, and data acquisition.`
+    Key Architectural & Performance Highlights:
+    • Open-Loop Voltage Gain: 66.5893 dB
+    • Phase Margin: 71.8° (ensuring robust closed-loop frequency stability)
+    • Technology Node: 90 nm CMOS (Cadence Virtuoso design environment)
+    • Circuit Topologies: Two-Stage Op-Amp (Differential Input + Common Source with Miller compensation Cc) and 3-Op-Amp Instrumentation Amplifier front-end.
+    • Applications: High-precision analog signal conditioning, biomedical sensor interfaces, and data acquisition.`
     }
 ];
 
 export const experience = [
     {
         id: 1,
-        role: "3D Artist",
-        icon: "logos:blender",
-        company: "Blender",
-        duration: "Oct 2023 - Present",
-        description: "Creating 3D models, textures, and animations for various projects."
+        year: 2024,
+        role: "GAME DEVELOPER",
+        company: "UNREAL ENGINE // C++ & BLUEPRINTS",
+        icon: "devicon:unrealengine",
+        duration: "Dec 2024 - Present",
+        sysId: "[ SYSTEM_001 ]",
+        phase: "// PHASE_04",
+        image: "/Images/rifle.jpg",
+        imageOverlayText: "[ SCANNING_SYSTEM_ARCHITECTURE ]",
+        description: "Pioneered modular combat & targeting algorithms in Unreal Engine 5 using C++ and Gameplay Ability System (GAS). Developed procedural avoidance systems with multi-height sphere sweeps and vector normal alignment.",
+        bullets: [
+            "Pioneered generative combat & targeting algorithms for deep-sea habitat modules using carbon-lattice reinforcement protocols.",
+            "Orchestrated a cross-functional team of 14 roboticists to deploy autonomous fabrication swarms for EX-01 prototype.",
+            "Integrated real-time haptic feedback loops into the architectural design interface, reducing iteration latency by 60%.",
+            "Implemented Gameplay Ability System (GAS), poise decay, directional dodge mechanics, and custom trace targeting channels."
+        ],
+        tags: ["UNREAL_ENGINE_5", "CPP", "GAS", "BLUEPRINTS", "DLSS"]
     },
     {
         id: 2,
-        role: "Game Developer",
-        icon: "devicon:unrealengine",
-        company: "Unreal Engine",
-        duration: "Dec 2024 - Present",
-        description: "Developing games using Unreal Engine Blueprint and C++."
+        year: 2024,
+        role: "VLSI SYSTEMS ENGINEER",
+        company: "CADENCE VIRTUOSO // 90NM CMOS",
+        imageLogo: "/Images/cadence.svg",
+        duration: "Jun 2024 - Present",
+        sysId: "[ HW_002 ]",
+        phase: "// PHASE_04",
+        image: "/Images/Two Stage Op amp .png",
+        imageOverlayText: "[ ANALOG_IC_SCHEMATIC ]",
+        description: "Designed and simulated high-gain Operational Amplifiers and 3-Op-Amp Instrumentation Amplifiers in 90nm CMOS technology using Cadence Virtuoso.",
+        bullets: [
+            "Designed and simulated a high-gain (66.58 dB) two-stage Operational Amplifier in 90nm CMOS technology using Cadence Virtuoso.",
+            "Validated 71.8° phase margin for robust closed-loop frequency stability under complex load conditions.",
+            "Constructed 3-Op-Amp Instrumentation Amplifier front-ends for high-precision analog signal conditioning.",
+            "Executed physical layout verification including Design Rule Checks (DRC) and Layout Versus Schematic (LVS) matching."
+        ],
+        tags: ["CADENCE_VIRTUOSO", "90NM_CMOS", "OP_AMP", "VERILOG", "DRC_LVS"]
     },
     {
         id: 3,
-        role: "VLSI Engineer",
-        company: "Cadence Virtuoso",
-        image: "/Images/cadence.svg",
-        width: "120",
-        height: "60",
-        duration: "Jun 2024 - Present",
-        description: "Designing and simulating VLSI circuits using Cadence tools."
+        year: 2023,
+        role: "3D ARTIST",
+        company: "BLENDER",
+        icon: "logos:blender",
+        duration: "Oct 2023 - Present",
+        sysId: "[ ARCH_003 ]",
+        phase: "// PHASE_03",
+        image: "/Images/gun.jpg",
+        imageOverlayText: "[ 3D_HARD_SURFACE_MESH ]",
+        description: "Creating 3D hard-surface models, PBR textures, procedural materials, and character/prop rigging pipelines for game engines.",
+        bullets: [
+            "Modeled high-poly and low-poly hard-surface game assets including weapons, environmental props, and architectural structures.",
+            "Authored procedural PBR materials and high-resolution texture maps optimized for real-time game engines.",
+            "Executed custom character and prop rigging pipelines for seamless skeletal animation integration.",
+            "Optimized geometry topology and UV unwrapping for minimal draw calls and efficient lightmap baking."
+        ],
+        tags: ["BLENDER", "PBR_TEXTURING", "HARD_SURFACE", "RIGGING", "UV_MAPPING"]
+    },
+    {
+        id: 4,
+        year: 2023,
+        role: "SOCIAL MEDIA STRATEGIST",
+        company: "GRID // MEDIA & BRANDING",
+        duration: "Feb 2023 - Oct 2023",
+        sysId: "[ MEDIA_004 ]",
+        phase: "// PHASE_02",
+        image: "/Images/Grid.jpg",
+        imageOverlayText: "[ CAMPAIGN_ANALYTICS ]",
+        description: "Orchestrating visual content campaigns, graphics creation, social media management, and digital audience growth strategies.",
+        bullets: [
+            "Orchestrated visual content campaigns and social engagement strategies across digital distribution channels.",
+            "Managed asset publishing schedules, graphics workflow, and audience growth analytics."
+        ],
+        tags: ["CONTENT_STRATEGY", "MEDIA_MANAGEMENT", "VISUAL_DESIGN"]
     },
     {
         id: 5,
-        role: "Social Media Assistant",
-        company: "GRID",
-        image: "/Images/Grid.jpg",
-        width: "60",
-        height: "60",
-        duration: "Feb 2023 - Oct 2023",
-        description: "Assisting in social media management and content creation."
+        year: 2023,
+        role: "SALES & OPERATIONS ASSOCIATE",
+        company: "RENTALSIFY // CLIENT RELATIONS",
+        duration: "Mar 2023 - Oct 2023",
+        sysId: "[ RETAIL_005 ]",
+        phase: "// PHASE_02",
+        image: "/Images/rentalsify_logo.jpg",
+        imageOverlayText: "[ OPERATIONAL_LOGISTICS ]",
+        description: "Managing client onboarding, rental inquiries, customer record workflows, and reservation logistics.",
+        bullets: [
+            "Managed client onboarding, rental inquiries, and reservation scheduling.",
+            "Streamlined customer record management to accelerate booking turnaround times."
+        ],
+        tags: ["CLIENT_RELATIONS", "BOOKINGS", "LOGISTICS"]
     },
     {
         id: 6,
-        role: "Sales Associate",
-        company: "RENTALSIFY",
-        image: "/Images/rentalsify_logo.jpg",
-        width: "60",
-        height: "60",
-        duration: "Mar 2023 - oct 2023",
-        description: "Assisting customers with rental inquiries and managing bookings."
-    },
-    {
-        id: 7,
-        role: "Member",
+        year: 2021,
+        role: "GDSC MEMBER",
         company: "GDSC RKMGEC",
         icon: "logos:google-developers",
         duration: "Nov 2022 - Present",
-        description: "Contributing to various projects and events organized by GDSC RKMGEC."
+        sysId: "[ COMMUNITY_006 ]",
+        phase: "// PHASE_01",
+        image: "/Images/IDE.png",
+        imageOverlayText: "[ DEV_COMMUNITY_HUB ]",
+        description: "Contributing to technical workshops, developer hackathons, and open-source software projects organized by GDSC RKMGEC.",
+        bullets: [
+            "Contributed to technical workshops and open-source developer initiatives.",
+            "Collaborated on campus developer projects across Web, Mobile, and Cloud technologies."
+        ],
+        tags: ["OPEN_SOURCE", "COMMUNITY"]
     }
 ];
 
