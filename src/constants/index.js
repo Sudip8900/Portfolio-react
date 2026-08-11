@@ -295,13 +295,28 @@ export const VLSIProjects = [
 export const experience = [
     {
         id: 1,
+        year: 2026,
+        role: "Unreal Developer Intern",
+        company: "Unada Labs",
+        icon: "devicon:unrealengine",
+        duration: "Aug 2026 - Present",
+        image: "/Images/Unada_Labs.png",
+        imageOverlayText: "[ UNREAL_ENGINE_5 ]",
+        description: "Currently working as an Unreal Developer Intern at Unada Labs, contributing to the development of immersive gaming experiences and interactive simulations using Unreal Engine 5.",
+        bullets: [
+            "Collaborating with a team of developers and designers to implement gameplay mechanics and interactive features.",
+            "Optimizing performance and ensuring smooth gameplay experiences across various platforms.",
+            "Participating in code reviews and providing constructive feedback to enhance code quality and maintainability.",
+        ],
+        tags: ["UNREAL_ENGINE_5", "CPP", "GAS", "BLUEPRINTS"]
+    },
+    {
+        id: 2,
         year: 2024,
         role: "GAME DEVELOPER",
         company: "UNREAL ENGINE // C++ & BLUEPRINTS",
         icon: "devicon:unrealengine",
         duration: "Dec 2024 - Present",
-        sysId: "[ SYSTEM_001 ]",
-        phase: "// PHASE_04",
         image: "/Images/rifle.jpg",
         imageOverlayText: "[ SCANNING_SYSTEM_ARCHITECTURE ]",
         description: "Pioneered modular combat & targeting algorithms in Unreal Engine 5 using C++ and Gameplay Ability System (GAS). Developed procedural avoidance systems with multi-height sphere sweeps and vector normal alignment.",
@@ -314,14 +329,12 @@ export const experience = [
         tags: ["UNREAL_ENGINE_5", "CPP", "GAS", "BLUEPRINTS", "DLSS"]
     },
     {
-        id: 2,
+        id: 3,
         year: 2024,
         role: "VLSI SYSTEMS ENGINEER",
         company: "CADENCE VIRTUOSO // 90NM CMOS",
         imageLogo: "/Images/cadence.svg",
         duration: "Jun 2024 - Present",
-        sysId: "[ HW_002 ]",
-        phase: "// PHASE_04",
         image: "/Images/Two Stage Op amp .png",
         imageOverlayText: "[ ANALOG_IC_SCHEMATIC ]",
         description: "Designed and simulated high-gain Operational Amplifiers and 3-Op-Amp Instrumentation Amplifiers in 90nm CMOS technology using Cadence Virtuoso.",
@@ -334,14 +347,12 @@ export const experience = [
         tags: ["CADENCE_VIRTUOSO", "90NM_CMOS", "OP_AMP", "VERILOG", "DRC_LVS"]
     },
     {
-        id: 3,
+        id: 4,
         year: 2023,
         role: "3D ARTIST",
         company: "BLENDER",
         icon: "logos:blender",
         duration: "Oct 2023 - Present",
-        sysId: "[ ARCH_003 ]",
-        phase: "// PHASE_03",
         image: "/Images/gun.jpg",
         imageOverlayText: "[ 3D_HARD_SURFACE_MESH ]",
         description: "Creating 3D hard-surface models, PBR textures, procedural materials, and character/prop rigging pipelines for game engines.",
@@ -354,13 +365,11 @@ export const experience = [
         tags: ["BLENDER", "PBR_TEXTURING", "HARD_SURFACE", "RIGGING", "UV_MAPPING"]
     },
     {
-        id: 4,
+        id: 5,
         year: 2023,
         role: "SOCIAL MEDIA STRATEGIST",
         company: "GRID // MEDIA & BRANDING",
         duration: "Feb 2023 - Oct 2023",
-        sysId: "[ MEDIA_004 ]",
-        phase: "// PHASE_02",
         image: "/Images/Grid.jpg",
         imageOverlayText: "[ CAMPAIGN_ANALYTICS ]",
         description: "Orchestrating visual content campaigns, graphics creation, social media management, and digital audience growth strategies.",
@@ -371,13 +380,11 @@ export const experience = [
         tags: ["CONTENT_STRATEGY", "MEDIA_MANAGEMENT", "VISUAL_DESIGN"]
     },
     {
-        id: 5,
+        id: 6,
         year: 2023,
         role: "SALES & OPERATIONS ASSOCIATE",
         company: "RENTALSIFY // CLIENT RELATIONS",
         duration: "Mar 2023 - Oct 2023",
-        sysId: "[ RETAIL_005 ]",
-        phase: "// PHASE_02",
         image: "/Images/rentalsify_logo.jpg",
         imageOverlayText: "[ OPERATIONAL_LOGISTICS ]",
         description: "Managing client onboarding, rental inquiries, customer record workflows, and reservation logistics.",
@@ -388,15 +395,13 @@ export const experience = [
         tags: ["CLIENT_RELATIONS", "BOOKINGS", "LOGISTICS"]
     },
     {
-        id: 6,
+        id: 7,
         year: 2021,
         role: "GDSC MEMBER",
         company: "GDSC RKMGEC",
         icon: "logos:google-developers",
         duration: "Nov 2022 - Present",
         sysId: "[ COMMUNITY_006 ]",
-        phase: "// PHASE_01",
-        image: "/Images/IDE.png",
         imageOverlayText: "[ DEV_COMMUNITY_HUB ]",
         description: "Contributing to technical workshops, developer hackathons, and open-source software projects organized by GDSC RKMGEC.",
         bullets: [
