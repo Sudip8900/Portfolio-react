@@ -296,22 +296,42 @@ export const experience = [
     {
         id: 1,
         year: 2026,
-        role: "Unreal Developer Intern",
-        company: "Unada Labs",
-        icon: "devicon:unrealengine",
-        duration: "Aug 2026 - Present",
-        image: "/Images/Unada_Labs.png",
-        imageOverlayText: "[ UNREAL_ENGINE_5 ]",
-        description: "Currently working as an Unreal Developer Intern at Unada Labs, contributing to the development of immersive gaming experiences and interactive simulations using Unreal Engine 5.",
+        role: "Game Developer",
+        company: "Arise Media",
+        icon: "devicon:roblox",
+        duration: "17th Aug 2026 - Present",
+        image: "/Images/AriseMedia.jpg",
+        imageOverlayText: "[ ROBLOx // Lua]",
+        description: "Working and contributing as a Roblox Developer at Arise Media, focused on creating engaging gaming experiences and interactive simulations using Lua and the Roblox platform.",
         bullets: [
-            "Collaborating with a team of developers and designers to implement gameplay mechanics and interactive features.",
-            "Optimizing performance and ensuring smooth gameplay experiences across various platforms.",
-            "Participating in code reviews and providing constructive feedback to enhance code quality and maintainability.",
+            "Developing gameplay features and systems for Roblox projects.",
+            "Implemented camera FOV transitions triggered by character sprinting and stopping.",
+            "Developed a damage number popup UI to provide visual feedback when the player hits an enemy.",
+            "Implemented directional camera sway synchronized with the player's punch direction.",
+            "Contributed to character movement polishing to improve responsiveness and overall gameplay feel.",
+            "Designed and refined the Badge UI for the project."
         ],
-        tags: ["UNREAL_ENGINE_5", "CPP", "GAS", "BLUEPRINTS"]
+        tags: ["ROBLOX", "LUAU", "UI"]
     },
     {
         id: 2,
+        year: 2026,
+        role: "Unreal Developer Intern",
+        company: "Unada Labs",
+        icon: "devicon:unrealengine",
+        duration: "12th Aug 2026 - 13th August 2026",
+        image: "/Images/Unada_Labs.png",
+        imageOverlayText: "[ UNREAL_ENGINE_5 ]",
+        description: "Worked and contributed as an Unreal Developer Intern at Unada Labs, contributed to the development of immersive gaming experiences and interactive simulations using Unreal Engine 5.",
+        bullets: [
+            "Developed a C++-based HUD Compass system in Unreal Engine.",
+            "Implemented compass orientation using the Player Controller's control rotation (Yaw).",
+            "Used Unreal Engine Materials to dynamically represent directional movement on the compass."
+        ],
+        tags: ["UNREAL_ENGINE_5", "CPP", "UI", "BLUEPRINTS"]
+    },
+    {
+        id: 3,
         year: 2024,
         role: "GAME DEVELOPER",
         company: "UNREAL ENGINE // C++ & BLUEPRINTS",
@@ -329,7 +349,7 @@ export const experience = [
         tags: ["UNREAL_ENGINE_5", "CPP", "GAS", "BLUEPRINTS", "DLSS"]
     },
     {
-        id: 3,
+        id: 4,
         year: 2024,
         role: "VLSI SYSTEMS ENGINEER",
         company: "CADENCE VIRTUOSO // 90NM CMOS",
@@ -347,7 +367,7 @@ export const experience = [
         tags: ["CADENCE_VIRTUOSO", "90NM_CMOS", "OP_AMP", "VERILOG", "DRC_LVS"]
     },
     {
-        id: 4,
+        id: 5,
         year: 2023,
         role: "3D ARTIST",
         company: "BLENDER",
@@ -365,7 +385,7 @@ export const experience = [
         tags: ["BLENDER", "PBR_TEXTURING", "HARD_SURFACE", "RIGGING", "UV_MAPPING"]
     },
     {
-        id: 5,
+        id: 6,
         year: 2023,
         role: "SOCIAL MEDIA STRATEGIST",
         company: "GRID // MEDIA & BRANDING",
@@ -380,7 +400,7 @@ export const experience = [
         tags: ["CONTENT_STRATEGY", "MEDIA_MANAGEMENT", "VISUAL_DESIGN"]
     },
     {
-        id: 6,
+        id: 7,
         year: 2023,
         role: "SALES & OPERATIONS ASSOCIATE",
         company: "RENTALSIFY // CLIENT RELATIONS",
@@ -395,7 +415,7 @@ export const experience = [
         tags: ["CLIENT_RELATIONS", "BOOKINGS", "LOGISTICS"]
     },
     {
-        id: 7,
+        id: 8,
         year: 2021,
         role: "GDSC MEMBER",
         company: "GDSC RKMGEC",
