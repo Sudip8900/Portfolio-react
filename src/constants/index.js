@@ -416,7 +416,7 @@ export const experience = [
     },
     {
         id: 8,
-        year: 2021,
+        year: 2022,
         role: "GDSC MEMBER",
         company: "GDSC RKMGEC",
         icon: "logos:google-developers",
