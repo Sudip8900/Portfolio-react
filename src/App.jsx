@@ -10,6 +10,7 @@ import Contact from './sections/Contact';
 import { useProgress } from '@react-three/drei';
 import { useState } from 'react';
 import Experience from './sections/Experience';
+import Achievements from './sections/Achievements';
 
 import CustomCursor from './componnts/CustomCursor';
 import { gsap } from 'gsap';
@@ -157,6 +158,7 @@ const App = () => {
           <About />
           <Works />
           <Experience />
+          <Achievements />
           <ContactSummary />
           <Contact />
         </div>

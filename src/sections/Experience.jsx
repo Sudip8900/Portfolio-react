@@ -282,16 +282,6 @@ const Experience = () => {
                                                 <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t-2 border-r-2 border-[#111111] opacity-40 group-hover:opacity-100 transition-opacity" />
                                                 <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b-2 border-l-2 border-[#111111] opacity-40 group-hover:opacity-100 transition-opacity" />
 
-                                                {/* Top Tag Bar */}
-                                                <div className="flex items-center justify-between gap-4 mb-6 font-mono text-[10px] sm:text-xs">
-                                                    <span className="bg-[#111111] text-white px-2.5 py-1 font-bold tracking-wider">
-                                                        {sysId}
-                                                    </span>
-                                                    <span className="border border-[#cfccb8] px-2.5 py-1 text-[#666666] font-semibold tracking-widest bg-white/60">
-                                                        {phase}
-                                                    </span>
-                                                </div>
-
                                                 {/* Experience Content Grid */}
                                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-start w-full">
 
@@ -354,12 +344,6 @@ const Experience = () => {
                                                                                 className="w-full h-full object-cover grayscale contrast-125 group-hover/img:scale-105 transition-transform duration-500"
                                                                             />
                                                                         )}
-                                                                        {/* Overlay Scanline & Label */}
-                                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
-                                                                            <span className="font-mono text-[9px] font-bold text-white tracking-widest uppercase bg-black/60 px-2 py-0.5 border border-white/20 backdrop-blur-sm">
-                                                                                {imageOverlayText}
-                                                                            </span>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -384,12 +368,6 @@ const Experience = () => {
                                                                                 className="w-full h-full object-cover grayscale contrast-125 group-hover/img:scale-105 transition-transform duration-500"
                                                                             />
                                                                         )}
-                                                                        {/* Overlay Scanline & Label */}
-                                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
-                                                                            <span className="font-mono text-[9px] font-bold text-white tracking-widest uppercase bg-black/60 px-2 py-0.5 border border-white/20 backdrop-blur-sm">
-                                                                                {imageOverlayText}
-                                                                            </span>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>

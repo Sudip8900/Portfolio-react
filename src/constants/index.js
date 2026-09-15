@@ -583,13 +583,41 @@ export const heroCarouselItems = [
     }
 ];
 
-export const sectionsList = ['home', 'about', 'works', 'experience', 'contact'];
+export const achievementsData = [
+    {
+        id: 1,
+        yearEvent: "2026 // INTERNATIONAL CONFERENCE ON INTELLIGENT COMPUTING AND EMERGING TECHNOLOGIES [ICICET]",
+        image: "/Images/Speaker Certificate.png",
+        title: "SPEAKER CERTIFICATE IN ICICET",
+        description: "I was a speaker in the conference of ICICET to present my research on VLSI Integration",
+        tags: ["ICICET", "SPEAKER", "VLSI INTEGRATION"]
+    },
+    {
+        id: 2,
+        yearEvent: "2026 // INTERNATIONAL CONFERENCE ON INTELLIGENT COMPUTING AND EMERGING TECHNOLOGIES [ICICET]",
+        image: "/Images/Best Paper Award.png",
+        title: "BEST PAPER AWARD",
+        description: "Our paper has been awarded as best paper in the conference of ICICET",
+        tags: ["ICICET", "BEST PAPER AWARD", "VLSI INTEGRATION"]
+    },
+    {
+        id: 3,
+        yearEvent: "2026 // INTERNATIONAL CONFERENCE ON INTELLIGENT COMPUTING AND EMERGING TECHNOLOGIES [ICICET]",
+        image: "/Images/Abstract_Publication.png",
+        title: "PUBLICATION OF OUR RESEARCH'S ABSTRACT ON THE BOOK OF ICICET",
+        description: "Our research on OP-Amp and Instrumentation Amplifier's Efficiency Analysis through Layout Parametrisation has been accepted for presentation at the International Conference on Intelligent Computing and Emerging Technologies.",
+        tags: ["ICICET", "ABSTRACT PUBLICATION", "VLSI INTEGRATION"]
+    }
+];
+
+export const sectionsList = ['home', 'about', 'works', 'experience', 'achievements', 'contact'];
 
 export const sectionIcons = {
     home: 'carbon:home',
     about: 'carbon:user',
     works: 'carbon:code',
     experience: 'carbon:development',
+    achievements: 'carbon:trophy',
     contact: 'carbon:email'
 };
 
