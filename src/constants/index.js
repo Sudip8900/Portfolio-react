@@ -299,7 +299,7 @@ export const experience = [
         role: "Game Developer",
         company: "Arise Media",
         icon: "devicon:roblox",
-        duration: "17th Aug 2026 - 24th Sep 2026",
+        duration: "17th Aug 2026 - 14th Sep 2026",
         image: "/Images/AriseMedia.jpg",
         imageOverlayText: "[ ROBLOx // Lua]",
         description: "Working and contributing as a Roblox Developer at Arise Media, focused on creating engaging gaming experiences and interactive simulations using Lua and the Roblox platform.",
